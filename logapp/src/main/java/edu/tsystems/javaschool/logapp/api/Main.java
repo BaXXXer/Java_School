@@ -1,5 +1,6 @@
 package edu.tsystems.javaschool.logapp.api;
 
+import edu.tsystems.javaschool.logapp.api.config.WebMvcConfig;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDaoImpl;
 import edu.tsystems.javaschool.logapp.api.entities.City;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext("classpath");
+        ApplicationContext context = new AnnotationConfigApplicationContext(WebMvcConfig.class);
         TruckService service = context.getBean(TruckService.class);
 
 
