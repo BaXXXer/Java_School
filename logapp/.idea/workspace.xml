@@ -7,16 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="496b0420-435d-4d28-b74c-523f0fd8d241" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/config/PersistenceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/config/PersistenceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/controller/TruckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/controller/TruckController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/dao/TruckDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/dao/TruckDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/entities/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/entities/Truck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/HelloWeb-servlet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/HelloWeb-servlet.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,7 +292,7 @@
       <workItem from="1582888613333" duration="8475000" />
       <workItem from="1582902227793" duration="7546000" />
       <workItem from="1582948358754" duration="30139000" />
-      <workItem from="1583036229650" duration="10440000" />
+      <workItem from="1583036229650" duration="11593000" />
     </task>
     <servers />
   </component>
