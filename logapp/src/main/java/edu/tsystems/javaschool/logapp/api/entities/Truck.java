@@ -24,14 +24,14 @@ public class Truck {
 
     @Column(name = "tr_condition")
     @Enumerated(EnumType.STRING)
-    private Condition condition;
+    private String condition;
 
 //    @ManyToOne
 //    @JoinColumn(name = "city_id")
     @Column(name = "tr_cityid")
     private int currentCityId;
 
-    public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, Condition condition, int currentCityId) {
+    public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, String condition, int currentCityId) {
         this.regNumber = regNumber;
         this.driverWorkingHours = driverWorkingHours;
         this.capacityKg = capacityKg;
@@ -79,11 +79,11 @@ public class Truck {
         this.capacityKg = capacityKg;
     }
 
-    public Condition getCondition() {
+    public String getCondition() {
         return condition;
     }
 
-    public void setCondition(Condition condition) {
+    public void setCondition(String condition) {
         this.condition = condition;
     }
 

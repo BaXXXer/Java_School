@@ -7,9 +7,9 @@
 
     <display-name>Cargo-Web App</display-name>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--    </listener>-->
 
     <servlet>
         <servlet-name>HelloWeb</servlet-name>

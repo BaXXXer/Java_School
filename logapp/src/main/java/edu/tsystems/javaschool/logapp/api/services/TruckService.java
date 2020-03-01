@@ -21,6 +21,7 @@ public class TruckService {
     }
 
     public List<Truck> getAllTrucks(){
+
         return truckDao.getAllTrucks();
     }
 }

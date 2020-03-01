@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+
 @Controller
 public class TruckController {
 
@@ -28,17 +30,20 @@ public class TruckController {
         return new ModelAndView("truckInfo", "command", new Truck());
     }
 
-    @RequestMapping(value = "/addTruck", method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/addTruck", method = {RequestMethod.POST})
+    public String addTruckPost(@ModelAttribute("addTruck") Truck truck, ModelMap model) throws IOException {
+        model.addAttribute("regNumber", truck);
+        model.addAttribute("driverWorkingHours", truck);
+        model.addAttribute("capacityKg", truck);
+        model.addAttribute("condition", truck);
+        model.addAttribute("currentCityId", truck);
+        truckService.saveTruck(truck);
 
-    public String addTruck(@ModelAttribute("addTruck") Truck truck, ModelMap model) {
-        model.addAttribute("regNumber", truck.getRegNumber());
-        model.addAttribute("driverWorkingHours", truck.getDriverWorkingHours());
-        model.addAttribute("capacity", truck.getCapacityKg());
-        model.addAttribute("condition", truck.getCondition());
-        model.addAttribute("currentCityId", truck.getCurrentCityId());
-
-        return "truckEdit";
-
-
+        return "addNewTruck";
+    }
+    @RequestMapping(value = "/allTrucks",method = RequestMethod.GET)
+    public String getAllTrucks(ModelMap model) {
+        model.addAttribute("trucks",truckService.getAllTrucks());
+        return "allTrucks";
     }
 }
