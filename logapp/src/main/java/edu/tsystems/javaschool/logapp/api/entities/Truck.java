@@ -28,6 +28,7 @@ public class Truck {
 
 //    @ManyToOne
 //    @JoinColumn(name = "city_id")
+    @Column(name = "tr_cityid")
     private int currentCityId;
 
     public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, Condition condition, int currentCityId) {

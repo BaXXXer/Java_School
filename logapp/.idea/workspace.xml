@@ -7,31 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="496b0420-435d-4d28-b74c-523f0fd8d241" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/logapp.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/config/AppInitializer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/config/HibernateConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/config/WebMvcConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/controllers/TruckController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/Cargo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/City.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/CountryMap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/Driver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/Order.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/org/tsystems/javaschool/logapp/api/entities/Truck.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/webapp/WEB-INF/HelloWeb-servlet.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/webapp/WEB-INF/views/result.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/webapp/WEB-INF/views/truck.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/webapp/WEB-INF/web.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/logapp-1.0-SNAPSHOT.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/logapp-1.0-SNAPSHOT.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/config/PersistenceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/config/PersistenceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/controller/TruckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/controller/TruckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/dao/TruckDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/dao/TruckDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/entities/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/tsystems/javaschool/logapp/api/entities/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/HelloWeb-servlet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/HelloWeb-servlet.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,16 +133,18 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Trainig projects/PYP/tsys-logiweb-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="spring" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="entities" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Андрей\Desktop\Java\Java School project\logapp\src\main\resources" />
+      <recent name="C:\Users\Андрей\Desktop\Java\Java School project\logapp\src\main\resources\edu\tsystems\javaschool\logapp\api\config" />
       <recent name="C:\Users\Андрей\Desktop\Java\Java School project\logapp\api\src\main\webapp\WEB-INF\views" />
       <recent name="C:\Users\Андрей\Desktop\Java\Java School project\logapp\api\src" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="entities" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main (1)">
@@ -314,6 +301,7 @@
       <workItem from="1582888613333" duration="8475000" />
       <workItem from="1582902227793" duration="7546000" />
       <workItem from="1582948358754" duration="30139000" />
+      <workItem from="1583036229650" duration="10440000" />
     </task>
     <servers />
   </component>
@@ -337,10 +325,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1582966980179" />
-    <state x="488" y="14" key="#com.intellij.ide.util.MemberChooser" timestamp="1583002739078">
+    <state x="488" y="14" key="#com.intellij.ide.util.MemberChooser" timestamp="1583042210279">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="488" y="14" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1583002739078" />
+    <state x="488" y="14" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1583042210279" />
     <state x="313" y="52" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1582900030034">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -349,14 +337,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="275" y="21" key="#com.intellij.j2ee.appServerIntegrations.ApplicationServersConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1582889272713" />
-    <state x="320" y="288" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1582901580683">
+    <state x="320" y="288" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1583041492325">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="320" y="288" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1366.728@0.0.1366.728" timestamp="1582901580683" />
+    <state x="320" y="288" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1366.728@0.0.1366.728" timestamp="1583041492325" />
     <state x="479" y="222" width="407" height="292" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1582825079574">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="479" y="222" width="407" height="292" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1366.728@0.0.1366.728" timestamp="1582825079574" />
+    <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1583037595126">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1583037595126" />
     <state x="481" y="65" key="ExecutionTargetDialog" timestamp="1583002522000">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -365,22 +357,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1582950246184" />
-    <state width="1322" height="216" key="GridCell.Tab.0.bottom" timestamp="1583003098019">
+    <state width="1322" height="174" key="GridCell.Tab.0.bottom" timestamp="1583047984453">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="216" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583003098019" />
-    <state width="1322" height="216" key="GridCell.Tab.0.center" timestamp="1583003098019">
+    <state width="1322" height="174" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583047984453" />
+    <state width="1322" height="174" key="GridCell.Tab.0.center" timestamp="1583047984452">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="216" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583003098019" />
-    <state width="1322" height="216" key="GridCell.Tab.0.left" timestamp="1583003098019">
+    <state width="1322" height="174" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583047984452" />
+    <state width="1322" height="174" key="GridCell.Tab.0.left" timestamp="1583047984452">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="216" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583003098019" />
-    <state width="1322" height="216" key="GridCell.Tab.0.right" timestamp="1583003098019">
+    <state width="1322" height="174" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583047984452" />
+    <state width="1322" height="174" key="GridCell.Tab.0.right" timestamp="1583047984453">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1322" height="216" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583003098019" />
+    <state width="1322" height="174" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583047984453" />
     <state width="1322" height="216" key="GridCell.Tab.1.bottom" timestamp="1583003098020">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

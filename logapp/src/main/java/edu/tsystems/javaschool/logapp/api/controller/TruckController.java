@@ -2,6 +2,8 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
+import edu.tsystems.javaschool.logapp.api.services.TruckService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +13,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class TruckController {
+
+    private final TruckService truckService;
+
+    @Autowired
+    public TruckController(TruckService truckService) {
+        this.truckService = truckService;
+    }
+
 
 
     @RequestMapping(value = "/truck",method = RequestMethod.GET)
