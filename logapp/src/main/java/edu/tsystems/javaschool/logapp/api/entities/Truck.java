@@ -23,7 +23,7 @@ public class Truck {
     private int capacityKg;
 
     @Column(name = "tr_condition")
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private String condition;
 
 //    @ManyToOne

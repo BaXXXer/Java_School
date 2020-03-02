@@ -30,7 +30,7 @@ public class TruckController {
         return new ModelAndView("truckInfo", "command", new Truck());
     }
 
-    @RequestMapping(value = "/addTruck", method = {RequestMethod.POST})
+    @RequestMapping(value = "/addTruck", method = {RequestMethod.GET,RequestMethod.POST})
     public String addTruckPost(@ModelAttribute("addTruck") Truck truck, ModelMap model) throws IOException {
         model.addAttribute("regNumber", truck);
         model.addAttribute("driverWorkingHours", truck);

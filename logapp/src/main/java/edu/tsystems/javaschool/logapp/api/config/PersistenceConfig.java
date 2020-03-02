@@ -2,60 +2,62 @@ package edu.tsystems.javaschool.logapp.api.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
+
 @Configuration
-@Transactional
+//@Transactional
 @EnableTransactionManagement
-//@PropertySource("/persistence.properties")
-@ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api.*"})
+
+//@ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api"})
 public class PersistenceConfig {
 
-    @Autowired
-    private Environment env;
-
     @Bean
-    public LocalSessionFactoryBean getSessionFactory() throws IOException {
-        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-        factoryBean.setDataSource(restDataSource());
-        factoryBean.setPackagesToScan(new String [] {"edu.tsystems.javaschool.logapp.api"});
-        factoryBean.setHibernateProperties(hibernateProperties());
-        factoryBean.afterPropertiesSet();
-        return factoryBean;
+    public LocalSessionFactoryBean sessionFactory() throws IOException {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(restDataSource());
+        sessionFactory.setPackagesToScan(new String[]{"edu.tsystems.javaschool.logapp.api"});
+        sessionFactory.setHibernateProperties(hibernateProperties());
+        sessionFactory.afterPropertiesSet();
+//        System.out.println(factoryBean.getConfiguration());
+
+        return sessionFactory;
 
     }
 
-    private Properties hibernateProperties() {
-        return new Properties() {
-            {
-                setProperty("hibernate.hbm2ddl.auto",
-                        "update");
-                setProperty("hibernate.dialect",
-                        "org.hibernate.dialect.PostgreSQL94Dialect");
-                setProperty("hibernate.globally_quoted_identifiers",
-                        "true");
-                setProperty("hibernate.show_sql",
-                        "false");
-//                setProperty("hibernate.c3p0.min_size",env.getProperty("5"));
-            }
-        };
+    private final Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
+                "create-drop");
+        hibernateProperties.setProperty("hibernate.dialect",
+                "org.hibernate.dialect.PostgreSQL94Dialect");
+
+        return hibernateProperties;
+    }
+
+//        return new Properties() {
+//            {
+//                setProperty("hibernate.hbm2ddl.auto",
+//                        "update");
+//                setProperty("hibernate.dialect",
+//                        "org.hibernate.dialect.PostgreSQL94Dialect");
+//                setProperty("hibernate.globally_quoted_identifiers",
+//                        "true");
+//                setProperty("hibernate.show_sql",
+//                        "false");
+////                setProperty("hibernate.c3p0.min_size",env.getProperty("5"));
+//            }
+//        };
 
 
 //        Properties hibernateProperties = new Properties();
@@ -67,9 +69,6 @@ public class PersistenceConfig {
 //
 //        return hibernateProperties;
 
-
-    }
-
     @Bean
     public DataSource restDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -78,6 +77,7 @@ public class PersistenceConfig {
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         return dataSource;
+    }
 
 //        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 //        dataSource.setDriverClassName("org.postgresql.Driver");
@@ -86,7 +86,6 @@ public class PersistenceConfig {
 //        dataSource.setPassword("postgres");
 
 
-    }
 
     @Bean
     @Autowired
@@ -99,6 +98,14 @@ public class PersistenceConfig {
 
         return txManager;
     }
+
+//    @Bean
+//    public PlatformTransactionManager hibernateTransactionManager() throws Exception {
+//        HibernateTransactionManager transactionManager
+//                = new HibernateTransactionManager();
+//        transactionManager.setSessionFactory(sessionFactory());
+//        return transactionManager;
+//    }
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
