@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 
 @Controller
 public class TruckController {
 
     private final TruckService truckService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     public TruckController(TruckService truckService) {
@@ -32,11 +36,18 @@ public class TruckController {
 
     @RequestMapping(value = "/addTruck", method = {RequestMethod.GET,RequestMethod.POST})
     public String addTruckPost(@ModelAttribute("addTruck") Truck truck, ModelMap model) throws IOException {
-        model.addAttribute("regNumber", truck);
-        model.addAttribute("driverWorkingHours", truck);
-        model.addAttribute("capacityKg", truck);
-        model.addAttribute("condition", truck);
-        model.addAttribute("currentCityId", truck);
+//        model.addAttribute("regNumber", truck);
+//        model.addAttribute("driverWorkingHours", truck);
+//        model.addAttribute("capacityKg", truck);
+//        model.addAttribute("condition", truck);
+//        model.addAttribute("currentCityId", truck);
+        truck.setRegNumber("AA00100");
+        truck.setCapacityKg(100);
+        truck.setCondition("OK");
+        truck.setCurrentCityId(1);
+        truck.setDriverWorkingHours(10);
+
+
         truckService.saveTruck(truck);
 
         return "addNewTruck";

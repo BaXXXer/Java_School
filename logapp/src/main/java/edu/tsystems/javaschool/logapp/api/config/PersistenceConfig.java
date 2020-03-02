@@ -1,25 +1,28 @@
 package edu.tsystems.javaschool.logapp.api.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
 
 @Configuration
-//@Transactional
+@Transactional
 @EnableTransactionManagement
-
-//@ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api"})
+@ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api"})
 public class PersistenceConfig {
 
     @Bean
@@ -34,6 +37,7 @@ public class PersistenceConfig {
         return sessionFactory;
 
     }
+
 
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
@@ -79,6 +83,7 @@ public class PersistenceConfig {
         return dataSource;
     }
 
+
 //        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 //        dataSource.setDriverClassName("org.postgresql.Driver");
 //        dataSource.setUrl("jdbc:postgresql://localhost:5432/log_app");
@@ -87,28 +92,33 @@ public class PersistenceConfig {
 
 
 
-    @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(
-            SessionFactory sessionFactory) {
-
-        HibernateTransactionManager txManager
-                = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
-
-        return txManager;
-    }
-
 //    @Bean
-//    public PlatformTransactionManager hibernateTransactionManager() throws Exception {
-//        HibernateTransactionManager transactionManager
+//    @Autowired
+//    public HibernateTransactionManager transactionManager(
+//            SessionFactory sessionFactory) {
+//
+//        HibernateTransactionManager txManager
 //                = new HibernateTransactionManager();
-//        transactionManager.setSessionFactory(sessionFactory());
-//        return transactionManager;
+//        txManager.setSessionFactory(sessionFactory);
+//
+//        return txManager;
 //    }
+    @Bean
+    public PlatformTransactionManager hibernateTransactionManager() throws Exception {
+        HibernateTransactionManager transactionManager
+                = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public EntityManager entityManager() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("logapp");
+        return emf.createEntityManager();
     }
 }
