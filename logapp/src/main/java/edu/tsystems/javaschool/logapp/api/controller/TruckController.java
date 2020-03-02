@@ -3,6 +3,7 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
 import edu.tsystems.javaschool.logapp.api.services.TruckService;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +22,25 @@ public class TruckController {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+
+
+
+
+    public TruckService getTruckService() {
+        return truckService;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Autowired
     public TruckController(TruckService truckService) {
@@ -46,6 +66,7 @@ public class TruckController {
         truck.setCondition("OK");
         truck.setCurrentCityId(1);
         truck.setDriverWorkingHours(10);
+//        sessionFactory.getCurrentSession();
 
 
         truckService.saveTruck(truck);

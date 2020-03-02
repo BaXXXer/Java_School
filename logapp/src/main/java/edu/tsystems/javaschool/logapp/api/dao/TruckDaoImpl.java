@@ -4,7 +4,9 @@ package edu.tsystems.javaschool.logapp.api.dao;
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class TruckDaoImpl implements TruckDao {
 
 
     @Autowired
+    @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
 
 
@@ -57,12 +60,16 @@ public class TruckDaoImpl implements TruckDao {
     }
 
 
-    @Transactional
+//    @Transactional
     public void saveTruck(Truck truck) throws IOException {
+//        Session session = this.sessionFactory.getCurrentSession();
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(truck);
-        entityManager.getTransaction().commit();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.persist(truck);
+        tx.commit();
+        session.close();
 
     }
 

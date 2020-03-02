@@ -1,8 +1,8 @@
 package edu.tsystems.javaschool.logapp.api.services;
 
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
-import edu.tsystems.javaschool.logapp.api.dao.TruckDaoImpl;
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,7 +11,9 @@ import java.util.List;
 @Service
 public class TruckService {
 
-    private TruckDao truckDao = new TruckDaoImpl();
+
+    @Autowired
+    private TruckDao truckDao;
 
     public TruckService() {
     }
