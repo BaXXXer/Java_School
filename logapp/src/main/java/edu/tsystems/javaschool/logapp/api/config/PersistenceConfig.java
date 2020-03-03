@@ -11,9 +11,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
@@ -32,8 +29,6 @@ public class PersistenceConfig {
         sessionFactory.setPackagesToScan(new String[]{"edu.tsystems.javaschool.logapp.api"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         sessionFactory.afterPropertiesSet();
-//        System.out.println(factoryBean.getConfiguration());
-
         return sessionFactory;
 
     }
@@ -42,36 +37,12 @@ public class PersistenceConfig {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
-                "create-drop");
+                "update");
         hibernateProperties.setProperty("hibernate.dialect",
                 "org.hibernate.dialect.PostgreSQL94Dialect");
 
         return hibernateProperties;
     }
-
-//        return new Properties() {
-//            {
-//                setProperty("hibernate.hbm2ddl.auto",
-//                        "update");
-//                setProperty("hibernate.dialect",
-//                        "org.hibernate.dialect.PostgreSQL94Dialect");
-//                setProperty("hibernate.globally_quoted_identifiers",
-//                        "true");
-//                setProperty("hibernate.show_sql",
-//                        "false");
-////                setProperty("hibernate.c3p0.min_size",env.getProperty("5"));
-//            }
-//        };
-
-
-//        Properties hibernateProperties = new Properties();
-//        hibernateProperties.put("hibernate.dialect", "hibernate.dialect.PostgreSQL94Dialect");
-//        hibernateProperties.put("hibernate.show_sql", false);
-//        hibernateProperties.put("hibernate.generate_statistics", false);
-//        hibernateProperties.put("hibernate.hbm2ddl.auto", "update");
-//        hibernateProperties.put("hibernate.use_sql_comments", false);
-//
-//        return hibernateProperties;
 
     @Bean
     public DataSource restDataSource() {
@@ -84,25 +55,6 @@ public class PersistenceConfig {
     }
 
 
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUrl("jdbc:postgresql://localhost:5432/log_app");
-//        dataSource.setUsername("postgres");
-//        dataSource.setPassword("postgres");
-
-
-
-//    @Bean
-//    @Autowired
-//    public HibernateTransactionManager transactionManager(
-//            SessionFactory sessionFactory) {
-//
-//        HibernateTransactionManager txManager
-//                = new HibernateTransactionManager();
-//        txManager.setSessionFactory(sessionFactory);
-//
-//        return txManager;
-//    }
     @Bean
     public PlatformTransactionManager hibernateTransactionManager() throws Exception {
         HibernateTransactionManager transactionManager
@@ -116,9 +68,9 @@ public class PersistenceConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    @Bean
-    public EntityManager entityManager() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("logapp");
-        return emf.createEntityManager();
-    }
+//    @Bean
+//    public EntityManager entityManager() {
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("logapp");
+//        return emf.createEntityManager();
+//    }
 }

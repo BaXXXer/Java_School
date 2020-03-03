@@ -20,6 +20,8 @@
     Capacity:<input type="text" name="capacityKg"/><br/>
     Condition:<input type="text" name="condition"/><br/>
     Current City Id:<input type="text" name="currentCityId"/><br/>
+    <a href="/allTrucks">Get all trucks</a>
+    <a href="/">Main page</a>
 
 </form>
 

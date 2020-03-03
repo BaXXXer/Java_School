@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+        <title>All Trucks in DB</title>
+    </h:head>
+<h:body>
+
+    <h3>Truck List</h3>
+
+        <table class="tg">
+            <tr>
+
+                <th width="120">Truck Registration Number</th>
+                <th width="120">Driver Working Hours</th>
+                <th width="120">Truck capacity</th>
+                <th width="120">Condition</th>
+                <th width="60">City id</th>
+            </tr>
+            <ui:repeat value="${trucks}" var="truck">
+                <tr>
+                    <td>${truck.regNumber}</td>
+                    <td>${truck.driverWorkingHours}</td>
+                    <td>${truck.capacityKg}</td>
+                    <td>${truck.condition}</td>
+                    <td>${truck.currentCityId}</td>
+                </tr>
+            </ui:repeat>
+        </table>
+
+
+    <a href="/addTruck">Add new truck</a>
+    <a href="/">Main page</a>
+
+</h:body>
+</html>

@@ -8,14 +8,15 @@
     <artifactId>logapp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <repositories>
+        <repository>
+            <id>PrimeFaces Repo</id>
+            <url>https://mvnrepository.com/artifact/org.primefaces/primefaces</url>
+        </repository>
+    </repositories>
     <dependencies>
 
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-core</artifactId>-->
-<!--            <version>5.2.1.RELEASE</version>-->
-<!--        </dependency>-->
 
 
         <dependency>
@@ -73,6 +74,12 @@
             <version>9.4.1212.jre7</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -80,28 +87,11 @@
             <version>6.0.16.Final</version>
         </dependency>
 
-
-
-        <!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <version>42.2.10</version>-->
-<!--        </dependency>-->
-
-
-<!--        <dependency>-->
-<!--            <groupId>com.mchange</groupId>-->
-<!--            <artifactId>c3p0</artifactId>-->
-<!--            <version>0.9.5.2</version>-->
-<!--        </dependency>-->
-
-
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate</groupId>-->
-<!--            <artifactId>hibernate-c3p0</artifactId>-->
-<!--            <version>5.4.12.Final</version>-->
-<!--        </dependency>-->
-
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>6.2</version>
+        </dependency>
 
 
         <dependency>
@@ -109,6 +99,15 @@
             <artifactId>tomcat-dbcp</artifactId>
             <version>9.0.30</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
 
 
 

@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.io.IOException;
 import java.util.List;
 
 @Repository
@@ -25,15 +22,6 @@ public class TruckDaoImpl implements TruckDao {
     private SessionFactory sessionFactory;
 
 
-    @Autowired
-    @PersistenceContext
-    private EntityManager entityManager;
-
-
-    public TruckDaoImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
     public TruckDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -42,32 +30,23 @@ public class TruckDaoImpl implements TruckDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-
     public TruckDaoImpl() {
     }
-
-
 
     public List<Truck> getAllTrucks() {
         Session session = this.sessionFactory.getCurrentSession();
         List<Truck> truckList = session.createQuery("from Truck").list();
-        session.close();
+//        session.close();
         return truckList;
     }
 
 
-//    @Transactional
-    public void saveTruck(Truck truck) throws IOException {
-//        Session session = this.sessionFactory.getCurrentSession();
-
+    @Transactional
+    public void saveTruck(Truck truck){
 
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        session.persist(truck);
+        session.save(truck);
         tx.commit();
         session.close();
 

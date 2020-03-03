@@ -3,16 +3,14 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
 import edu.tsystems.javaschool.logapp.api.services.TruckService;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 
 @Controller
@@ -21,38 +19,15 @@ public class TruckController {
     private final TruckService truckService;
 
     @Autowired
-    private EntityManager entityManager;
-
-    @Autowired
-    private SessionFactory sessionFactory;
-
-
-
-
-
-    public TruckService getTruckService() {
-        return truckService;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    @Autowired
     public TruckController(TruckService truckService) {
         this.truckService = truckService;
     }
 
-
-
-    @RequestMapping(value = "/truck",method = RequestMethod.GET)
-    public ModelAndView truck() {
-        return new ModelAndView("truckInfo", "command", new Truck());
+    @RequestMapping(value = "/",method = RequestMethod.GET)
+    public String startPage(){
+        return "index";
     }
+
 
     @RequestMapping(value = "/addTruck", method = {RequestMethod.GET,RequestMethod.POST})
     public String addTruckPost(@ModelAttribute("addTruck") Truck truck, ModelMap model) throws IOException {
@@ -66,16 +41,15 @@ public class TruckController {
         truck.setCondition("OK");
         truck.setCurrentCityId(1);
         truck.setDriverWorkingHours(10);
-//        sessionFactory.getCurrentSession();
-
-
         truckService.saveTruck(truck);
-
         return "addNewTruck";
     }
     @RequestMapping(value = "/allTrucks",method = RequestMethod.GET)
-    public String getAllTrucks(ModelMap model) {
+    public String getAllTrucks(Model model) {
+        model.addAttribute("truck",new Truck());
+
         model.addAttribute("trucks",truckService.getAllTrucks());
+
         return "allTrucks";
     }
 }

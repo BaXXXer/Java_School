@@ -7,6 +7,8 @@
 
     <display-name>Cargo-Web App</display-name>
 
+
+
 <!--    <listener>-->
 <!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
 <!--    </listener>-->
@@ -27,6 +29,12 @@
         <servlet-name>HelloWeb</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+<!--    <welcome-file-list>-->
+<!--        <welcome-file>index.jsp</welcome-file>-->
+<!--    </welcome-file-list>-->
+
+
 
 
 
