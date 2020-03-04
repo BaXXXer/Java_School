@@ -23,15 +23,15 @@ public class Truck {
     private int capacityKg;
 
     @Column(name = "tr_condition")
-//    @Enumerated(EnumType.STRING)
-    private String condition;
+    @Enumerated(EnumType.STRING)
+    private Condition condition;
 
 //    @ManyToOne
 //    @JoinColumn(name = "city_id")
     @Column(name = "tr_cityid")
     private int currentCityId;
 
-    public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, String condition, int currentCityId) {
+    public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, Condition condition, int currentCityId) {
         this.regNumber = regNumber;
         this.driverWorkingHours = driverWorkingHours;
         this.capacityKg = capacityKg;
@@ -42,8 +42,32 @@ public class Truck {
     public Truck() {
     }
 
+
     public enum Condition {
-        DEFECTIVE, OK
+        OK, BROKEN ;
+
+        private String code;
+
+        Condition(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        Condition() {
+
+        }
+
+        public static Condition fromCode(String condition){
+            for(Condition cond:Condition.values()){
+                if(cond.getCode().equals(condition)){
+                    return cond;
+                }
+            }
+             throw new UnsupportedOperationException("The code " + condition + "is not supported!");
+        }
     }
 
 
@@ -79,11 +103,11 @@ public class Truck {
         this.capacityKg = capacityKg;
     }
 
-    public String getCondition() {
+    public Condition getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(Condition condition) {
         this.condition = condition;
     }
 

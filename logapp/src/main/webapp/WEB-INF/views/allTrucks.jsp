@@ -13,23 +13,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
     <title>All Trucks in DB</title>
+    <link href = "webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <script scr="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script scr="webjars/jquery/3.0.0/jquery.js"></script>
 </head>
 <body>
+<div class="container">
 
 <h3>Truck List</h3>
 <c:if test="${!empty trucks}">
-    <table class="tg">
+    <table class="table table-striped">
         <tr>
+            <thead>
 
-            <th width="120">Truck Registration Number</th>
-            <th width="120">Driver Working Hours</th>
-            <th width="120">Truck capacity</th>
-            <th width="120">Condition</th>
-            <th width="60">City id</th>
+                <th scope="col">Truck Registration Number</th>
+                <th scope="col">Driver Working Hours</th>
+                <th scope="col">Truck capacity</th>
+                <th scope="col">Condition</th>
+                <th scope="col">City id</th>
+
+            </thead>
         </tr>
         <c:forEach items="${trucks}" var="truck">
             <tr>
+
                 <td>${truck.regNumber}</td>
                 <td>${truck.driverWorkingHours}</td>
                 <td>${truck.capacityKg}</td>
@@ -40,8 +49,9 @@
     </table>
 </c:if>
 
-<a href="/addTruck">Add new truck</a>
-<a href="/">Main page</a>
+    <a class="btn btn-primary" href="/addTruck" role="button">Add truck</a>
+    <a class="btn btn-primary" href="/" role="button">Main page</a>
+</div>
 
 </body>
 </html>

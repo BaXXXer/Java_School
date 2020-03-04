@@ -1,13 +1,36 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
 public class Driver {
+    private Long driverId;
     private String driverFirstName;
     private String driverSurName;
     private long driverPrivateNum;
     private int driverWorkedHours;
-    private Status driverSstatus;
+    private Status driverStatus;
     private City driverCurrentCity;
     private Truck driverCurrentTruck;
+
+    public Driver(String driverFirstName, String driverSurName, long driverPrivateNum,
+                  int driverWorkedHours, Status driverStatus, City driverCurrentCity, Truck driverCurrentTruck) {
+        this.driverFirstName = driverFirstName;
+        this.driverSurName = driverSurName;
+        this.driverPrivateNum = driverPrivateNum;
+        this.driverWorkedHours = driverWorkedHours;
+        this.driverStatus = driverStatus;
+        this.driverCurrentCity = driverCurrentCity;
+        this.driverCurrentTruck = driverCurrentTruck;
+    }
+
+    public Driver() {
+    }
+
+    public Long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
+    }
 
     private enum Status {
         OFF,WORKING,DRIVING
@@ -45,12 +68,12 @@ public class Driver {
         this.driverWorkedHours = driverWorkedHours;
     }
 
-    public Status getDriverSstatus() {
-        return driverSstatus;
+    public Status getDriverStatus() {
+        return driverStatus;
     }
 
-    public void setDriverSstatus(Status driverSstatus) {
-        this.driverSstatus = driverSstatus;
+    public void setDriverStatus(Status driverStatus) {
+        this.driverStatus = driverStatus;
     }
 
     public City getDriverCurrentCity() {

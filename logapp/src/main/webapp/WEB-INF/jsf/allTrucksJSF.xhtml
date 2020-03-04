@@ -21,13 +21,15 @@
                 <th width="120">Condition</th>
                 <th width="60">City id</th>
             </tr>
-            <ui:repeat value="${trucks}" var="truck">
+
+
+            <ui:repeat value="#{truckService.allTrucks}" var="truck">
                 <tr>
-                    <td>${truck.regNumber}</td>
-                    <td>${truck.driverWorkingHours}</td>
-                    <td>${truck.capacityKg}</td>
-                    <td>${truck.condition}</td>
-                    <td>${truck.currentCityId}</td>
+                    <td>#{truck.regNumber}</td>
+                    <td>#{truck.driverWorkingHours}</td>
+                    <td>#{truck.capacityKg}</td>
+                    <td>#{truck.condition}</td>
+                    <td>#{truck.currentCityId}</td>
                 </tr>
             </ui:repeat>
         </table>

@@ -3,7 +3,7 @@ package edu.tsystems.javaschool.logapp.api.entities;
 import java.util.List;
 
 public class Order {
-    private long orderId;
+    private Long orderId;
     private boolean orderIsDone;
     private List<DestinationPoint> destinationPoints;
     private Truck truckOnOrder;

@@ -1,4 +1,4 @@
-package edu.tsystems.javaschool.logapp.api.dao;
+package edu.tsystems.javaschool.logapp.api.entities.dao;
 
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
