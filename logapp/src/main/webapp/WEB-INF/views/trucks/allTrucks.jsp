@@ -41,7 +41,7 @@
 
                 <td>${truck.regNumber}</td>
                 <td>${truck.driverWorkingHours}</td>
-                <td>${truck.capacityKg}</td>
+                <td>${truck.capacityTons}</td>
                 <td>${truck.condition}</td>
                 <td>${truck.currentCityId}</td>
             </tr>

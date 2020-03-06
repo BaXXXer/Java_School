@@ -2,6 +2,7 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
+import edu.tsystems.javaschool.logapp.api.entities.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.services.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,36 +36,39 @@ public class TruckController {
 
     @RequestMapping(value = "/addTruck", method = RequestMethod.GET)
     public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("addNewTruck");
-        model.addObject("truckToAdd", new Truck());
+        ModelAndView model = new ModelAndView("trucks/addNewTruck");
+        model.addObject("truckToAdd", new TruckDTO());
         model.addObject("enumCondition",Truck.Condition.values());
         return model;
     }
 
     //TODO: make error view + add redirect to success
     @RequestMapping(value = "/addTruck", method = RequestMethod.POST)
-    public String submit(@ModelAttribute("truckToAdd")  Truck truck,
+    public String submit(@ModelAttribute("truckToAdd") TruckDTO truck,
                          ModelMap model) throws IOException {
 //        if (result.hasErrors()) {
 //            return "addNewTruck";
 //        }
-        model.addAttribute("regNumber", truck);
+        model.addAttribute("regNum", truck);
         model.addAttribute("driverWorkingHours", truck);
-        model.addAttribute("capacityKg", truck);
+        model.addAttribute("capacityTons", truck);
         model.addAttribute("condition", truck);
         model.addAttribute("currentCityId", truck);
         truckService.saveTruck(truck);
 
-        return "addNewTruck";
+        return "trucks/addNewTruck";
     }
 
 
     @RequestMapping(value = "/allTrucks",method = RequestMethod.GET)
     public String getAllTrucks(Model model) {
-        model.addAttribute("truck",new Truck());
+        model.addAttribute("truck",new TruckDTO());
 
         model.addAttribute("trucks",truckService.getAllTrucks());
 
-        return "allTrucks";
+        return "trucks/allTrucks";
     }
+
+
+
 }

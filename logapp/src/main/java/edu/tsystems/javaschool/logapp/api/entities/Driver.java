@@ -1,27 +1,49 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
-public class Driver {
-    private Long driverId;
-    private String driverFirstName;
-    private String driverSurName;
-    private long driverPrivateNum;
-    private int driverWorkedHours;
-    private Status driverStatus;
-    private City driverCurrentCity;
-    private Truck driverCurrentTruck;
+import javax.persistence.*;
 
-    public Driver(String driverFirstName, String driverSurName, long driverPrivateNum,
-                  int driverWorkedHours, Status driverStatus, City driverCurrentCity, Truck driverCurrentTruck) {
-        this.driverFirstName = driverFirstName;
-        this.driverSurName = driverSurName;
-        this.driverPrivateNum = driverPrivateNum;
-        this.driverWorkedHours = driverWorkedHours;
-        this.driverStatus = driverStatus;
-        this.driverCurrentCity = driverCurrentCity;
-        this.driverCurrentTruck = driverCurrentTruck;
-    }
+@Entity
+@Table(name = "lg_drivers")
+public class Driver {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "dr_id")
+    private Long driverId;
+
+    @Column(name = "dr_firstName")
+    private String driverFirstName;
+
+    @Column(name="dr_surname")
+    private String driverSurname;
+
+    @Column(name="dr_PrivateNum")
+    private Long driverPrivateNum;
+
+    @Column(name="dr_workingHours")
+    private Integer driverWorkedHours;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="dr_status")
+    private Status driverStatus;
+
+    @Column(name="dr_cityId")
+    private int driverCityId;
+
+
+    @ManyToOne()
+    @JoinColumn(name="dr_id",insertable = false, updatable = false)
+    private Truck currentTruck;
 
     public Driver() {
+    }
+
+    public Truck getCurrentTruck() {
+        return currentTruck;
+    }
+
+    public void setCurrentTruck(Truck currentTruck) {
+        this.currentTruck = currentTruck;
     }
 
     public Long getDriverId() {
@@ -32,7 +54,7 @@ public class Driver {
         this.driverId = driverId;
     }
 
-    private enum Status {
+    public enum Status {
         OFF,WORKING,DRIVING
     }
 
@@ -44,12 +66,12 @@ public class Driver {
         this.driverFirstName = driverFirstName;
     }
 
-    public String getDriverSurName() {
-        return driverSurName;
+    public String getDriverSurname() {
+        return driverSurname;
     }
 
-    public void setDriverSurName(String driverSurName) {
-        this.driverSurName = driverSurName;
+    public void setDriverSurname(String driverSurname) {
+        this.driverSurname = driverSurname;
     }
 
     public long getDriverPrivateNum() {
@@ -76,19 +98,13 @@ public class Driver {
         this.driverStatus = driverStatus;
     }
 
-    public City getDriverCurrentCity() {
-        return driverCurrentCity;
+    public int getDriverCityId() {
+        return driverCityId;
     }
 
-    public void setDriverCurrentCity(City driverCurrentCity) {
-        this.driverCurrentCity = driverCurrentCity;
+    public void setDriverCityId(int driverCityId) {
+        this.driverCityId = driverCityId;
     }
 
-    public Truck getDriverCurrentTruck() {
-        return driverCurrentTruck;
-    }
 
-    public void setDriverCurrentTruck(Truck driverCurrentTruck) {
-        this.driverCurrentTruck = driverCurrentTruck;
-    }
 }

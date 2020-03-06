@@ -14,10 +14,10 @@ public class TruckFormValidator implements Validator {
 
     public void validate(Object o, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"regNumber","regNum.required");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"capacityKg","capacity.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"capacityTons","capacity.required");
 
-        if(((Truck) o).getCapacityKg()<=0){
-            errors.rejectValue("capacityKg","negative Value",new Object[]{"'capacityKg'"}, "capacity can't be negative");
+        if(((Truck) o).getCapacityTons()<=0){
+            errors.rejectValue("capacityTons","negative Value",new Object[]{"'capacityTons'"}, "capacity can't be negative");
         }
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"condition","condition.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"cityId","city id is required");

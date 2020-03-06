@@ -1,14 +1,31 @@
 package edu.tsystems.javaschool.logapp.api.entities.dto;
 
-import edu.tsystems.javaschool.logapp.api.entities.City;
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
 
 public class TruckDTO {
+
     private String regNumber;
-    private String driverName;
+
+    private int driverWorkingHours;
+
+
+    private int capacityTons;
+
     private Truck.Condition condition;
-    private City currentCity;
-    private String orderId;
+
+    private Integer currentCityId;
+
+    public TruckDTO() {
+    }
+
+    public TruckDTO(String regNumber, int driverWorkingHours, int capacityTons, Truck.Condition condition, Integer currentCityId) {
+        this.regNumber = regNumber;
+        this.driverWorkingHours = driverWorkingHours;
+        this.capacityTons = capacityTons;
+        this.condition = condition;
+        this.currentCityId = currentCityId;
+    }
+
 
     public String getRegNumber() {
         return regNumber;
@@ -18,12 +35,20 @@ public class TruckDTO {
         this.regNumber = regNumber;
     }
 
-    public String getDriverName() {
-        return driverName;
+    public int getDriverWorkingHours() {
+        return driverWorkingHours;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
+    public void setDriverWorkingHours(int driverWorkingHours) {
+        this.driverWorkingHours = driverWorkingHours;
+    }
+
+    public int getCapacityTons() {
+        return capacityTons;
+    }
+
+    public void setCapacityTons(int capacityTons) {
+        this.capacityTons = capacityTons;
     }
 
     public Truck.Condition getCondition() {
@@ -34,20 +59,12 @@ public class TruckDTO {
         this.condition = condition;
     }
 
-    public City getCurrentCity() {
-        return currentCity;
+    public Integer getCurrentCityId() {
+        return currentCityId;
     }
 
-    public void setCurrentCity(City currentCity) {
-        this.currentCity = currentCity;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setCurrentCityId(Integer currentCityId) {
+        this.currentCityId = currentCityId;
     }
 
 

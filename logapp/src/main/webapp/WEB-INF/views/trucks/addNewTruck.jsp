@@ -63,7 +63,7 @@
 
 
     <p>Capacity:<input type = "number"
-                                  name="capacityKg"
+                                  name="capacityTons"
                                   min = "10";
                                   max="30"
                                   placeholder="Capacity"></p>
