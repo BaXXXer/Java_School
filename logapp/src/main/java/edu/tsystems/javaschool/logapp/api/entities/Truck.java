@@ -14,21 +14,25 @@ public class Truck {
 
     @Column(name = "tr_regNum")
     @Pattern(regexp = "[A-Z]{2}\\d{5}")
+//    @NotEmpty
     private String regNumber;
 
     @Column(name = "tr_workingHours")
     private int driverWorkingHours;
 
     @Column(name = "tr_capacityKg")
+//    @NotEmpty @Min(2) @Max(25)
     private int capacityKg;
 
     @Column(name = "tr_condition")
     @Enumerated(EnumType.STRING)
+//    @NotEmpty
     private Condition condition;
 
 //    @ManyToOne
 //    @JoinColumn(name = "city_id")
     @Column(name = "tr_cityid")
+//    @NotEmpty
     private int currentCityId;
 
     public Truck(@Pattern(regexp = "[A-Z]{2}\\d{5}") String regNumber, int driverWorkingHours, int capacityKg, Condition condition, int currentCityId) {

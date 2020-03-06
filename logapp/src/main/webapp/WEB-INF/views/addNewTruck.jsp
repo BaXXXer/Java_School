@@ -11,6 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 
 <html>
@@ -23,50 +24,71 @@
 </head>
 <body>
 <h3>Enter the truck details below:</h3>
-<form:form action="/addTruck" method = "POST" modelAttribute="addTruck" >
+<style>
+    .error {
+        color: #ff0000;
+        font-style: italic;
+        font-weight: bold;
+    }
+</style>
+<springForm:form action="/addTruck" method = "POST" modelAttribute="truckToAdd" >
 
     <table>
-        <tr>
-            <td><form:label path="regNumber">Registration Number</form:label></td>
-            <td><form:input path="regNumber"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="driverWorkingHours">Driver Working Hours</form:label></td>
-            <td><form:input path="driverWorkingHours"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="capacityKg">Capacity (kg)</form:label></td>
-            <td><form:input path="capacityKg"/></td>
-        </tr>
-        <tr>
-            <td><form:label path="condition">Condition</form:label></td>
-            <td>
 
-                <form:select path="condition">
-                    <form:option value="" label="Choose Type.." />
-                    <form:options items="${enumCondition}"/>
-                </form:select>
+<%--        <tr>--%>
+<%--            <td><springForm:input path="regNumber" />Registration Number</td>--%>
+<%--            <td><springForm:errors path="regNumber" cssClass="error" /></td>--%>
+<%--        </tr>--%>
 
-            </td>
-        </tr>
-        <tr>
-            <td><form:label path="currentCityId">Current city (id)</form:label></td>
-            <td><form:input path="currentCityId"/></td>
-        </tr>
+    <p>Registration Number (format AA00000):<input name="regNumber"
+                                      required minlength="7"
+                                      placeholder="Registration Number"
+                                      pattern="[A-Z]{2}\d{5}" ></p>
+
+    <p>Working Hours:<input type = "number"
+                                  name="driverWorkingHours"
+                                  required minlength="7"
+                                  placeholder="Working Hours"></p>
+
+                <tr>
+                    <td><springForm:label path="condition">Condition</springForm:label></td>
+                    <td>
+
+                        <springForm:select path="condition">
+                            <springForm:option value="" label="Choose Type.." />
+                            <springForm:options items="${enumCondition}"/>
+                        </springForm:select>
+
+                    </td>
+
+
+    <p>Capacity:<input type = "number"
+                                  name="capacityKg"
+                                  min = "10";
+                                  max="30"
+                                  placeholder="Capacity"></p>
+    <p>City Idr:<input type = "number"
+                                  name="currentCityId"
+                                  required maxength="2"
+                                  placeholder="City ID"></p>
+
+
         <tr>
             <td><input type="submit" value="Submit"/></td>
         </tr>
 
     </table>
+</springForm:form>
+<springForm:form method="POST" modelAttribute="truckToAdd">
+<table>
 
-<%--        <a href="">Get all trucks</a>--%>
-<%--        <a href="/">Main page</a>--%>
+</table>
+</springForm:form>
 
-    </form>
-
-    <a class="btn btn-primary" href="/allTrucks" role="button">Get all trucks</a>
-    <a class="btn btn-primary" href="/" role="button">Main page</a>
+    <a class="btn btn-primary" href="
+    ${pageContext.request.contextPath}/allTrucks" role="button">Get all trucks</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 
     </body>
-</form:form>
+
 </html>

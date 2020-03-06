@@ -21,6 +21,10 @@ public class TruckService {
     public TruckService() {
     }
 
+    public TruckDao getTruckDao() {
+        return truckDao;
+    }
+
     public void saveTruck(Truck truck) throws IOException {
         truckDao.saveTruck(truck);
     }
