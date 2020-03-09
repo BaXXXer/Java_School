@@ -9,4 +9,8 @@ public interface TruckDao {
 
     List<Truck> getAllTrucks();
     void saveTruck(Truck truck) throws IOException;
+    void updateTruck(Truck truck);
+    void removeTruck(int id);
+    Truck getTruckById(int id);
+
 }

@@ -23,6 +23,8 @@
                 <th scope="col">Status</th>
                 <th scope="col">Current truck</th>
                 <th scope="col">Current city</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
 
                 </thead>
             </tr>
@@ -34,15 +36,17 @@
                     <td>${driver.driverPrivateNum}</td>
                     <td>${driver.driverWorkedHours}</td>
                     <td>${driver.driverStatus}</td>
-                    <td>${driver.currentTruck}</td>
-                    <td>${driver.driverCity}</td>
+                    <td>${driver.driversTruckId}</td>
+                    <td>${driver.driverCityId}</td>
+                    <td><a href = "<c:url value='/editDriver/${driver.driverId}' />">Edit</a></td>
+                    <td><a href = "<c:url value='/removeDriver/${driver.driverId}' />">Delete</a></td>
                 </tr>
             </c:forEach>
         </table>
     </c:if>
 
-    <a class="btn btn-primary" href="/addDriver" role="button">Add driver</a>
-    <a class="btn btn-primary" href="/" role="button">Main page</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/addDriver" role="button">Add driver</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 </div>
 
 </body>

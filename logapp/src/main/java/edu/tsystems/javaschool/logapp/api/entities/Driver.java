@@ -1,6 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "lg_drivers")
@@ -9,7 +10,7 @@ public class Driver {
     @Id
     @GeneratedValue
     @Column(name = "dr_id")
-    private Long driverId;
+    private Integer driverId;
 
     @Column(name = "dr_firstName")
     private String driverFirstName;
@@ -18,7 +19,7 @@ public class Driver {
     private String driverSurname;
 
     @Column(name="dr_PrivateNum")
-    private Long driverPrivateNum;
+    private Integer driverPrivateNum;
 
     @Column(name="dr_workingHours")
     private Integer driverWorkedHours;
@@ -32,7 +33,7 @@ public class Driver {
 
 
     @ManyToOne()
-    @JoinColumn(name="dr_id",insertable = false, updatable = false)
+    @JoinColumn(name="currentTruck_tr_id")
     private Truck currentTruck;
 
     public Driver() {
@@ -46,16 +47,36 @@ public class Driver {
         this.currentTruck = currentTruck;
     }
 
-    public Long getDriverId() {
+    public Integer getDriverId() {
         return driverId;
     }
 
-    public void setDriverId(Long driverId) {
+    public void setDriverId(Integer driverId) {
         this.driverId = driverId;
     }
 
     public enum Status {
         OFF,WORKING,DRIVING
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Driver driver = (Driver) o;
+        return driverCityId == driver.driverCityId &&
+                Objects.equals(driverId, driver.driverId) &&
+                Objects.equals(driverFirstName, driver.driverFirstName) &&
+                Objects.equals(driverSurname, driver.driverSurname) &&
+                Objects.equals(driverPrivateNum, driver.driverPrivateNum) &&
+                Objects.equals(driverWorkedHours, driver.driverWorkedHours) &&
+                driverStatus == driver.driverStatus &&
+                Objects.equals(currentTruck, driver.currentTruck);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(driverId, driverFirstName, driverSurname, driverPrivateNum, driverWorkedHours, driverStatus, driverCityId, currentTruck);
     }
 
     public String getDriverFirstName() {
@@ -74,12 +95,16 @@ public class Driver {
         this.driverSurname = driverSurname;
     }
 
-    public long getDriverPrivateNum() {
+    public Integer getDriverPrivateNum() {
         return driverPrivateNum;
     }
 
-    public void setDriverPrivateNum(long driverPrivateNum) {
+    public void setDriverPrivateNum(Integer driverPrivateNum) {
         this.driverPrivateNum = driverPrivateNum;
+    }
+
+    public void setDriverWorkedHours(Integer driverWorkedHours) {
+        this.driverWorkedHours = driverWorkedHours;
     }
 
     public int getDriverWorkedHours() {
@@ -105,6 +130,9 @@ public class Driver {
     public void setDriverCityId(int driverCityId) {
         this.driverCityId = driverCityId;
     }
+
+
+
 
 
 }

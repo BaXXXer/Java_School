@@ -33,8 +33,8 @@
 </style>
 <springForm:form action="/addTruck" method = "POST" modelAttribute="truckToAdd" >
 
-    <table>
 
+    <table>
 <%--        <tr>--%>
 <%--            <td><springForm:input path="regNumber" />Registration Number</td>--%>
 <%--            <td><springForm:errors path="regNumber" cssClass="error" /></td>--%>
@@ -67,7 +67,7 @@
                                   min = "10";
                                   max="30"
                                   placeholder="Capacity"></p>
-    <p>City Idr:<input type = "number"
+    <p>City Id:<input type = "number"
                                   name="currentCityId"
                                   required maxength="2"
                                   placeholder="City ID"></p>
@@ -77,12 +77,9 @@
             <td><input type="submit" value="Submit"/></td>
         </tr>
 
-    </table>
-</springForm:form>
-<springForm:form method="POST" modelAttribute="truckToAdd">
-<table>
 
-</table>
+
+    </table>
 </springForm:form>
 
     <a class="btn btn-primary" href="

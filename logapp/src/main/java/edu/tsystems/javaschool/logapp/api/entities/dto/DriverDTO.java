@@ -1,17 +1,35 @@
 package edu.tsystems.javaschool.logapp.api.entities.dto;
 
-import edu.tsystems.javaschool.logapp.api.entities.City;
 import edu.tsystems.javaschool.logapp.api.entities.Driver;
-import edu.tsystems.javaschool.logapp.api.entities.Truck;
+
+import javax.persistence.GeneratedValue;
 
 public class DriverDTO {
+    @GeneratedValue
+    private int driverId;
     private String driverFirstName;
     private String driverSurname;
-    private Long driverPrivateNum;
+    private Integer driverPrivateNum;
     private Integer driverWorkedHours;
     private Driver.Status driverStatus;
-    private City driverCity;
-    private Truck currentTruck;
+    private Integer driverCityId;
+    private Integer driversTruckId;
+
+    public int getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(int driverId) {
+        this.driverId = driverId;
+    }
+
+    public Integer getDriverPrivateNum() {
+        return driverPrivateNum;
+    }
+
+    public void setDriverPrivateNum(Integer driverPrivateNum) {
+        this.driverPrivateNum = driverPrivateNum;
+    }
 
     public String getDriverFirstName() {
         return driverFirstName;
@@ -27,14 +45,6 @@ public class DriverDTO {
 
     public void setDriverSurname(String driverSurname) {
         this.driverSurname = driverSurname;
-    }
-
-    public long getDriverPrivateNum() {
-        return driverPrivateNum;
-    }
-
-    public void setDriverPrivateNum(long driverPrivateNum) {
-        this.driverPrivateNum = driverPrivateNum;
     }
 
     public int getDriverWorkedHours() {
@@ -53,22 +63,23 @@ public class DriverDTO {
         this.driverStatus = driverStatus;
     }
 
-    public City getDriverCity() {
-        return driverCity;
+    public void setDriverWorkedHours(Integer driverWorkedHours) {
+        this.driverWorkedHours = driverWorkedHours;
     }
 
-    public void setDriverCity(City driverCity) {
-        this.driverCity = driverCity;
+    public Integer getDriverCityId() {
+        return driverCityId;
     }
 
-    public Truck getCurrentTruck() {
-        return currentTruck;
+    public void setDriverCityId(Integer driverCityId) {
+        this.driverCityId = driverCityId;
     }
 
-    public void setCurrentTruck(Truck currentTruck) {
-        this.currentTruck = currentTruck;
+    public Integer getDriversTruckId() {
+        return driversTruckId;
     }
 
-
-
+    public void setDriversTruckId(Integer driversTruckId) {
+        this.driversTruckId = driversTruckId;
+    }
 }

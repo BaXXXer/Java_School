@@ -33,6 +33,8 @@
                 <th scope="col">Truck capacity</th>
                 <th scope="col">Condition</th>
                 <th scope="col">City id</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
 
             </thead>
         </tr>
@@ -43,14 +45,17 @@
                 <td>${truck.driverWorkingHours}</td>
                 <td>${truck.capacityTons}</td>
                 <td>${truck.condition}</td>
-                <td>${truck.currentCityId}</td>
+                <td>${truck.cityId}</td>
+                <td><a href = "<c:url value='/editTruck/${truck.id}' />">Edit</a></td>
+                <td><a href = "<c:url value='/removeTruck/${truck.id}' />">Delete</a></td>
+
             </tr>
         </c:forEach>
     </table>
 </c:if>
 
-    <a class="btn btn-primary" href="/addTruck" role="button">Add truck</a>
-    <a class="btn btn-primary" href="/" role="button">Main page</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/addTruck" role="button">Add truck</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 </div>
 
 </body>

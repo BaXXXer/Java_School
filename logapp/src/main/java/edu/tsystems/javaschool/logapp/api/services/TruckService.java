@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.faces.bean.ManagedBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@ManagedBean(name = "truckService")
 public class TruckService {
 
 
@@ -32,6 +30,7 @@ public class TruckService {
         return truckDao;
     }
 
+    //TODO: correct mapping dto-dao finish (@Transactional??)
     public void saveTruck(TruckDTO truckDTO) throws IOException {
         truckDao.saveTruck(mapper.toEntity(truckDTO));
 //        truckDao.saveTruck(truck);
@@ -50,13 +49,43 @@ public class TruckService {
 //        return truckDao.getAllTrucks();
     }
 
+    public void updateTruck(TruckDTO truck) {
 
-//    public List<String> getAllTruckRegNums(){
-//        List<String> regNumbers = new ArrayList();
-//        for(TruckDTO dto : this.getAllTrucks()){
-//            regNumbers.add(dto.getRegNumber());
-//        }
-//        return regNumbers;
-//
-//    }
+
+        truckDao.updateTruck(mapper.toEntity(truck));
+    }
+
+    public void removeTruck(int id) {
+        truckDao.removeTruck(id);
+    }
+
+    //TODO: refactor with working hours dependent on orders
+    @Transactional
+    public TruckDTO getTruckById(int id){
+        Truck dao = truckDao.getTruckById(id);
+        TruckDTO dto = new TruckDTO();
+        dto.setId(dao.getId());
+        dto.setRegNumber(dao.getRegNum());
+
+        dto.setDriverWorkingHours(dao.getWorkingHours());
+        dto.setCapacityTons(dao.getCapacityTons());
+        dto.setCondition(dao.getCondition());
+        dto.setCityId(dao.getCityId());
+        return dto;
+    }
+
+    private static TruckDTO toDTO(Truck dao){
+        TruckDTO truckDTO = new TruckDTO();
+        truckDTO.setId(dao.getId());
+        truckDTO.setRegNumber(dao.getRegNum());
+
+        truckDTO.setDriverWorkingHours(dao.getWorkingHours());
+        truckDTO.setCapacityTons(dao.getCapacityTons());
+        truckDTO.setCondition(dao.getCondition());
+        truckDTO.setCityId(dao.getCityId());
+        return truckDTO;
+
+    }
+
+
 }

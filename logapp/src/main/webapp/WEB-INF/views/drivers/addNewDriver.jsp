@@ -33,7 +33,7 @@
                             placeholder="First Name"
                             width="100"></p>
 
-        <p>Surname:<input type = "number"
+        <p>Surname:<input type = "text"
                                 name="driverSurname"
                                 required minlength="2"
                                 placeholder="Surname"></p>
@@ -42,12 +42,12 @@
             name="driverPrivateNum"
             required minlength="8"
             required maxlength="8"
-            placeholder="First Name" ></p>
+            placeholder="Private Number" ></p>
         <p>Worked Hours: <input
                 name="driverWorkedHours"
                 min="0"
                 max="176"
-                placeholder="First Name" ></p>
+                placeholder="Worker hours" ></p>
 
         <tr>
             <td><springForm:label path="driverStatus">Status:</springForm:label></td>
@@ -60,19 +60,33 @@
 
             </td>
 
-        <tr>
-            <td><springForm:label path="currentTruck">Truck:</springForm:label></td>
-            <td>
+            <p>Truck Id: <input
+                    name="truckId"
+                    min="0"
+                    max="176"
+                    placeholder="Truck Id" ></p>
 
-                <springForm:select path="currentTruck">
-                    <springForm:option value="" label="Choose Truck..." />
-                    <springForm:options items="${truckList}"/>
-                </springForm:select>
+            <p>City Id: <input
+                    name="cityId"
+                    min="0"
+                    max="176"
+                    placeholder="City Id" ></p>
 
-            </td>
 
 
-        <tr>
+<%--        <tr>--%>
+<%--            <td><springForm:label path="currentTruck">Truck:</springForm:label></td>--%>
+<%--            <td>--%>
+
+<%--                <springForm:select path="currentTruck">--%>
+<%--                    <springForm:option value="" label="Choose Truck..." />--%>
+<%--                    <springForm:options items="${truckList}"/>--%>
+<%--                </springForm:select>--%>
+
+<%--            </td>--%>
+
+
+<%--        <tr>--%>
             <td><input type="submit" value="Submit"/></td>
         </tr>
 

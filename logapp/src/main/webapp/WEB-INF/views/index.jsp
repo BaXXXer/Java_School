@@ -20,7 +20,9 @@
 <body>
 
     <a class="btn btn-primary" href="/addTruck" role="button">Add truck</a>
-    <a class="btn btn-primary" href="/allTrucks" role="button">See all trucks</a>
+    <a class="btn btn-primary" href="/allTrucks" role="button">See all trucks</a><br><br><br>
+    <a class="btn btn-primary" href="/addDriver" role="button">Add driver</a>
+    <a class="btn btn-primary" href="/allDrivers" role="button">See all drivers</a>
 
 </body>
 </html>

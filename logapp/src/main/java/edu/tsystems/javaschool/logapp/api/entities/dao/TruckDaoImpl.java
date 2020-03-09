@@ -16,6 +16,31 @@ import java.util.List;
 @Transactional
 public class TruckDaoImpl implements TruckDao {
 
+    @Override
+    @Transactional
+    public Truck getTruckById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Truck truck = session.load(Truck.class, id);
+        return truck;
+    }
+
+    @Override
+    @Transactional
+    public void updateTruck(Truck truck) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(truck);
+    }
+
+    @Override
+    @Transactional
+    public void removeTruck(int id) {
+        Session session = this.sessionFactory.getCurrentSession();
+        Truck p = (Truck) session.load(Truck.class, id);
+        if (null != p) {
+            session.delete(p);
+        }
+
+    }
 
 
     @Qualifier("sessionFactory")
@@ -42,13 +67,12 @@ public class TruckDaoImpl implements TruckDao {
 
 
     @Transactional
-    public void saveTruck(Truck truck){
-
+    public void saveTruck(Truck truck) {
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         session.save(truck);
         tx.commit();
-        session.close();
+//        session.close();
 
     }
 

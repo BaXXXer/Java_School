@@ -2,7 +2,11 @@ package edu.tsystems.javaschool.logapp.api.entities.dto;
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
 
+import javax.persistence.GeneratedValue;
+
 public class TruckDTO {
+    @GeneratedValue
+    private int id;
 
     private String regNumber;
 
@@ -13,17 +17,26 @@ public class TruckDTO {
 
     private Truck.Condition condition;
 
-    private Integer currentCityId;
+    private Integer cityId
+            ;
 
     public TruckDTO() {
     }
 
-    public TruckDTO(String regNumber, int driverWorkingHours, int capacityTons, Truck.Condition condition, Integer currentCityId) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public TruckDTO(String regNumber, int driverWorkingHours, int capacityTons, Truck.Condition condition, Integer cityId) {
         this.regNumber = regNumber;
         this.driverWorkingHours = driverWorkingHours;
         this.capacityTons = capacityTons;
         this.condition = condition;
-        this.currentCityId = currentCityId;
+        this.cityId = cityId;
     }
 
 
@@ -59,13 +72,16 @@ public class TruckDTO {
         this.condition = condition;
     }
 
-    public Integer getCurrentCityId() {
-        return currentCityId;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCurrentCityId(Integer currentCityId) {
-        this.currentCityId = currentCityId;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
-
+    @Override
+    public String toString() {
+        return regNumber;
+    }
 }
