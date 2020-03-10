@@ -2,7 +2,6 @@ package edu.tsystems.javaschool.logapp.api.entities;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "lg_trucks")
@@ -16,13 +15,13 @@ public class Truck {
     @Column(name = "tr_regNum")
     private String regNum;
 
-    @OneToMany(mappedBy = "currentTruck",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "currentTruck", cascade = CascadeType.ALL)
     private List<Driver> drivers;
 
-    @Column(name = "tr_orderId")
-    private Integer orderId;
+    @OneToOne(mappedBy = "truckOnOrder")
+    private Order currentOrder;
 
-    @Column(name="tr_workingHours")
+    @Column(name = "tr_workingHours")
     private Integer workingHours;
 
     @Column(name = "tr_cityId")
@@ -36,7 +35,7 @@ public class Truck {
     private Condition condition;
 
     public enum Condition {
-        OK, BROKEN ;
+        OK, BROKEN;
 
         private String code;
 
@@ -52,9 +51,9 @@ public class Truck {
 
         }
 
-        public static Condition fromCode(String condition){
-            for(Condition cond: Condition.values()){
-                if(cond.getCode().equals(condition)){
+        public static Condition fromCode(String condition) {
+            for (Condition cond : Condition.values()) {
+                if (cond.getCode().equals(condition)) {
                     return cond;
                 }
             }
@@ -69,9 +68,6 @@ public class Truck {
         this.id = id;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
 
     public Integer getWorkingHours() {
         return workingHours;
@@ -89,24 +85,12 @@ public class Truck {
         this.capacityTons = capacityTons;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Truck truck = (Truck) o;
-        return Objects.equals(id, truck.id) &&
-                Objects.equals(regNum, truck.regNum) &&
-                Objects.equals(drivers, truck.drivers) &&
-                Objects.equals(orderId, truck.orderId) &&
-                Objects.equals(workingHours, truck.workingHours) &&
-                Objects.equals(cityId, truck.cityId) &&
-                Objects.equals(capacityTons, truck.capacityTons) &&
-                condition == truck.condition;
+    public Order getCurrentOrder() {
+        return currentOrder;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, regNum, drivers, orderId, workingHours, cityId, capacityTons, condition);
+    public void setCurrentOrder(Order currentOrder) {
+        this.currentOrder = currentOrder;
     }
 
     public Integer getId() {
@@ -131,14 +115,6 @@ public class Truck {
 
     public void setDrivers(List<Driver> drivers) {
         this.drivers = drivers;
-    }
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
     }
 
     public Integer getCityId() {

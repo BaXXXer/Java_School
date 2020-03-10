@@ -1,7 +1,8 @@
-package edu.tsystems.javaschool.logapp.api.entities.dao;
+package edu.tsystems.javaschool.logapp.api.entities.daoImpl;
 
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
+import edu.tsystems.javaschool.logapp.api.entities.dao.TruckDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

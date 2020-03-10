@@ -1,36 +1,38 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name="lg_orders")
 public class Order {
+    @Id
+    @GeneratedValue
+    @Column(name="or_id")
     private Long orderId;
+
+    @Column(name="or_isDone")
     private boolean orderIsDone;
-    private List<DestinationPoint> destinationPoints;
+
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OrderBy(value = "waypointWeight asc")
+    private List<OrderWaypoint> wayPoints;
+
+    @OneToOne
+    @JoinColumn(name = "truckOnOrder_tr_id")
     private Truck truckOnOrder;
+
+
+    @ManyToMany
+    @JoinTable(name="lg_orders_droversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
+    inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private List <Driver> driversOnOrder;
 
-    private static class DestinationPoint {
-        private City destCity;
-        private Cargo destCargo;
-        private LoadType loadType;
-
-        private enum LoadType{
-            LOAD,UNLOAD
-        }
-
-        public DestinationPoint(City destCity, Cargo destCargo, LoadType loadType) {
-            this.destCity = destCity;
-            this.destCargo = destCargo;
-            this.loadType = loadType;
-        }
-    }
-
-
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
@@ -42,12 +44,12 @@ public class Order {
         this.orderIsDone = orderIsDone;
     }
 
-    public List<DestinationPoint> getDestinationPoints() {
-        return destinationPoints;
+    public List<OrderWaypoint> getWayPoints() {
+        return wayPoints;
     }
 
-    public void setDestinationPoints(List<DestinationPoint> destinationPoints) {
-        this.destinationPoints = destinationPoints;
+    public void setWayPoints(List<OrderWaypoint> wayPoints) {
+        this.wayPoints = wayPoints;
     }
 
     public Truck getTruckOnOrder() {

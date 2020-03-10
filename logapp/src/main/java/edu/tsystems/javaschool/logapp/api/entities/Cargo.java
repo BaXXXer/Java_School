@@ -1,21 +1,51 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="lg_cargo")
 public class Cargo {
-    private long cargoId;
+    @Id
+    @GeneratedValue
+    @Column(name = "cg_id")
+    private int cargoId;
+
+    /**
+     * Unique cargo identifier for given order.
+     */
+
+    @Column(name="cg_name")
     private String cargoName;
+
+    /**
+     * Cargo description.
+     */
+    @Column(name = "title")
+//    @NotNull
+//    @Size(min = 1)
+    private String title;
+
+    @Column(name="cg_weight")
     private int cargoWeightKilos;
+
+    @Column(name = "cg_status")
+    @Enumerated(EnumType.STRING)
     private Status cargoStatus;
 
-    private enum Status{
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    public enum Status{
         READY, SHIPPED, DELIVERED
     }
 
-    public long getCargoId() {
+    public int getCargoId() {
         return cargoId;
     }
 
-    public void setCargoId(long cargoId) {
+    public void setCargoId(int cargoId) {
         this.cargoId = cargoId;
     }
 
@@ -25,6 +55,14 @@ public class Cargo {
 
     public void setCargoName(String cargoName) {
         this.cargoName = cargoName;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getCargoWeightKilos() {
@@ -41,5 +79,13 @@ public class Cargo {
 
     public void setCargoStatus(Status cargoStatus) {
         this.cargoStatus = cargoStatus;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

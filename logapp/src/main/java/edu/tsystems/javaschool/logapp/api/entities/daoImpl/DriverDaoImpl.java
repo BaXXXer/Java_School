@@ -1,6 +1,7 @@
-package edu.tsystems.javaschool.logapp.api.entities.dao;
+package edu.tsystems.javaschool.logapp.api.entities.daoImpl;
 
 import edu.tsystems.javaschool.logapp.api.entities.Driver;
+import edu.tsystems.javaschool.logapp.api.entities.dao.DriverDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
