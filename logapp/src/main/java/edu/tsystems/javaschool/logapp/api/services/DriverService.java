@@ -33,8 +33,22 @@ public class DriverService {
 
     @Transactional
     public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
-//        Driver driver = mapper.toEntity(driverDTO);
-        Driver driver = new Driver();
+        Driver driver = toEntity(driverDTO);
+        try {
+            driver.setDriversTruckId(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            driverDao.saveDriver(driver);
+
+        } catch (DataIntegrityViolationException ex) {
+            throw new EntityNotFoundException("Truck", driverDTO.getDriversTruckId());
+        } catch (IOException ex) {
+            throw new RuntimeException("exception while saving" + ex);
+        }
+
+
+    }
+
+    private Driver toEntity(DriverDTO driverDTO) {
+        Driver driver = mapper.toEntity(driverDTO);
 
         driver.setDriverSurname(driverDTO.getDriverSurname());
         driver.setDriverFirstName(driverDTO.getDriverFirstName());
@@ -42,25 +56,36 @@ public class DriverService {
         driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
         driver.setDriverStatus(driverDTO.getDriverStatus());
         driver.setDriverCityId(driverDTO.getDriverCityId());
-        try {
-            driver.setCurrentTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-            driverDao.saveDriver(driver);
-
-        } catch (DataIntegrityViolationException ex) {
-            throw new EntityNotFoundException("Truck", driverDTO.getDriversTruckId());
-        } catch (IOException ex) {
-            throw new RuntimeException("exception while saving");
-        }
-
-
+        return driver;
     }
+
+    private DriverDTO toDto(Driver entity) {
+        DriverDTO dto = new DriverDTO();
+
+        try {
+            dto.setDriversTruckId(entity.getDriversTruckId().getId());
+        }catch (NullPointerException ex){
+            dto.setDriversTruckId(0);
+        }
+        dto.setDriverId(entity.getDriverId());
+        dto.setDriverPrivateNum(entity.getDriverPrivateNum());
+        dto.setDriverStatus(entity.getDriverStatus());
+        dto.setDriverCityId(entity.getDriverCityId());
+        dto.setDriverFirstName(entity.getDriverFirstName());
+        dto.setDriverSurname(entity.getDriverSurname());
+        dto.setDriverWorkedHours(entity.getDriverWorkedHours());
+
+        return dto;
+    }
+
+
 
     @Transactional
     public List<DriverDTO> getAllDrivers() {
         List<DriverDTO> dtos = new ArrayList();
 
         for (Driver d : driverDao.getAllDrivers()) {
-            dtos.add(mapper.toDto(d));
+            dtos.add(toDto(d));
         }
         return dtos;
     }
@@ -68,17 +93,7 @@ public class DriverService {
     @Transactional
     public DriverDTO getDriverById(int id) {
         Driver dao = driverDao.getDriverById(id);
-        DriverDTO dto = new DriverDTO();
-
-        dto.setDriverId(dao.getDriverId());
-        dto.setDriverFirstName(dao.getDriverFirstName());
-        dto.setDriverWorkedHours(dao.getDriverWorkedHours());
-        dto.setDriverSurname(dao.getDriverSurname());
-        dto.setDriversTruckId(dao.getCurrentTruck().getId());
-        dto.setDriverStatus(dao.getDriverStatus());
-        dto.setDriverCityId(dao.getDriverCityId());
-        dto.setDriverPrivateNum(dao.getDriverPrivateNum());
-        return dto;
+        return toDto(dao);
     }
 
     @Transactional

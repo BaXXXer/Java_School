@@ -33,18 +33,21 @@ public class Driver {
 
 
     @ManyToOne()
-    @JoinColumn(name="currentTruck_tr_id")
-    private Truck currentTruck;
+    @JoinColumn(name="driversTruckId_tr_id")
+    private Truck driversTruckId;
 
     public Driver() {
     }
 
-    public Truck getCurrentTruck() {
-        return currentTruck;
+
+
+
+    public Truck getDriversTruckId() {
+        return driversTruckId;
     }
 
-    public void setCurrentTruck(Truck currentTruck) {
-        this.currentTruck = currentTruck;
+    public void setDriversTruckId(Truck driversTruckId) {
+        this.driversTruckId = driversTruckId;
     }
 
     public Integer getDriverId() {
@@ -71,12 +74,12 @@ public class Driver {
                 Objects.equals(driverPrivateNum, driver.driverPrivateNum) &&
                 Objects.equals(driverWorkedHours, driver.driverWorkedHours) &&
                 driverStatus == driver.driverStatus &&
-                Objects.equals(currentTruck, driver.currentTruck);
+                Objects.equals(driversTruckId, driver.driversTruckId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(driverId, driverFirstName, driverSurname, driverPrivateNum, driverWorkedHours, driverStatus, driverCityId, currentTruck);
+        return Objects.hash(driverId, driverFirstName, driverSurname, driverPrivateNum, driverWorkedHours, driverStatus, driverCityId, driversTruckId);
     }
 
     public String getDriverFirstName() {

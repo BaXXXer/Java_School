@@ -17,8 +17,7 @@ public class TruckDTO {
 
     private Truck.Condition condition;
 
-    private Integer cityId
-            ;
+    private Integer currentCityId;
 
     public TruckDTO() {
     }
@@ -31,12 +30,12 @@ public class TruckDTO {
         this.id = id;
     }
 
-    public TruckDTO(String regNumber, int driverWorkingHours, int capacityTons, Truck.Condition condition, Integer cityId) {
+    public TruckDTO(String regNumber, int driverWorkingHours, int capacityTons, Truck.Condition condition, Integer currentCityId) {
         this.regNumber = regNumber;
         this.driverWorkingHours = driverWorkingHours;
         this.capacityTons = capacityTons;
         this.condition = condition;
-        this.cityId = cityId;
+        this.currentCityId = currentCityId;
     }
 
 
@@ -72,12 +71,12 @@ public class TruckDTO {
         this.condition = condition;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public Integer getCurrentCityId() {
+        return currentCityId;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCurrentCityId(Integer currentCityId) {
+        this.currentCityId = currentCityId;
     }
 
     @Override

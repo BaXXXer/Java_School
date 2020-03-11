@@ -16,6 +16,8 @@
             <tr>
                 <thead>
 
+                <th scope="col">Id</th>
+
                 <th scope="col">First Name</th>
                 <th scope="col">Surname</th>
                 <th scope="col">Private Number</th>
@@ -30,6 +32,9 @@
             </tr>
             <c:forEach items="${drivers}" var="driver">
                 <tr>
+
+                    <td>${driver.driverId}</td>
+
 
                     <td>${driver.driverFirstName}</td>
                     <td>${driver.driverSurname}</td>

@@ -27,34 +27,52 @@
             <%--        </tr>--%>
 
 
-        <p>Is order completed?<input type="radio" name="orderIsDone" value="Yes"> <input type="radio" name="orderIsDone" value="No"></p>
-
-        <tr>
-            <td><springForm:label path="condition">Condition</springForm:label></td>
-            <td>
-
-                <springForm:select path="condition">
-                    <springForm:option value="" label="Choose Type.."/>
-                    <springForm:options items="${enumCondition}"/>
-                </springForm:select>
-
-            </td>
+        <p>Is order completed?<input type="radio" name="orderIsDone" value="Yes">Yes <input type="radio" name="orderIsDone" value="No">No</p>
 
 
-            <p>Capacity:<input type="number"
-                               name="capacityTons"
+
+
+            <p>From (id):<input type="number"
+                               name="pointFromId"
                                min="10" ;
                                max="30"
-                               placeholder="Capacity"></p>
-            <p>City Id:<input type="number"
-                              name="currentCityId"
+                                placeholder="City ID"
+                               ></p>
+            <p>To (id):<input type="number"
+                              name="pointToId"
                               required maxength="2"
                               placeholder="City ID"></p>
+
+                <p>Truck id:<input type="number"
+                              name="truckId"
+                              required maxength="2"
+                              placeholder="Truck ID"></p>
+                <p>First driver id:<input type="number"
+                              name="driverId1"
+                              required maxength="2"
+                              placeholder="Driver ID"></p>
+                <p>Second driver id:<input type="number"
+                              name="driverId2"
+                              required maxength="2"
+                              placeholder="Driver ID"></p>
 
 
         <tr>
             <td><input type="submit" value="Submit"/></td>
         </tr>
+
+<%--                <tr>--%>
+
+<%--                    <td>--%>
+<%--                        <form:label path="orderId">--%>
+<%--                            <spring:message text="ID"/>--%>
+<%--                        </form:label>--%>
+<%--                    </td>--%>
+<%--                    <td>--%>
+<%--                        <form:input path="orderId" readonly="true" size="8" disabled="true" />--%>
+<%--&lt;%&ndash;                        <form:hidden path="orderId"/>&ndash;%&gt;--%>
+<%--                    </td>--%>
+<%--                </tr>--%>
 
 
     </table>

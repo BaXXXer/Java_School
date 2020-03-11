@@ -54,8 +54,8 @@ public class DriverController {
         model.addAttribute("driverPrivateNum", driverDTO);
         model.addAttribute("driverWorkedHours", driverDTO);
         model.addAttribute("driverStatus", driverDTO);
-        model.addAttribute("cityId", driverDTO);
-        model.addAttribute("truckId", driverDTO);
+        model.addAttribute("driverCityId", driverDTO);
+        model.addAttribute("driversTruckId", driverDTO);
         driverService.saveDriver(driverDTO);
         return "drivers/addNewDriver";
     }

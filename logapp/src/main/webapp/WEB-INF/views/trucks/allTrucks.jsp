@@ -28,6 +28,8 @@
         <tr>
             <thead>
 
+                <th scope="col">Truck Id</th>
+
                 <th scope="col">Truck Registration Number</th>
                 <th scope="col">Driver Working Hours</th>
                 <th scope="col">Truck capacity</th>
@@ -41,11 +43,12 @@
         <c:forEach items="${trucks}" var="truck">
             <tr>
 
+                <td>${truck.id}</td>
                 <td>${truck.regNumber}</td>
                 <td>${truck.driverWorkingHours}</td>
                 <td>${truck.capacityTons}</td>
                 <td>${truck.condition}</td>
-                <td>${truck.cityId}</td>
+                <td>${truck.currentCityId}</td>
                 <td><a href = "<c:url value='/editTruck/${truck.id}' />">Edit</a></td>
                 <td><a href = "<c:url value='/removeTruck/${truck.id}' />">Delete</a></td>
 

@@ -13,19 +13,19 @@ public class Truck {
     private Integer id;
 
     @Column(name = "tr_regNum")
-    private String regNum;
+    private String regNumber;
 
-    @OneToMany(mappedBy = "currentTruck", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "driversTruckId", cascade = CascadeType.ALL)
     private List<Driver> drivers;
 
     @OneToOne(mappedBy = "truckOnOrder")
     private Order currentOrder;
 
     @Column(name = "tr_workingHours")
-    private Integer workingHours;
+    private Integer driverWorkingHours;
 
     @Column(name = "tr_cityId")
-    private Integer cityId;
+    private Integer currentCityId;
 
     @Column(name = "tr_capacityTons")
     private Integer capacityTons;
@@ -69,16 +69,28 @@ public class Truck {
     }
 
 
-    public Integer getWorkingHours() {
-        return workingHours;
+    public String getRegNumber() {
+        return regNumber;
     }
 
-    public void setWorkingHours(Integer workingHours) {
-        this.workingHours = workingHours;
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public Integer getDriverWorkingHours() {
+        return driverWorkingHours;
+    }
+
+    public void setDriverWorkingHours(Integer driverWorkingHours) {
+        this.driverWorkingHours = driverWorkingHours;
+    }
+
+    public Integer getCurrentCityId() {
+        return currentCityId;
+    }
+
+    public void setCurrentCityId(Integer currentCityId) {
+        this.currentCityId = currentCityId;
     }
 
     public void setCapacityTons(Integer capacityTons) {
@@ -101,13 +113,7 @@ public class Truck {
         this.id = id;
     }
 
-    public String getRegNum() {
-        return regNum;
-    }
 
-    public void setRegNum(String regNum) {
-        this.regNum = regNum;
-    }
 
     public List<Driver> getDrivers() {
         return drivers;
@@ -117,13 +123,7 @@ public class Truck {
         this.drivers = drivers;
     }
 
-    public Integer getCityId() {
-        return cityId;
-    }
 
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
 
     public int getCapacityTons() {
         return capacityTons;
@@ -144,7 +144,7 @@ public class Truck {
     @Override
     public String toString() {
         return "Truck{" +
-                "regNum='" + regNum + '\'' +
+                "regNum='" + regNumber + '\'' +
                 '}';
     }
 

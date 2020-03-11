@@ -1,4 +1,4 @@
-package edu.tsystems.javaschool.logapp.api.entities.daoImpl;
+package edu.tsystems.javaschool.logapp.api.entities.dao_impl;
 
 import edu.tsystems.javaschool.logapp.api.entities.Driver;
 import edu.tsystems.javaschool.logapp.api.entities.dao.DriverDao;
@@ -46,8 +46,9 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public void updateDriver(Driver driver) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.update(driver);
+        try(Session session = this.sessionFactory.getCurrentSession()) {
+            session.update(driver);
+        }
     }
 
     @Override

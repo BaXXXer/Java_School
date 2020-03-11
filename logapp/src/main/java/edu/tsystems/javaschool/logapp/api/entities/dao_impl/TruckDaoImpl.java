@@ -1,4 +1,4 @@
-package edu.tsystems.javaschool.logapp.api.entities.daoImpl;
+package edu.tsystems.javaschool.logapp.api.entities.dao_impl;
 
 
 import edu.tsystems.javaschool.logapp.api.entities.Truck;
@@ -20,25 +20,27 @@ public class TruckDaoImpl implements TruckDao {
     @Override
     @Transactional
     public Truck getTruckById(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Truck truck = session.load(Truck.class, id);
-        return truck;
+        try(Session session = this.sessionFactory.openSession()) {
+            return session.load(Truck.class, id);
+        }
     }
 
     @Override
     @Transactional
     public void updateTruck(Truck truck) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.update(truck);
+        try(Session session = this.sessionFactory.openSession()) {
+            session.update(truck);
+        }
     }
 
     @Override
     @Transactional
     public void removeTruck(int id) {
-        Session session = this.sessionFactory.getCurrentSession();
-        Truck p = (Truck) session.load(Truck.class, id);
-        if (null != p) {
-            session.delete(p);
+        try(Session session = this.sessionFactory.openSession()) {
+            Truck p = session.load(Truck.class, id);
+            if (null != p) {
+                session.delete(p);
+            }
         }
 
     }
@@ -60,20 +62,23 @@ public class TruckDaoImpl implements TruckDao {
     public TruckDaoImpl() {
     }
 
+    @Transactional
     public List<Truck> getAllTrucks() {
-        Session session = this.sessionFactory.getCurrentSession();
-        List<Truck> truckList = session.createQuery("from Truck").list();
-        return truckList;
+        try(Session session = this.sessionFactory.openSession()) {
+            return session.createQuery("from Truck").list();
+        }
     }
 
 
     @Transactional
     public void saveTruck(Truck truck) {
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.save(truck);
-        tx.commit();
-//        session.close();
+        try(Session session = this.sessionFactory.openSession()) {
+
+            Transaction tx = session.beginTransaction();
+            session.save(truck);
+            tx.commit();
+        }
+
 
     }
 

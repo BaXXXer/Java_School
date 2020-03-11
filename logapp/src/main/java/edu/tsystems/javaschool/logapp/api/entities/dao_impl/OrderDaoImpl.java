@@ -1,4 +1,4 @@
-package edu.tsystems.javaschool.logapp.api.entities.daoImpl;
+package edu.tsystems.javaschool.logapp.api.entities.dao_impl;
 
 import edu.tsystems.javaschool.logapp.api.entities.Order;
 import edu.tsystems.javaschool.logapp.api.entities.dao.OrderDao;
@@ -6,10 +6,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+@Repository
+@Transactional
 public class OrderDaoImpl implements OrderDao {
     private SessionFactory sessionFactory;
 
@@ -19,20 +23,19 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    @Transactional
     public List<Order> getAllOrders() {
-        Session session = this.sessionFactory.getCurrentSession();
-        List <Order> orders = session.createQuery("from Order").list();
-        return orders;
+        try(Session session = this.sessionFactory.openSession()) {
+            return  session.createQuery("from Order").list();
+        }
     }
 
     @Override
-    @Transactional
     public void saveOrder(Order order) {
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        session.save(order);
-        tx.commit();
+        try(Session session = this.sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.save(order);
+            tx.commit();
+        }
 
     }
 }

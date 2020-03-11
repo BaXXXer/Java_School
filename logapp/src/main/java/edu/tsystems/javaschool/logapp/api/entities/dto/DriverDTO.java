@@ -47,11 +47,11 @@ public class DriverDTO {
         this.driverSurname = driverSurname;
     }
 
-    public int getDriverWorkedHours() {
+    public Integer getDriverWorkedHours() {
         return driverWorkedHours;
     }
 
-    public void setDriverWorkedHours(int driverWorkedHours) {
+    public void setDriverWorkedHours(Integer driverWorkedHours) {
         this.driverWorkedHours = driverWorkedHours;
     }
 
@@ -63,9 +63,6 @@ public class DriverDTO {
         this.driverStatus = driverStatus;
     }
 
-    public void setDriverWorkedHours(Integer driverWorkedHours) {
-        this.driverWorkedHours = driverWorkedHours;
-    }
 
     public Integer getDriverCityId() {
         return driverCityId;

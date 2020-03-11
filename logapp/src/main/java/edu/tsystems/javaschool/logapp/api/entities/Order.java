@@ -24,7 +24,7 @@ public class Order {
 
 
     @ManyToMany
-    @JoinTable(name="lg_orders_droversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
+    @JoinTable(name="lg_orders_driversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
     inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private List <Driver> driversOnOrder;
 

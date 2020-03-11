@@ -60,29 +60,30 @@ public class TruckService {
     }
 
     //TODO: refactor with working hours dependent on orders
+
     @Transactional
     public TruckDTO getTruckById(int id){
         Truck dao = truckDao.getTruckById(id);
         TruckDTO dto = new TruckDTO();
         dto.setId(dao.getId());
-        dto.setRegNumber(dao.getRegNum());
+        dto.setRegNumber(dao.getRegNumber());
 
-        dto.setDriverWorkingHours(dao.getWorkingHours());
+        dto.setDriverWorkingHours(dao.getDriverWorkingHours());
         dto.setCapacityTons(dao.getCapacityTons());
         dto.setCondition(dao.getCondition());
-        dto.setCityId(dao.getCityId());
+        dto.setCurrentCityId(dao.getCurrentCityId());
         return dto;
     }
 
     private static TruckDTO toDTO(Truck dao){
         TruckDTO truckDTO = new TruckDTO();
         truckDTO.setId(dao.getId());
-        truckDTO.setRegNumber(dao.getRegNum());
+        truckDTO.setRegNumber(dao.getRegNumber());
 
-        truckDTO.setDriverWorkingHours(dao.getWorkingHours());
+        truckDTO.setDriverWorkingHours(dao.getDriverWorkingHours());
         truckDTO.setCapacityTons(dao.getCapacityTons());
         truckDTO.setCondition(dao.getCondition());
-        truckDTO.setCityId(dao.getCityId());
+        truckDTO.setCurrentCityId(dao.getCurrentCityId());
         return truckDTO;
 
     }

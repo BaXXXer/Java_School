@@ -33,9 +33,9 @@ public class Cargo {
     @Enumerated(EnumType.STRING)
     private Status cargoStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+//    @ManyToOne
+//    @JoinColumn(name = "order_id")
+//    private Order order;
 
     public enum Status{
         READY, SHIPPED, DELIVERED
@@ -81,11 +81,11 @@ public class Cargo {
         this.cargoStatus = cargoStatus;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+//    public Order getOrder() {
+//        return order;
+//    }
+//
+//    public void setOrder(Order order) {
+//        this.order = order;
+//    }
 }

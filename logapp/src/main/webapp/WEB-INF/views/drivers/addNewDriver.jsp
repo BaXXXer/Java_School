@@ -61,13 +61,13 @@
             </td>
 
             <p>Truck Id: <input
-                    name="truckId"
+                    name="driversTruckId"
                     min="0"
                     max="176"
                     placeholder="Truck Id" ></p>
 
             <p>City Id: <input
-                    name="cityId"
+                    name="driverCityId"
                     min="0"
                     max="176"
                     placeholder="City Id" ></p>
