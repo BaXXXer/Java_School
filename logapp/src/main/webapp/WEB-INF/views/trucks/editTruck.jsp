@@ -62,7 +62,7 @@
         <p>City Id:<input type="number"
                           name="currentCityId"
                           required maxength="2"
-                          value=${truckToEdit.cityId}></p>
+                          value=${truckToEdit.currentCityId}></p>
 
 
         <tr>

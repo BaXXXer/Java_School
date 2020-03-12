@@ -20,28 +20,28 @@ public class TruckDaoImpl implements TruckDao {
     @Override
     @Transactional
     public Truck getTruckById(int id) {
-        try(Session session = this.sessionFactory.openSession()) {
+        Session session = this.sessionFactory.getCurrentSession();
             return session.load(Truck.class, id);
-        }
+
     }
 
     @Override
     @Transactional
     public void updateTruck(Truck truck) {
-        try(Session session = this.sessionFactory.openSession()) {
-            session.update(truck);
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(truck);
+
     }
 
     @Override
     @Transactional
     public void removeTruck(int id) {
-        try(Session session = this.sessionFactory.openSession()) {
-            Truck p = session.load(Truck.class, id);
-            if (null != p) {
+       Session session = this.sessionFactory.getCurrentSession();
+       Truck p = session.load(Truck.class, id);
+       if (null != p) {
                 session.delete(p);
-            }
-        }
+       }
+
 
     }
 

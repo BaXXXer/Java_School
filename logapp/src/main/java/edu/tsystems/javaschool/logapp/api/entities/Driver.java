@@ -39,9 +39,6 @@ public class Driver {
     public Driver() {
     }
 
-
-
-
     public Truck getDriversTruckId() {
         return driversTruckId;
     }

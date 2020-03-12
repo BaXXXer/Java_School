@@ -50,8 +50,6 @@ public class TruckService {
     }
 
     public void updateTruck(TruckDTO truck) {
-
-
         truckDao.updateTruck(mapper.toEntity(truck));
     }
 

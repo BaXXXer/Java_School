@@ -46,9 +46,9 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public void updateDriver(Driver driver) {
-        try(Session session = this.sessionFactory.getCurrentSession()) {
-            session.update(driver);
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        session.update(driver);
+
     }
 
     @Override
