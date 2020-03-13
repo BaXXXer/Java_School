@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class OrderWayPointService {
 
@@ -19,5 +21,10 @@ public class OrderWayPointService {
     @Transactional
     public OrderWaypoint getPointById(int id){
         return dao.getWaypointById(id);
+    }
+
+    public List<OrderWaypoint> getAllWaypoints() {
+        return dao.getAllWaypoints();
+
     }
 }

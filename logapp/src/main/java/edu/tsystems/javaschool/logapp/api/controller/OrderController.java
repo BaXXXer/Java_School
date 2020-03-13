@@ -10,6 +10,7 @@ import edu.tsystems.javaschool.logapp.api.services.OrderWayPointService;
 import edu.tsystems.javaschool.logapp.api.services.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,6 @@ public class OrderController {
         model.addObject("enumOperations", OrderWaypoint.Operation.values());
         model.addObject("enumCargoStatus", Cargo.Status.values());
         model.addObject("truckList", truckService.getAllTrucks());
-
         return model;
     }
 
@@ -57,7 +57,6 @@ public class OrderController {
         }else{
             orderDto.setOrderIsDone(false);
         }
-
         model.addAttribute("orderId", orderDto);
         orderDto.setWayPointsIds(orderService.getListOfPointIds());
         model.addAttribute("truckId", orderDto);
@@ -65,4 +64,15 @@ public class OrderController {
         orderService.saveOrder(orderDto);
         return "orders/addNewOrder";
     }
+
+    @RequestMapping(value = "/allOrders",method = RequestMethod.GET)
+    public String getAllOrders(Model model) {
+        model.addAttribute("order",new OrderDTO());
+
+        model.addAttribute("orders",orderService.getAllOrders());
+
+        return "orders/allOrders";
+    }
+
+
 }

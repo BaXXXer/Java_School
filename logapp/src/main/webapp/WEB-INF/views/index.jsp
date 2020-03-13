@@ -24,6 +24,7 @@
     <a class="btn btn-primary" href="/addDriver" role="button">Add driver</a>
     <a class="btn btn-primary" href="/allDrivers" role="button">See all drivers</a><br><br><br>
     <a class="btn btn-primary" href="/addOrder" role="button">Add new order</a>
+    <a class="btn btn-primary" href="/allOrders" role="button">See all orders</a>
 
 </body>
 </html>

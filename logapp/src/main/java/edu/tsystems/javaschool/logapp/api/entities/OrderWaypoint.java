@@ -22,8 +22,8 @@ public class OrderWaypoint {
     @JoinColumn(name="cargo_id")
     private Cargo cargo;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne()
+    @JoinColumn(name = "orders_or_id")
     private Order order;
 
     @Column(name = "waypoint_weight")

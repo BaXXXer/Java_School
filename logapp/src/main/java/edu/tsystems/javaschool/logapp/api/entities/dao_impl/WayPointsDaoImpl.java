@@ -22,15 +22,15 @@ public class WayPointsDaoImpl implements WayPointsDao {
 
     @Override
     public OrderWaypoint getWaypointById(int id) {
-        try(Session session = this.sessionFactory.openSession()) {
-            return session.load(OrderWaypoint.class, id);
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.load(OrderWaypoint.class, id);
+
     }
 
     @Override
     public List<OrderWaypoint> getAllWaypoints() {
-        try(Session session = this.sessionFactory.openSession()) {
-            return session.createQuery("from OrderWaypoint ").list();
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.createQuery("from OrderWaypoint ").list();
+
     }
 }

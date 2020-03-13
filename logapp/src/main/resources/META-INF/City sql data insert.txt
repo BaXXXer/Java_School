@@ -1,0 +1,5 @@
+insert into lg_cities (c_id, c_name, c_lat, c_lng) values(3,'Los Angeles', 95,120);
+insert into lg_cities (c_id, c_name, c_lat, c_lng) values(4,'Washington', 105,220);
+insert into lg_cities (c_id, c_name, c_lat, c_lng) values(5,'Las Vegas', 100,110);
+insert into lg_cities (c_id, c_name, c_lat, c_lng) values(6,'San Francisco', 150,120);
+insert into lg_cities (c_id, c_name, c_lat, c_lng) values(7,'Toronto', 195,200);

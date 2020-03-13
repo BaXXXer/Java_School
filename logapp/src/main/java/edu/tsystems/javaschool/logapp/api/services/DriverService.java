@@ -35,7 +35,7 @@ public class DriverService {
     public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
         Driver driver = toEntity(driverDTO);
         try {
-            driver.setDriversTruckId(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
             driverDao.saveDriver(driver);
 
         } catch (DataIntegrityViolationException ex) {
@@ -63,7 +63,7 @@ public class DriverService {
         DriverDTO dto = new DriverDTO();
 
         try {
-            dto.setDriversTruckId(entity.getDriversTruckId().getId());
+            dto.setDriversTruckId(entity.getDriversTruck().getId());
         }catch (NullPointerException ex){
             dto.setDriversTruckId(0);
         }

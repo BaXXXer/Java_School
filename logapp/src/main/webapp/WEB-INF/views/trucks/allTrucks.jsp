@@ -3,18 +3,12 @@
 <html>
 
 <%@ page session="false" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Андрей
-  Date: 01.03.2020
-  Time: 19:41
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
-    <title>All Trucks in DB</title>
+    <title>All Trucks</title>
     <link href = "../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script scr="../webjars/jquery/3.0.0/jquery.js"></script>

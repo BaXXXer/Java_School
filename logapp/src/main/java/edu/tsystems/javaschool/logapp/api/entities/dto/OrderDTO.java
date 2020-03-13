@@ -16,13 +16,11 @@ public class OrderDTO {
     private List <Integer> driversOnOrderIds;
 
 
-    public long getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
+
 
     public boolean isOrderIsDone() {
         return orderIsDone;

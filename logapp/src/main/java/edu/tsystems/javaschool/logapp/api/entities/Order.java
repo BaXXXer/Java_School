@@ -1,6 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.entities;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -9,14 +10,13 @@ public class Order {
     @Id
     @GeneratedValue
     @Column(name="or_id")
-    private Long orderId;
+    private Integer orderId;
 
     @Column(name="or_isDone")
     private boolean orderIsDone;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    @OrderBy(value = "waypointWeight asc")
-    private List<OrderWaypoint> wayPoints;
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<OrderWaypoint> wayPoints;
 
     @OneToOne
     @JoinColumn(name = "truckOnOrder_tr_id")
@@ -28,11 +28,11 @@ public class Order {
     inverseJoinColumns = @JoinColumn(name = "driver_id"))
     private List <Driver> driversOnOrder;
 
-    public Long getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
@@ -44,11 +44,11 @@ public class Order {
         this.orderIsDone = orderIsDone;
     }
 
-    public List<OrderWaypoint> getWayPoints() {
+    public Collection<OrderWaypoint> getWayPoints() {
         return wayPoints;
     }
 
-    public void setWayPoints(List<OrderWaypoint> wayPoints) {
+    public void setWayPoints(Collection<OrderWaypoint> wayPoints) {
         this.wayPoints = wayPoints;
     }
 

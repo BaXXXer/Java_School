@@ -15,7 +15,7 @@ public class Truck {
     @Column(name = "tr_regNum")
     private String regNumber;
 
-    @OneToMany(mappedBy = "driversTruckId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "driversTruck", cascade = CascadeType.ALL)
     private List<Driver> drivers;
 
     @OneToOne(mappedBy = "truckOnOrder",cascade = CascadeType.ALL, orphanRemoval = true)

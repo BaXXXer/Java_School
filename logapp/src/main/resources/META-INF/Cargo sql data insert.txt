@@ -1,0 +1,15 @@
+insert into lg_cargo(cg_id,cg_name,cg_status,cg_weight,title)
+values(
+3,'003','DELIVERED',12000,'Bricks');
+
+insert into lg_cargo(cg_id,cg_name,cg_status,cg_weight,title)
+values(
+4,'004','READY',12200,'Paper');
+
+insert into lg_cargo(cg_id,cg_name,cg_status,cg_weight,title)
+values(
+5,'005','READY',10100,'Apples');
+
+insert into lg_cargo(cg_id,cg_name,cg_status,cg_weight,title)
+values(
+6,'006','DELIVERED',23000,'Bricks');
