@@ -45,6 +45,8 @@ public class OrderController {
         model.addObject("enumOperations", OrderWaypoint.Operation.values());
         model.addObject("enumCargoStatus", Cargo.Status.values());
         model.addObject("truckList", truckService.getAllTrucks());
+        model.addObject("pointList", pointService.getAllWaypoints());
+        model.addObject("driverList", driverService.getAllDrivers());
         return model;
     }
 

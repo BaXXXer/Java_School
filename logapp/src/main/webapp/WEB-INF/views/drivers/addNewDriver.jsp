@@ -49,22 +49,47 @@
                 max="176"
                 placeholder="Worker hours" ></p>
 
+<%--        <tr>--%>
+<%--            <td><springForm:label path="driverStatus">Status:</springForm:label></td>--%>
+<%--            <td>--%>
+
+<%--                <springForm:select path="driverStatus">--%>
+<%--                    <springForm:option value="" label="Choose Type.." />--%>
+<%--                    <springForm:options items="${enumStatus}"/>--%>
+<%--                </springForm:select>--%>
+
+<%--            </td>--%>
+<%--        </tr>--%>
+
         <tr>
-            <td><springForm:label path="driverStatus">Status:</springForm:label></td>
+            <td>Select Status:</td>
             <td>
+                <select name="driverStatus">
+                    <option label="---Select status---">
+                        <c:forEach items="${enumStatus}" var="status">
+                    <option value=${status}>${status}</option>
+                    </c:forEach>
 
-                <springForm:select path="driverStatus">
-                    <springForm:option value="" label="Choose Type.." />
-                    <springForm:options items="${enumStatus}"/>
-                </springForm:select>
-
+                </select>
             </td>
+        </tr>
+        <br>
 
-            <p>Truck Id: <input
-                    name="driversTruckId"
-                    min="0"
-                    max="176"
-                    placeholder="Truck Id" ></p>
+
+        <tr>
+        <td>Select Truck:</td>
+            <td>
+            <select name="driversTruckId">
+                <option label="---Select truck---">
+                <c:forEach items="${truckList}" var="truck">
+                    <option value=${truck.id}>${truck.regNumber}</option>
+                </c:forEach>
+
+            </select>
+            </td>
+        </tr>
+
+
 
             <p>City Id: <input
                     name="driverCityId"
