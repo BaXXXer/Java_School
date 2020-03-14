@@ -3,9 +3,12 @@ package edu.tsystems.javaschool.logapp.api.config;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -23,13 +26,17 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 @Configuration
 @Transactional
 @EnableTransactionManagement
+@PropertySource("classpath:app.properties")
 @ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api"})
 public class PersistenceConfig {
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() throws IOException {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(restDataSource());
+        sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(new String[]{"edu.tsystems.javaschool.logapp.api"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         sessionFactory.afterPropertiesSet();
@@ -41,20 +48,18 @@ public class PersistenceConfig {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
-                "update");
-        hibernateProperties.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.PostgreSQL94Dialect");
-
+                "validate");
+        hibernateProperties.setProperty("hibernate.dialect",env.getProperty("hibernate.dialect"));
         return hibernateProperties;
     }
 
     @Bean
-    public DataSource restDataSource() {
+    public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/log_app");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
+        dataSource.setUrl(env.getProperty("jdbc.url"));
+        dataSource.setUsername(env.getProperty("jdbc.user"));
+        dataSource.setPassword(env.getProperty("jdbc.pass"));
         return dataSource;
     }
 

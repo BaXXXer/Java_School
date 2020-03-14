@@ -1,11 +1,11 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
-import edu.tsystems.javaschool.logapp.api.entities.Driver;
-import edu.tsystems.javaschool.logapp.api.entities.dto.DriverDTO;
-import edu.tsystems.javaschool.logapp.api.entities.dto.TruckDTO;
-import edu.tsystems.javaschool.logapp.api.exceptions.EntityNotFoundException;
-import edu.tsystems.javaschool.logapp.api.services.DriverService;
-import edu.tsystems.javaschool.logapp.api.services.TruckService;
+import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
+import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
+import edu.tsystems.javaschool.logapp.api.entity.Driver;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import edu.tsystems.javaschool.logapp.api.service.DriverService;
+import edu.tsystems.javaschool.logapp.api.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -59,12 +59,14 @@
                 <tr>
                     <td>Select Truck:</td>
                     <td>
-                        <select name="truckId">
-                            <option label="---Select truck---">
-                                <c:forEach items="${truckList}" var="truck">
-                            <option value=${truck.id}>${truck.regNumber}</option>
-                            </c:forEach>
-                        </select>
+                        <label>
+                            <select name="truckId">
+                                <option label="---Select truck---">
+                                    <c:forEach items="${truckList}" var="truck">
+                                <option value=${truck.id}>${truck.regNumber}</option>
+                                </c:forEach>
+                            </select>
+                        </label>
                     </td>
                 </tr>
 

@@ -1,13 +1,13 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
-import edu.tsystems.javaschool.logapp.api.entities.Cargo;
-import edu.tsystems.javaschool.logapp.api.entities.OrderWaypoint;
-import edu.tsystems.javaschool.logapp.api.entities.dto.OrderDTO;
-import edu.tsystems.javaschool.logapp.api.exceptions.InvalidStateException;
-import edu.tsystems.javaschool.logapp.api.services.DriverService;
-import edu.tsystems.javaschool.logapp.api.services.OrderService;
-import edu.tsystems.javaschool.logapp.api.services.OrderWayPointService;
-import edu.tsystems.javaschool.logapp.api.services.TruckService;
+import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
+import edu.tsystems.javaschool.logapp.api.entity.Cargo;
+import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
+import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
+import edu.tsystems.javaschool.logapp.api.service.DriverService;
+import edu.tsystems.javaschool.logapp.api.service.OrderService;
+import edu.tsystems.javaschool.logapp.api.service.OrderWayPointService;
+import edu.tsystems.javaschool.logapp.api.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

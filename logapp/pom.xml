@@ -21,21 +21,41 @@
     </build>
     <packaging>war</packaging>
 
-    <repositories>
-        <repository>
-            <id>PrimeFaces Repo</id>
-            <url>https://mvnrepository.com/artifact/org.primefaces/primefaces</url>
-        </repository>
-    </repositories>
     <dependencies>
 
 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.2.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.2.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.2.2.RELEASE</version>
+
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>5.1.14.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>javax.validation</groupId>
@@ -99,30 +119,11 @@
             <version>6.0.16.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>6.2</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
             <version>9.0.30</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.20</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.20</version>
         </dependency>
 
 
@@ -143,12 +144,6 @@
             <artifactId>modelmapper</artifactId>
             <version>2.3.6</version>
         </dependency>
-
-
-
-
-
-
 
     </dependencies>
 
