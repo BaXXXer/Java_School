@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +13,8 @@ import java.io.IOException;
 import java.util.List;
 
 @Repository
-@Transactional
 public class DriverDaoImpl implements DriverDao {
-    @Qualifier("sessionFactory")
+
     private SessionFactory sessionFactory;
 
     @Autowired
@@ -35,6 +33,7 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    @Transactional
     public void saveDriver(Driver driver) throws IOException {
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
@@ -45,6 +44,7 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    @Transactional
     public void updateDriver(Driver driver) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(driver);
@@ -52,6 +52,7 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    @Transactional
     public void removeDriver(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Driver p = session.load(Driver.class, id);
@@ -62,6 +63,7 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    @Transactional
     public Driver getDriverById(int id) {
         Session session = sessionFactory.getCurrentSession();
         Driver driver = session.load(Driver.class, id);

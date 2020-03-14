@@ -18,9 +18,6 @@ public class Truck {
     @OneToMany(mappedBy = "driversTruck", cascade = CascadeType.ALL)
     private List<Driver> drivers;
 
-    @OneToOne(mappedBy = "truckOnOrder",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Order currentOrder;
-
     @Column(name = "tr_workingHours")
     private Integer driverWorkingHours;
 
@@ -97,14 +94,6 @@ public class Truck {
         this.capacityTons = capacityTons;
     }
 
-    public Order getCurrentOrder() {
-        return currentOrder;
-    }
-
-    public void setCurrentOrder(Order currentOrder) {
-        this.currentOrder = currentOrder;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -144,7 +133,7 @@ public class Truck {
     @Override
     public String toString() {
         return "Truck{" +
-                "regNum='" + regNumber + '\'' +
+                "regNum='" + regNumber +
                 '}';
     }
 

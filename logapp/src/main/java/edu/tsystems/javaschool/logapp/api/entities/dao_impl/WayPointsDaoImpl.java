@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class WayPointsDaoImpl implements WayPointsDao {
     private SessionFactory sessionFactory;
 
@@ -21,6 +20,7 @@ public class WayPointsDaoImpl implements WayPointsDao {
     }
 
     @Override
+    @Transactional
     public OrderWaypoint getWaypointById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         return session.load(OrderWaypoint.class, id);
@@ -28,6 +28,7 @@ public class WayPointsDaoImpl implements WayPointsDao {
     }
 
     @Override
+    @Transactional
     public List<OrderWaypoint> getAllWaypoints() {
         Session session = this.sessionFactory.getCurrentSession();
         return session.createQuery("from OrderWaypoint ").list();

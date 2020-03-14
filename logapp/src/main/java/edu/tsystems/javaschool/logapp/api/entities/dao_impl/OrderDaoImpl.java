@@ -12,7 +12,6 @@ import java.util.List;
 
 
 @Repository
-@Transactional
 public class OrderDaoImpl implements OrderDao {
     private SessionFactory sessionFactory;
 
@@ -22,6 +21,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    @Transactional
     public List<Order> getAllOrders() {
         Session session = this.sessionFactory.getCurrentSession();
         return session.createQuery("from Order").list();
