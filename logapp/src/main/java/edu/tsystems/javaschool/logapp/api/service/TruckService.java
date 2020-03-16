@@ -20,6 +20,7 @@ public class TruckService {
 
     private TruckDao truckDao;
     private CityService cityService;
+//    private OrderService orderService;
 
     private final TruckMapper mapper;
 
@@ -38,24 +39,22 @@ public class TruckService {
     @Transactional
     public void saveTruck(TruckDTO truckDTO) throws IOException {
         Truck entity = toEntity(truckDTO);
-        List <Truck> trucks = entity.getCurrentCity().getTruckList();
-        if(!trucks.contains(entity)) {
+        List<Truck> trucks = entity.getCurrentCity().getTruckList();
+        if (!trucks.contains(entity)) {
             trucks.add(entity);
         }
         truckDao.saveTruck(entity);
     }
 
     @Transactional
-    public List<TruckDTO> getAllTrucks(){
+    public List<TruckDTO> getAllTrucks() {
         List<TruckDTO> dtos = new ArrayList();
 
-        for (Truck t:truckDao.getAllTrucks()) {
+        for (Truck t : truckDao.getAllTrucks()) {
             dtos.add(toDTO(t));
         }
         return dtos;
 
-
-//        return truckDao.getAllTrucks();
     }
 
     public void updateTruck(TruckDTO truck) {
@@ -69,13 +68,13 @@ public class TruckService {
 
     //TODO: refactor with working hours dependent on orders
     @Transactional
-    public TruckDTO getTruckById(int id){
+    public TruckDTO getTruckById(int id) {
         Truck entity = truckDao.getTruckById(id);
         entity.getCurrentCity().getTruckList().add(entity);// adds truck to the city
         return toDTO(entity);
     }
 
-    private TruckDTO toDTO(Truck entity){
+    private TruckDTO toDTO(Truck entity) {
         TruckDTO truckDTO = new TruckDTO();
         truckDTO.setId(entity.getId());
         truckDTO.setRegNumber(entity.getRegNumber());
@@ -88,7 +87,7 @@ public class TruckService {
 
     }
 
-    private Truck toEntity(TruckDTO dto){
+    private Truck toEntity(TruckDTO dto) {
         Truck entity = new Truck();
         entity.setId(dto.getId());
         entity.setCapacityTons(dto.getCapacityTons());
@@ -101,13 +100,18 @@ public class TruckService {
     }
 
     @Transactional
-    public Map<Integer, String> getTruckMap(){
+    public Map<Integer, String> getTruckMap() {
         Map<Integer, String> map = new HashMap<>();
-        for(TruckDTO t: getAllTrucks()){
-            map.put(t.getId(),t.getRegNumber());
+        for (TruckDTO t : getAllTrucks()) {
+            map.put(t.getId(), t.getRegNumber());
         }
         return map;
     }
+
+
+
+
+//    }
 
 
 }

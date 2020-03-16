@@ -47,4 +47,8 @@ public class Cargo {
     public enum Status{
         READY, SHIPPED, DELIVERED
     }
+
+//    @ManyToOne
+//    @JoinColumn(name = "city", nullable = false)
+//    private City currentCity;
 }

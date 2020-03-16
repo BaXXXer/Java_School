@@ -88,7 +88,7 @@ public class DriverController {
         return mav;
     }
 
-    @RequestMapping(value = "/editDriver/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/editDriver/{driverId}", method = RequestMethod.POST)
     public String submitEdit(@ModelAttribute("driverToEdit") DriverDTO driver,
                              ModelMap model) {
         model.addAttribute("id", driver);

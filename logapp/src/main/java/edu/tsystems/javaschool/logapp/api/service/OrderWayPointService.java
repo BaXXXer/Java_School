@@ -23,6 +23,7 @@ public class OrderWayPointService {
         return dao.getWaypointById(id);
     }
 
+    @Transactional
     public List<OrderWaypoint> getAllWaypoints() {
         return dao.getAllWaypoints();
 

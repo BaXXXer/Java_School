@@ -1,18 +1,17 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
+import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
-import edu.tsystems.javaschool.logapp.api.service.DriverService;
-import edu.tsystems.javaschool.logapp.api.service.OrderService;
-import edu.tsystems.javaschool.logapp.api.service.OrderWayPointService;
-import edu.tsystems.javaschool.logapp.api.service.TruckService;
+import edu.tsystems.javaschool.logapp.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,15 +26,17 @@ public class OrderController {
     private final OrderWayPointService pointService;
     private final OrderService  orderService;
     private final HttpServletRequest request;
+    private final CityService cityService;
 
 
     @Autowired
-    public OrderController(DriverService driverService, TruckService truckService, OrderWayPointService pointService, OrderService orderService, HttpServletRequest request) {
+    public OrderController(DriverService driverService, TruckService truckService, OrderWayPointService pointService, OrderService orderService, HttpServletRequest request, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.pointService = pointService;
         this.orderService = orderService;
         this.request = request;
+        this.cityService = cityService;
     }
 
     @RequestMapping(value = "/addOrder", method = RequestMethod.GET)
@@ -75,6 +76,22 @@ public class OrderController {
         model.addAttribute("driverService", driverService);
 
         return "orders/allOrders";
+    }
+
+    @RequestMapping(value = "/orderStatus",method = RequestMethod.GET)
+    public String getOrderStatus(Model model) {
+        model.addAttribute("order",new OrderStatusDTO());
+        model.addAttribute("orders",orderService.getOrderStatus());
+
+        return "orders/orderStatus";
+    }
+
+    @RequestMapping(value = "/readyToGoTrucks/{id}",method = RequestMethod.GET)
+    public ModelAndView getReadyToGoTrucks(@PathVariable("id") int id, Model model) {
+        ModelAndView mav = new ModelAndView("orders/readyToGoTrucks");
+        mav.addObject("truckList",orderService.getReadyToGoTrucks(orderService.getOrderById(id)));
+        mav.addObject("cityMap",cityService.getCityMap());
+        return mav;
     }
 
 

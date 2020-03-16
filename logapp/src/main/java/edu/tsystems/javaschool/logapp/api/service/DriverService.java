@@ -20,14 +20,12 @@ public class DriverService {
 
     private DriverDao driverDao;
     private final DriverMapper mapper;
-    private TruckService truckService;
     private TruckDao truckDao;
 
     @Autowired
-    public DriverService(DriverDao driverDao, DriverMapper mapper, TruckService truckService, TruckDao truckDao) {
+    public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao) {
         this.driverDao = driverDao;
         this.mapper = mapper;
-        this.truckService = truckService;
         this.truckDao = truckDao;
     }
 

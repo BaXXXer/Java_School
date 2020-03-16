@@ -1,5 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.dao;
 
+import edu.tsystems.javaschool.logapp.api.entity.Order;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 
 import java.io.IOException;
@@ -12,5 +13,5 @@ public interface TruckDao {
     void updateTruck(Truck truck);
     void removeTruck(int id);
     Truck getTruckById(int id);
-
+    List<Truck> getReadyToGoTrucks(Order order);
 }

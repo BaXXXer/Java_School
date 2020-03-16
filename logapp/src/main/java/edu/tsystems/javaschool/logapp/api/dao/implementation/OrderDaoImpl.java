@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,9 +31,13 @@ public class OrderDaoImpl implements OrderDao {
     public void saveOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
         session.save(order);
-//        Transaction tx = session.beginTransaction();
-//        tx.commit();
+    }
 
-
+    @Override
+    @Transactional
+    public Order getOrderById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Order order = session.load(Order.class, id);
+        return order;
     }
 }

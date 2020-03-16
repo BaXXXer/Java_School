@@ -26,6 +26,7 @@
             <th scope="col">Waypoints</th>
             <th scope="col">Truck id</th>
             <th scope="col">Drivers</th>
+            <th scope="col">Get ready trucks</th>
 
 
             </thead>
@@ -34,6 +35,7 @@
             <tr>
 
                 <td>${order.orderId}</td>
+
                 <c:choose>
                     <c:when test="${order.orderIsDone}">
                         <td>Completed</td>
@@ -46,8 +48,8 @@
                 <td>
                     <c:forEach items="${order.wayPointsIds}" var="pointId">
 
-<%--                        ${pointId}--%>
-                        ${pointService.getPointById(pointId).city.cityName}
+                        ${pointId}
+<%--                        ${pointService.getPointById(pointId).city.cityName}--%>
                     </c:forEach>
 
                 <td>${order.truckId}</td>
@@ -58,6 +60,8 @@
 <%--                        ${driverId}--%>
                         ${driverService.getDriverById(driverId).driverSurname}
                     </c:forEach>
+
+                <td><a href = "<c:url value='/readyToGoTrucks/${order.orderId}' />">Get ready trucks</a></td>
 
 
 
