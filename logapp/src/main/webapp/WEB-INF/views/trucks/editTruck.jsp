@@ -17,13 +17,13 @@
     <table>
         <tr>
 
-                    <td>
-                        <form:label path="id">
-                            <spring:message text="ID"/>
-                        </form:label>
-                    </td>
             <td>
-                <form:input path="id" readonly="true" size="8" disabled="true" />
+                <form:label path="id">
+                    <spring:message text="ID"/>
+                </form:label>
+            </td>
+            <td>
+                <form:input path="id" readonly="true" size="8" disabled="true"/>
                 <form:hidden path="id"/>
             </td>
         </tr>
@@ -40,7 +40,31 @@
             </td>
         </tr>
 
-            <%--        <input name="id" hidden readonly>--%>
+        <tr>
+            <td>Select City:</td>
+            <td>
+                <select name="currentCityId">
+                    <option label="---Select city---">
+                        <c:forEach items="${cityList}" var="city">
+                    <option value=${city.cityId}>${city.cityName}</option>
+                    </c:forEach>
+
+                </select>
+            </td>
+        </tr>
+
+<%--        <tr>--%>
+<%--            <td>Select City:</td>--%>
+<%--            <td>--%>
+<%--                <select name="currentCityId">--%>
+<%--                    <option label="---Select city---">--%>
+<%--                        <c:forEach var="hash" items="${cityMap}">--%>
+<%--                    <option selected="${cityMap.get(truckToEdit.currentCityId)}" value=${hash.key}>${hash.value}</option>--%>
+<%--                    </c:forEach>--%>
+
+<%--                </select>--%>
+<%--            </td>--%>
+<%--        </tr>--%>
 
 
         <p>Registration Number (format AA00000):<input name="regNumber"
@@ -59,10 +83,7 @@
                            min="10" ;
                            max="30"
                            value=${truckToEdit.capacityTons }></p>
-        <p>City Id:<input type="number"
-                          name="currentCityId"
-                          required maxength="2"
-                          value=${truckToEdit.currentCityId}></p>
+
 
 
         <tr>

@@ -15,7 +15,7 @@
 <body>
 <div class="container">
 
-    <h3>Truck List</h3>
+    <h3>Order List</h3>
     <c:if test="${!empty orders}">
     <table class="table table-striped">
         <tr>
@@ -46,7 +46,8 @@
                 <td>
                     <c:forEach items="${order.wayPointsIds}" var="pointId">
 
-                        ${pointId}
+<%--                        ${pointId}--%>
+                        ${pointService.getPointById(pointId).city.cityName}
                     </c:forEach>
 
                 <td>${order.truckId}</td>
@@ -54,7 +55,8 @@
                 <td>
                     <c:forEach items="${order.driversOnOrderIds}" var="driverId">
 
-                        ${driverId}
+<%--                        ${driverId}--%>
+                        ${driverService.getDriverById(driverId).driverSurname}
                     </c:forEach>
 
 

@@ -44,7 +44,6 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
-    @Transactional
     public void updateDriver(Driver driver) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(driver);
@@ -52,7 +51,6 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
-    @Transactional
     public void removeDriver(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Driver p = session.load(Driver.class, id);

@@ -2,10 +2,11 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
+import edu.tsystems.javaschool.logapp.api.entity.City;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
+import edu.tsystems.javaschool.logapp.api.service.CityService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,16 @@ import java.util.List;
 @Repository
 public class TruckDaoImpl implements TruckDao {
 
+    private SessionFactory sessionFactory;
+    private CityService cityService;
+
     @Override
     @Transactional
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
+        Truck truck = session.load(Truck.class, id);
+        City city = truck.getCurrentCity();
+
         return session.load(Truck.class, id);
 
     }
@@ -44,33 +51,26 @@ public class TruckDaoImpl implements TruckDao {
     }
 
 
-    private SessionFactory sessionFactory;
-
-
     @Autowired
-    public TruckDaoImpl(SessionFactory sessionFactory) {
+    public TruckDaoImpl(SessionFactory sessionFactory, CityService cityService) {
         this.sessionFactory = sessionFactory;
+        this.cityService = cityService;
     }
 
     public TruckDaoImpl() {
     }
 
-    @Transactional
+
     public List<Truck> getAllTrucks() {
-        try (Session session = this.sessionFactory.openSession()) {
-            return session.createQuery("from Truck").list();
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.createQuery("from Truck").list();
+
     }
 
 
-    @Transactional
     public void saveTruck(Truck truck) {
-        try (Session session = this.sessionFactory.openSession()) {
-
-            Transaction tx = session.beginTransaction();
-            session.save(truck);
-            tx.commit();
-        }
+        Session session = this.sessionFactory.getCurrentSession();
+        session.save(truck);
 
 
     }

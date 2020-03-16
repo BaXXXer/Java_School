@@ -28,7 +28,7 @@
                 <th scope="col">Driver Working Hours</th>
                 <th scope="col">Truck capacity</th>
                 <th scope="col">Condition</th>
-                <th scope="col">City id</th>
+                <th scope="col">Current city</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
 
@@ -42,7 +42,15 @@
                 <td>${truck.driverWorkingHours}</td>
                 <td>${truck.capacityTons}</td>
                 <td>${truck.condition}</td>
-                <td>${truck.currentCityId}</td>
+
+                <td>
+                    <c:forEach var="hash" items="${cityMap}">
+                        <c:if test="${hash.key == truck.currentCityId}">
+                            ${hash.value}
+                        </c:if>
+                    </c:forEach>
+                </td>
+
                 <td><a href = "<c:url value='/editTruck/${truck.id}' />">Edit</a></td>
                 <td><a href = "<c:url value='/removeTruck/${truck.id}' />">Delete</a></td>
 

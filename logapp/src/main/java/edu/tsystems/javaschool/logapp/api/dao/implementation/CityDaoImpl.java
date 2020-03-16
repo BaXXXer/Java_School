@@ -1,7 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
-import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
-import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
+import edu.tsystems.javaschool.logapp.api.dao.CityDao;
+import edu.tsystems.javaschool.logapp.api.entity.City;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class WayPointsDaoImpl implements WayPointsDao {
+public class CityDaoImpl implements CityDao {
+
     private SessionFactory sessionFactory;
 
     @Autowired
-    public WayPointsDaoImpl(SessionFactory sessionFactory) {
+    public CityDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     @Transactional
-    public OrderWaypoint getWaypointById(int id) {
+    public List<City> getAllCities() {
         Session session = this.sessionFactory.getCurrentSession();
-        return session.load(OrderWaypoint.class, id);
-
+        List<City> cityList = session.createQuery("from City").list();
+        return cityList;
     }
 
     @Override
-    public List<OrderWaypoint> getAllWaypoints() {
-        Session session = this.sessionFactory.getCurrentSession();
-        return session.createQuery("from OrderWaypoint ").list();
-
+    @Transactional
+    public City getCityById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        City city = session.load(City.class, id);
+        return city;
     }
 }

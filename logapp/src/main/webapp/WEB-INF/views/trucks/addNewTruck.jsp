@@ -61,16 +61,29 @@
 
                     </td>
 
+    <tr>
+        <td>Select City:</td>
+        <td>
+            <select name="currentCityId">
+                <option label="---Select city---">
+                    <c:forEach items="${cityList}" var="city">
+                <option value=${city.cityId}>${city.cityName}</option>
+                </c:forEach>
+
+            </select>
+        </td>
+    </tr>
+
 
     <p>Capacity:<input type = "number"
                                   name="capacityTons"
                                   min = "10";
                                   max="30"
                                   placeholder="Capacity"></p>
-    <p>City Id:<input type = "number"
-                                  name="currentCityId"
-                                  required maxength="2"
-                                  placeholder="City ID"></p>
+<%--    <p>City Id:<input type = "number"--%>
+<%--                                  name="currentCityId"--%>
+<%--                                  required maxength="2"--%>
+<%--                                  placeholder="City ID"></p>--%>
 
 
         <tr>

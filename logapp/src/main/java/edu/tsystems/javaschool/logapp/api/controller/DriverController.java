@@ -1,9 +1,9 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
-import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import edu.tsystems.javaschool.logapp.api.service.CityService;
 import edu.tsystems.javaschool.logapp.api.service.DriverService;
 import edu.tsystems.javaschool.logapp.api.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class DriverController {
 
     private final DriverService driverService;
     private final TruckService truckService;
+    private final CityService cityService;
 
 
     @Autowired
-    public DriverController(DriverService driverService, TruckService truckService) {
+    public DriverController(DriverService driverService, TruckService truckService, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
+        this.cityService = cityService;
     }
 
     @RequestMapping(value = "/addDriver", method = RequestMethod.GET)
@@ -39,6 +39,7 @@ public class DriverController {
         model.addObject("driverToAdd", new DriverDTO());
         model.addObject("enumStatus", Driver.Status.values());
         model.addObject("truckList", truckService.getAllTrucks());
+        model.addObject("cityList",cityService.getAllCities());
 
         return model;
     }
@@ -63,20 +64,12 @@ public class DriverController {
     @RequestMapping(value = "/allDrivers", method = RequestMethod.GET)
     public String getAllDrivers(Model model) {
         model.addAttribute("driver", new DriverDTO());
-
         model.addAttribute("drivers", driverService.getAllDrivers());
         model.addAttribute("trucks", truckService.getAllTrucks());
+        model.addAttribute("cityMap",cityService.getCityMap());
+        model.addAttribute("truckMap",truckService.getTruckMap());
 
         return "drivers/allDrivers";
-    }
-
-    private List<String> getAllTruckRegNums() {
-        List<String> regNumbers = new ArrayList();
-        for (TruckDTO dto : truckService.getAllTrucks()) {
-            regNumbers.add(dto.getRegNumber());
-        }
-        return regNumbers;
-
     }
 
     @RequestMapping(value = "/removeDriver/{id}", method = RequestMethod.GET)
@@ -90,21 +83,22 @@ public class DriverController {
         ModelAndView mav = new ModelAndView("drivers/editDriver");
         mav.addObject("driverToEdit", driverService.getDriverById(id));
         mav.addObject("enumStatus", Driver.Status.values());
+        mav.addObject("cityList",cityService.getAllCities());
+        mav.addObject("truckList",truckService.getAllTrucks());
         return mav;
     }
 
     @RequestMapping(value = "/editDriver/{id}", method = RequestMethod.POST)
     public String submitEdit(@ModelAttribute("driverToEdit") DriverDTO driver,
                              ModelMap model) {
-
         model.addAttribute("id", driver);
         model.addAttribute("driverFirstName",driver);
         model.addAttribute("driverSurname",driver);
         model.addAttribute("driverPrivateNum",driver);
         model.addAttribute("driverWorkedHours",driver);
         model.addAttribute("driverStatus",driver);
-        model.addAttribute("truckId",driver);
-        model.addAttribute("cityId",driver);
+        model.addAttribute("driversTruckId",driver);
+        model.addAttribute("driverCityId",driver);
         driverService.updateDriver(driver);
 
         return "drivers/editDriver";

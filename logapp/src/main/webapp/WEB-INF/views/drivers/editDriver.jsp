@@ -1,6 +1,7 @@
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Андрей
@@ -44,6 +45,32 @@
 
             </td>
 
+        <tr>
+            <td>Select City:</td>
+            <td>
+                <select name="driverCityId">
+                    <option label="---Select city---">
+                        <c:forEach items="${cityList}" var="city">
+                    <option value=${city.cityId}>${city.cityName}</option>
+                    </c:forEach>
+
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Select Truck:</td>
+            <td>
+                <select name="driversTruckId">
+                    <option label="---Select city---">
+                        <c:forEach items="${truckList}" var="truck">
+                    <option value=${truck.id}>${truck.regNumber}</option>
+                    </c:forEach>
+
+                </select>
+            </td>
+        </tr>
+
 
 
 
@@ -70,17 +97,17 @@
 
 
 
-            <p>Truck Id: <input
-                    name="driversTruckId"
-                    min="0"
-                    max="176"
-                    placeholder="Truck Id" value=${driverToEdit.driversTruckId} ></p>
+<%--            <p>Truck Id: <input--%>
+<%--                    name="driversTruckId"--%>
+<%--                    min="0"--%>
+<%--                    max="176"--%>
+<%--                    placeholder="Truck Id" value=${driverToEdit.driversTruckId} ></p>--%>
 
-            <p>City Id: <input
-                    name="driverCityId"
-                    min="0"
-                    max="176"
-                    placeholder="City Id" value=${driverToEdit.driverCityId}></p>
+<%--            <p>City Id: <input--%>
+<%--                    name="driverCityId"--%>
+<%--                    min="0"--%>
+<%--                    max="176"--%>
+<%--                    placeholder="City Id" value=${driverToEdit.driverCityId}></p>--%>
 
 
         <tr>

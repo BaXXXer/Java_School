@@ -90,12 +90,26 @@
         </tr>
 
 
+        <tr>
+            <td>Select City:</td>
+            <td>
+                <select name="driverCityId">
+                    <option label="---Select city---">
+                        <c:forEach items="${cityList}" var="city">
+                    <option value=${city.cityId}>${city.cityName}</option>
+                    </c:forEach>
 
-            <p>City Id: <input
-                    name="driverCityId"
-                    min="0"
-                    max="176"
-                    placeholder="City Id" ></p>
+                </select>
+            </td>
+        </tr>
+
+
+
+<%--            <p>City Id: <input--%>
+<%--                    name="driverCityId"--%>
+<%--                    min="0"--%>
+<%--                    max="176"--%>
+<%--                    placeholder="City Id" ></p>--%>
 
 
 

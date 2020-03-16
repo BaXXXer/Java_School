@@ -41,8 +41,24 @@
                     <td>${driver.driverPrivateNum}</td>
                     <td>${driver.driverWorkedHours}</td>
                     <td>${driver.driverStatus}</td>
-                    <td>${driver.driversTruckId}</td>
-                    <td>${driver.driverCityId}</td>
+<%--                    <td>${driver.driversTruckId}</td>--%>
+                    <td>
+                        <c:forEach var="hash" items="${truckMap}">
+                            <c:if test="${hash.key == driver.driversTruckId}">
+                                ${hash.value}
+
+                            </c:if>
+                        </c:forEach>
+                    </td>
+
+                    <td>
+                        <c:forEach var="hash" items="${cityMap}">
+                            <c:if test="${hash.key == driver.driverCityId}">
+                                ${hash.value}
+                            </c:if>
+                        </c:forEach>
+                    </td>
+
                     <td><a href = "<c:url value='/editDriver/${driver.driverId}' />">Edit</a></td>
                     <td><a href = "<c:url value='/removeDriver/${driver.driverId}' />">Delete</a></td>
                 </tr>

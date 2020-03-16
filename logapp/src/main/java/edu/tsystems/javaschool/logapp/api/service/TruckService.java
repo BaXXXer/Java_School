@@ -10,19 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TruckService {
 
 
     private TruckDao truckDao;
+    private CityService cityService;
 
     private final TruckMapper mapper;
 
     @Autowired
-    public TruckService(TruckDao truckDao, TruckMapper mapper) {
+    public TruckService(TruckDao truckDao, CityService cityService, TruckMapper mapper) {
         this.truckDao = truckDao;
+        this.cityService = cityService;
         this.mapper = mapper;
     }
 
@@ -30,10 +34,15 @@ public class TruckService {
         return truckDao;
     }
 
-    //TODO: correct mapping dto-dao finish (@Transactional??)
+
+    @Transactional
     public void saveTruck(TruckDTO truckDTO) throws IOException {
-        truckDao.saveTruck(mapper.toEntity(truckDTO));
-//        truckDao.saveTruck(truck);
+        Truck entity = toEntity(truckDTO);
+        List <Truck> trucks = entity.getCurrentCity().getTruckList();
+        if(!trucks.contains(entity)) {
+            trucks.add(entity);
+        }
+        truckDao.saveTruck(entity);
     }
 
     @Transactional
@@ -41,7 +50,7 @@ public class TruckService {
         List<TruckDTO> dtos = new ArrayList();
 
         for (Truck t:truckDao.getAllTrucks()) {
-            dtos.add(mapper.toDto(t));
+            dtos.add(toDTO(t));
         }
         return dtos;
 
@@ -50,7 +59,8 @@ public class TruckService {
     }
 
     public void updateTruck(TruckDTO truck) {
-        truckDao.updateTruck(mapper.toEntity(truck));
+
+        truckDao.updateTruck(toEntity(truck));
     }
 
     public void removeTruck(int id) {
@@ -58,32 +68,45 @@ public class TruckService {
     }
 
     //TODO: refactor with working hours dependent on orders
-
     @Transactional
     public TruckDTO getTruckById(int id){
-        Truck dao = truckDao.getTruckById(id);
-        TruckDTO dto = new TruckDTO();
-        dto.setId(dao.getId());
-        dto.setRegNumber(dao.getRegNumber());
-
-        dto.setDriverWorkingHours(dao.getDriverWorkingHours());
-        dto.setCapacityTons(dao.getCapacityTons());
-        dto.setCondition(dao.getCondition());
-        dto.setCurrentCityId(dao.getCurrentCityId());
-        return dto;
+        Truck entity = truckDao.getTruckById(id);
+        entity.getCurrentCity().getTruckList().add(entity);// adds truck to the city
+        return toDTO(entity);
     }
 
-    private static TruckDTO toDTO(Truck dao){
+    private TruckDTO toDTO(Truck entity){
         TruckDTO truckDTO = new TruckDTO();
-        truckDTO.setId(dao.getId());
-        truckDTO.setRegNumber(dao.getRegNumber());
+        truckDTO.setId(entity.getId());
+        truckDTO.setRegNumber(entity.getRegNumber());
 
-        truckDTO.setDriverWorkingHours(dao.getDriverWorkingHours());
-        truckDTO.setCapacityTons(dao.getCapacityTons());
-        truckDTO.setCondition(dao.getCondition());
-        truckDTO.setCurrentCityId(dao.getCurrentCityId());
+        truckDTO.setDriverWorkingHours(entity.getDriverWorkingHours());
+        truckDTO.setCapacityTons(entity.getCapacityTons());
+        truckDTO.setCondition(entity.getCondition());
+        truckDTO.setCurrentCityId(entity.getCurrentCity().getCityId());
         return truckDTO;
 
+    }
+
+    private Truck toEntity(TruckDTO dto){
+        Truck entity = new Truck();
+        entity.setId(dto.getId());
+        entity.setCapacityTons(dto.getCapacityTons());
+        entity.setCondition(dto.getCondition());
+        entity.setCurrentCity(cityService.getCityById(dto.getCurrentCityId()));
+        entity.setDriverWorkingHours(dto.getDriverWorkingHours());
+        entity.setRegNumber(dto.getRegNumber());
+        return entity;
+
+    }
+
+    @Transactional
+    public Map<Integer, String> getTruckMap(){
+        Map<Integer, String> map = new HashMap<>();
+        for(TruckDTO t: getAllTrucks()){
+            map.put(t.getId(),t.getRegNumber());
+        }
+        return map;
     }
 
 

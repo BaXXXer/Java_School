@@ -64,7 +64,7 @@ public class DriverService {
 
         try {
             dto.setDriversTruckId(entity.getDriversTruck().getId());
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             dto.setDriversTruckId(0);
         }
         dto.setDriverId(entity.getDriverId());
@@ -77,7 +77,6 @@ public class DriverService {
 
         return dto;
     }
-
 
 
     @Transactional
@@ -103,10 +102,10 @@ public class DriverService {
 
     @Transactional
     public void updateDriver(DriverDTO driver) {
-        driverDao.updateDriver(mapper.toEntity(driver));
+        Driver entity = toEntity(driver);
+        entity.setDriversTruck(truckDao.getTruckById(driver.getDriversTruckId()));
+        driverDao.updateDriver(entity);
     }
-
-
 
 
 }

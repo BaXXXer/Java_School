@@ -3,6 +3,7 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
+import edu.tsystems.javaschool.logapp.api.service.CityService;
 import edu.tsystems.javaschool.logapp.api.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +21,14 @@ import java.io.IOException;
 public class TruckController {
 
     private final TruckService truckService;
+    private final CityService cityService;
 
 
 
     @Autowired
-    public TruckController(TruckService truckService) {
+    public TruckController(TruckService truckService, CityService cityService) {
         this.truckService = truckService;
+        this.cityService = cityService;
     }
 
 
@@ -40,6 +43,8 @@ public class TruckController {
         ModelAndView model = new ModelAndView("trucks/addNewTruck");
         model.addObject("truckToAdd", new TruckDTO());
         model.addObject("enumCondition",Truck.Condition.values());
+        model.addObject("cityList",cityService.getAllCities());
+
         return model;
     }
 
@@ -47,9 +52,7 @@ public class TruckController {
     @RequestMapping(value = "/addTruck", method = RequestMethod.POST)
     public String submit(@ModelAttribute("truckToAdd") TruckDTO truck,
                          ModelMap model) throws IOException {
-//        if (result.hasErrors()) {
-//            return "addNewTruck";
-//        }
+
         model.addAttribute("regNum", truck);
         model.addAttribute("driverWorkingHours", truck);
         model.addAttribute("capacityTons", truck);
@@ -64,7 +67,8 @@ public class TruckController {
     @RequestMapping(value = "/allTrucks",method = RequestMethod.GET)
     public String getAllTrucks(Model model) {
         model.addAttribute("truck",new TruckDTO());
-
+        model.addAttribute("cityService",cityService);
+        model.addAttribute("cityMap",cityService.getCityMap());
         model.addAttribute("trucks",truckService.getAllTrucks());
 
         return "trucks/allTrucks";
@@ -81,6 +85,8 @@ public class TruckController {
         ModelAndView mav = new ModelAndView("trucks/editTruck");
         mav.addObject("truckToEdit",truckService.getTruckById(id));
         mav.addObject("enumCondition", Truck.Condition.values());
+        mav.addObject("cityList",cityService.getAllCities());
+        mav.addObject("cityMap",cityService.getCityMap());
 
         return mav;
     }
@@ -99,6 +105,8 @@ public class TruckController {
 
         return "trucks/editTruck";
     }
+
+
 
 
 
