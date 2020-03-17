@@ -33,6 +33,8 @@ public class OrderWaypointDTO {
 
     private int waypointWeight;
 
+    private String pointName;
+
     private Integer cityId;
 
 

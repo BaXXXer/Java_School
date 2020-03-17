@@ -180,4 +180,23 @@ public class OrderService {
 
         return readyToGoTrucks;
     }
+    @Transactional
+    public Map<Integer, String> getPointMap(){
+
+        List <Order> orders = orderDao.getAllOrders();
+        Map<Integer, String> map = new HashMap<>();
+        for (Order o: orders){
+            List <OrderWaypoint>points = (List<OrderWaypoint>) o.getWayPoints();
+            for(OrderWaypoint ow: points){
+                map.put(ow.getId(),ow.getPointName());
+            }
+        }
+        return map;
+
+    }
+
+    @Transactional
+    public void removeOrder(int id) {
+        orderDao.removeOrder(id);
+    }
 }

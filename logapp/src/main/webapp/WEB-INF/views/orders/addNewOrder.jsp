@@ -30,12 +30,12 @@
 
 
                 <tr>
-                    <td>From:</td>
+                    <td>Point 1:</td>
                     <td>
                         <select name="pointFromId">
                             <option label="---Select city---">
                                 <c:forEach items="${pointList}" var="point">
-                            <option value=${point.id}>${point.city.cityName}</option>
+                            <option value=${point.id}>${point.pointName}</option>
                             </c:forEach>
 
                         </select>
@@ -43,12 +43,12 @@
                 </tr>
 
                 <tr>
-                    <td>To:</td>
+                    <td>Point 2:</td>
                     <td>
                         <select name="pointToId">
-                            <option label="---Select city---">
+                            <option label="---Select point---">
                                 <c:forEach items="${pointList}" var="point">
-                            <option value=${point.id}>${point.city.cityName}</option>
+                            <option value=${point.id}>${point.pointName}</option>
                             </c:forEach>
 
                         </select>

@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
@@ -11,8 +10,6 @@
 </head>
 <body>
 <div class="container">
-
-    <h3>Order status list</h3>
 
     <c:forEach items="${orders}" var="order">
         <table class="table table-striped">

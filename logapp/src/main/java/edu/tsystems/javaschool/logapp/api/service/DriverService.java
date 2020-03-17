@@ -95,6 +95,7 @@ public class DriverService {
 
     @Transactional
     public void removeDriver(int id) {
+
         driverDao.removeDriver(id);
     }
 

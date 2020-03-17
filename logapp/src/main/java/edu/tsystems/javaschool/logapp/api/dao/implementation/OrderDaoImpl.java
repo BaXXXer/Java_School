@@ -40,4 +40,13 @@ public class OrderDaoImpl implements OrderDao {
         Order order = session.load(Order.class, id);
         return order;
     }
+
+    @Override
+    public void removeOrder(int id) {
+        Session session = this.sessionFactory.getCurrentSession();
+        Order p = session.load(Order.class, id);
+        if (null != p) {
+            session.delete(p);
+        }
+    }
 }

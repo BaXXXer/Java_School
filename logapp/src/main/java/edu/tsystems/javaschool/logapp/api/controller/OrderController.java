@@ -74,8 +74,10 @@ public class OrderController {
         model.addAttribute("orders",orderService.getAllOrders());
         model.addAttribute("pointService", pointService);
         model.addAttribute("driverService", driverService);
+        model.addAttribute("pointMap",orderService.getPointMap());
 
-        return "orders/allOrders";
+
+        return "orders/allOrdersTables";
     }
 
     @RequestMapping(value = "/orderStatus",method = RequestMethod.GET)
@@ -92,6 +94,12 @@ public class OrderController {
         mav.addObject("truckList",orderService.getReadyToGoTrucks(orderService.getOrderById(id)));
         mav.addObject("cityMap",cityService.getCityMap());
         return mav;
+    }
+
+    @RequestMapping(value = "/removeOrder/{id}", method = RequestMethod.GET)
+    public String removeDriver(@PathVariable("id") int id) {
+        orderService.removeOrder(id);
+        return "redirect:/allOrders";
     }
 
 

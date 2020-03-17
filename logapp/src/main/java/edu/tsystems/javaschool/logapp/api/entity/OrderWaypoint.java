@@ -24,6 +24,9 @@ public class OrderWaypoint {
     @Column(name="ow_isCompleted")
     private boolean isCompleted;
 
+    @Column(name="ow_point")
+    private String pointName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ow_operation")
     private Operation operationType;
