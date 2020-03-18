@@ -14,10 +14,13 @@
     <c:forEach items="${orders}" var="order">
         <table class="table table-striped">
         <h3>Order #${order.orderId}</h3><br>
+        <a href="<c:url value='/readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
         <th scope="col">Order Id</th>
         <th scope="col">Order status</th>
         <th scope="col">Cargo names</th>
         <th scope="col">Cargo titles</th>
+        <th scope="col">Cargo weight</th>
+        <th scope="col">Cargo city</th>
         <th scope="col">Cargo status</th>
 
 
@@ -46,6 +49,15 @@
                     <td>
                             ${cargo.title}
                     </td>
+                    <td>
+                            ${cargo.cargoWeightKilos}
+                    </td>
+
+                    <td>
+                            ${cargo.currentCity.cityName}
+                    </td>
+
+
                     <td>
                             ${cargo.cargoStatus}
                     </td>

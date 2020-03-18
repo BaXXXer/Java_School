@@ -41,12 +41,21 @@ public class OrderDaoImpl implements OrderDao {
         return order;
     }
 
-    @Override
-    public void removeOrder(int id) {
+    public void updateOrder(Order order){
         Session session = this.sessionFactory.getCurrentSession();
-        Order p = session.load(Order.class, id);
-        if (null != p) {
-            session.delete(p);
-        }
+        session.update(order);
     }
+
+//    @Override
+//    public void removeOrder(int id) {
+//        Session session = this.sessionFactory.getCurrentSession();
+//        Order order = session.load(Order.class, id);
+//            order.getWayPoints().removeIf((OrderWaypoint point) -> {
+//                if(point.getId())
+//            })
+//
+//            if (null != p) {
+//        session.delete(p);
+//    }
+//}
 }

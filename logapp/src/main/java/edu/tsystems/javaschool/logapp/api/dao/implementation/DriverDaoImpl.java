@@ -44,6 +44,7 @@ public class DriverDaoImpl implements DriverDao {
     }
 
     @Override
+    @Transactional
     public void updateDriver(Driver driver) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(driver);
@@ -68,5 +69,14 @@ public class DriverDaoImpl implements DriverDao {
         return driver;
     }
 
-
+    @Override
+    public List<Driver> findFreeDriversInCity(int cityId, int maxHours) {
+        Session session = this.sessionFactory.getCurrentSession();
+        List<Driver> driverList = session.createQuery("from Driver d where driverCityId =: cityId " +
+                "and driverStatus='OFF' and driverWorkedHours< :maxHours and not exists (from Order o join o.driversOnOrder od " +
+                "where od = d and o.orderIsDone = false)")
+                .setParameter("cityId",cityId).setParameter("maxHours",maxHours)
+                .list();
+        return driverList;
+    }
 }

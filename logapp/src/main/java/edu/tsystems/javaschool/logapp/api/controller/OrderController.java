@@ -96,11 +96,26 @@ public class OrderController {
         return mav;
     }
 
-    @RequestMapping(value = "/removeOrder/{id}", method = RequestMethod.GET)
-    public String removeDriver(@PathVariable("id") int id) {
-        orderService.removeOrder(id);
-        return "redirect:/allOrders";
+    @RequestMapping(value = "/readyForTripDrivers/{id}",method = RequestMethod.GET)
+    public ModelAndView getReadyForTripDrivers(@PathVariable("id") int id, Model model) {
+        ModelAndView mav = new ModelAndView("orders/readyForTripDrivers");
+        mav.addObject("drivers",orderService.findDriversForTrip(orderService.getOrderById(id)));
+        mav.addObject("cityMap",cityService.getCityMap());
+        mav.addObject("truckMap",truckService.getTruckMap());
+        mav.addObject("order",orderService.getOrderById(id));
+        return mav;
     }
+
+    @RequestMapping(value = "/readyForTripDrivers/{orderId}/{driverId}", method ={RequestMethod.GET, RequestMethod.POST})
+    public String submitAssign( @PathVariable ("orderId") int orderId,
+                               ModelMap model, @PathVariable ("driverId") int driverId){
+
+        orderService.assignDriver(driverService.getDriverById(driverId),orderService.getOrderById(orderId));
+        return "orders/readyForTripDrivers";
+    }
+
+
+
 
 
 }

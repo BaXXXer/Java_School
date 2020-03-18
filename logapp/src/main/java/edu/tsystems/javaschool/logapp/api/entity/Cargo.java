@@ -48,7 +48,7 @@ public class Cargo {
         READY, SHIPPED, DELIVERED
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "city", nullable = false)
-//    private City currentCity;
+    @ManyToOne()
+    @JoinColumn(name = "cargo_currentCity_id", nullable = false)
+    private City currentCity;
 }

@@ -31,16 +31,16 @@ public class OrderWaypoint {
     @Column(name = "ow_operation")
     private Operation operationType;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne()
     @JoinColumn(name="cargo_id")
     private Cargo cargo;
 
     @ManyToOne()
     @JoinColumn(name = "orders_or_id")
     private Order order;
-
-    @Column(name = "waypoint_weight")
-    private int waypointWeight;
+//
+//    @Column(name = "waypoint_weight")
+//    private int waypointWeight;
 
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = false)

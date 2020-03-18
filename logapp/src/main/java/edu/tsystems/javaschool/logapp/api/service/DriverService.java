@@ -45,7 +45,7 @@ public class DriverService {
 
     }
 
-    private Driver toEntity(DriverDTO driverDTO) {
+    public Driver toEntity(DriverDTO driverDTO) {
         Driver driver = mapper.toEntity(driverDTO);
 
         driver.setDriverSurname(driverDTO.getDriverSurname());
@@ -57,7 +57,7 @@ public class DriverService {
         return driver;
     }
 
-    private DriverDTO toDto(Driver entity) {
+    public DriverDTO toDto(Driver entity) {
         DriverDTO dto = new DriverDTO();
 
         try {
@@ -104,6 +104,15 @@ public class DriverService {
         Driver entity = toEntity(driver);
         entity.setDriversTruck(truckDao.getTruckById(driver.getDriversTruckId()));
         driverDao.updateDriver(entity);
+    }
+
+    public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours){
+        List<DriverDTO> dtos = new ArrayList();
+        for(Driver d: driverDao.findFreeDriversInCity(cityId,maxHours)){
+            dtos.add(toDto(d));
+        }
+
+        return dtos;
     }
 
 

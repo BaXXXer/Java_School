@@ -25,7 +25,7 @@ public class Order {
     @Column(name="or_isDone")
     private boolean orderIsDone;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "order")
     private Collection<OrderWaypoint> wayPoints;
 
     @OneToOne
@@ -33,9 +33,10 @@ public class Order {
     private Truck truckOnOrder;
 
 
-    @ManyToMany
-    @JoinTable(name="lg_orders_driversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
-    inverseJoinColumns = @JoinColumn(name = "driver_id"))
+
+//    @JoinTable(name="lg_orders_driversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
+//    inverseJoinColumns = @JoinColumn(name = "driver_id"))
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List <Driver> driversOnOrder;
 
 }

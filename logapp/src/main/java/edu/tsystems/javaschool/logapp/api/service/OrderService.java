@@ -4,16 +4,21 @@ import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
+import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.OrderMapper;
 import edu.tsystems.javaschool.logapp.api.entity.*;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
+import edu.tsystems.javaschool.logapp.api.util.DistanceCalculator;
+import edu.tsystems.javaschool.logapp.api.util.LogappConfig;
+import edu.tsystems.javaschool.logapp.api.util.WorkingHoursCalc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -27,10 +32,12 @@ public class OrderService {
     private WayPointsDao wayPointsDao;
     private final HttpServletRequest request;
     private final DriverService driverService;
+    private final DistanceCalculator distanceCalculator;
+    private final LogappConfig appConfig;
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService) {
+    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService, DistanceCalculator distanceCalculator, LogappConfig appConfig) {
         this.orderDao = orderDao;
         this.mapper = mapper;
         this.driverDao = driverDao;
@@ -41,6 +48,8 @@ public class OrderService {
         this.driverService = driverService;
 
 
+        this.distanceCalculator = distanceCalculator;
+        this.appConfig = appConfig;
     }
 
 
@@ -66,6 +75,7 @@ public class OrderService {
 
     public Order toEntity(OrderDTO dto) {
         Order order = new Order();
+        order.setOrderId(dto.getOrderId());
         List<Integer> driverIds = dto.getDriversOnOrderIds();
         List<Driver> drivers = new ArrayList();
         for (Integer id : driverIds) {
@@ -196,7 +206,32 @@ public class OrderService {
     }
 
     @Transactional
-    public void removeOrder(int id) {
-        orderDao.removeOrder(id);
+    public List <DriverDTO> findDriversForTrip(OrderDTO orderDto){
+        Order order = toEntity(orderDto);
+        List<DriverDTO> driversForTrip = new ArrayList();
+        int routeDistance = distanceCalculator.getRouteDistance(order.getWayPoints()); //cumulative distance between all the cities over all the waypoints
+        double routeDuration = distanceCalculator.getRouteDuration(routeDistance,2);//for 2 drivers
+        LocalDateTime expectedArrival = LocalDateTime.now().plusHours((long)routeDuration);
+        double requiredWorkingHours = WorkingHoursCalc.getRequiredWorkHoursInCurrentMonth(LocalDateTime.now(), expectedArrival);
+        for(OrderWaypoint point: order.getWayPoints()) {
+            driversForTrip.addAll(driverService.findFreeDriversInCity(point.getCity().getCityId(),
+                    (int) (appConfig.getMaxMonthlyDutyHours() - requiredWorkingHours)));
+        }
+        return driversForTrip;
     }
+
+    @Transactional
+    public void assignDriver(DriverDTO driverDTO, OrderDTO orderDTO){
+        Driver driver = driverService.toEntity(driverDTO);
+        Order order = toEntity(orderDTO);
+        List<Driver> assignedDrivers = order.getDriversOnOrder(); //get current drivers on this order
+        assignedDrivers.add(driver); // add a driver to assign
+        Set<Driver>set = new HashSet<>(assignedDrivers); //remove duplicates
+        assignedDrivers.clear();
+        assignedDrivers.addAll(set);
+        order.setDriversOnOrder(assignedDrivers);//set to entity
+        driver.setOrder(order);
+        orderDao.updateOrder(order);//update entity
+    }
+
 }

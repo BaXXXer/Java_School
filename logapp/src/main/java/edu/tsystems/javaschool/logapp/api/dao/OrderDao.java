@@ -8,5 +8,6 @@ public interface OrderDao {
     List<Order> getAllOrders();
     void saveOrder(Order order);
     Order getOrderById(int id);
-    void removeOrder(int id);
+    public void updateOrder(Order order);
+//    void removeOrder(int id);
 }

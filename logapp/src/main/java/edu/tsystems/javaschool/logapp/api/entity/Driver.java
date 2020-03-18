@@ -49,5 +49,9 @@ public class Driver {
         OFF,WORKING,DRIVING
     }
 
+    @ManyToOne()
+    @JoinColumn(name = "orders_or_id")
+    private Order order;
+
 
 }
