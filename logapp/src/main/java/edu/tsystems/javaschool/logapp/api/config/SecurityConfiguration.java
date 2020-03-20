@@ -16,22 +16,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password("password").roles("USER");
+                .withUser("admin").password("password").authorities("ROLE_MANAGER")
+                .and()
+                .withUser("driver").password("password").authorities("ROLE_DRIVER");
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/");
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests()
+//                .antMatchers("/").access("hasRole('MANAGER') or hasRole('DRIVER')")
+                .antMatchers("/drivers/**").access("hasRole('ROLE_MANAGER')")
+                .antMatchers("/trucks/**").access("hasRole('ROLE_MANAGER')")
+                .antMatchers("/orders/**").access("hasRole('ROLE_MANAGER')")
+                .antMatchers("/myOrder/**").access("hasRole('ROLE_DRIVER')")
                 .and()
                 .formLogin()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .logout();
+
+//        http.authorizeRequests().anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .and()
+//                .httpBasic();
 
 //        http.csrf().disable()
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

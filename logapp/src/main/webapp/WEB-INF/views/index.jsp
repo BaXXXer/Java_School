@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
-    <link href = "../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
     <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script scr="../webjars/jquery/3.0.0/jquery.js"></script>
     <title>Welcome</title>
@@ -19,13 +19,18 @@
 </head>
 <body>
 
-    <a class="btn btn-primary" href="/addTruck" role="button">Add truck</a>
-    <a class="btn btn-primary" href="/allTrucks" role="button">See all trucks</a><br><br><br>
-    <a class="btn btn-primary" href="/addDriver" role="button">Add driver</a>
-    <a class="btn btn-primary" href="/allDrivers" role="button">See all drivers</a><br><br><br>
-    <a class="btn btn-primary" href="/addOrder" role="button">Add new order</a>
-    <a class="btn btn-primary" href="/allOrders" role="button">See all orders</a>
-    <a class="btn btn-primary" href="/orderStatus" role="button">Get order status</a>
+<a href="/logout">Logout</a>
+
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/trucks/addTruck" role="button">Add truck</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/trucks/allTrucks" role="button">See all
+    trucks</a><br><br><br>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/drivers/addDriver" role="button">Add driver</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/drivers/allDrivers" role="button">See all
+    drivers</a><br><br><br>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/addOrder" role="button">Add new order</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/allOrders" role="button">See all orders</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/orderStatus" role="button">Get order
+    status</a>
 
 </body>
 </html>

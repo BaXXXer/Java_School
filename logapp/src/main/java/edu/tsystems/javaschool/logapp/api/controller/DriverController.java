@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/drivers")
 public class DriverController {
 
     private final DriverService driverService;

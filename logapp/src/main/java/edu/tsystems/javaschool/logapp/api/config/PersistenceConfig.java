@@ -48,7 +48,7 @@ public class PersistenceConfig {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
-                "update");
+                "validate");
         hibernateProperties.setProperty("hibernate.dialect",env.getProperty("hibernate.dialect"));
         return hibernateProperties;
     }

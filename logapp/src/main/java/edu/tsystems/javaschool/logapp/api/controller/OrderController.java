@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@RequestMapping("/orders")
 public class OrderController {
 
     private final DriverService driverService;

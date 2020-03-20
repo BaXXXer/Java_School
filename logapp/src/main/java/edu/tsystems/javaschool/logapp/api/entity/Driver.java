@@ -53,5 +53,9 @@ public class Driver {
     @JoinColumn(name = "orders_or_id")
     private Order order;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }
