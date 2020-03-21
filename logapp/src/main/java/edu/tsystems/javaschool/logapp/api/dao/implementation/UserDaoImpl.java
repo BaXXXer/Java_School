@@ -2,24 +2,17 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.UserDao;
 import edu.tsystems.javaschool.logapp.api.entity.User;
-import edu.tsystems.javaschool.logapp.api.model.DriverUserModel;
-import edu.tsystems.javaschool.logapp.api.model.UserModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao, UserDetailsManager {
+public class UserDaoImpl implements UserDao {
 
     private final SessionFactory sessionFactory;
 
@@ -30,17 +23,24 @@ public class UserDaoImpl implements UserDao, UserDetailsManager {
 
 
     @Override
+    @Transactional
+    public void saveUser(User user) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.save(user);
+//        session.flush();
+    }
+
+    @Override
     public User findByEmail(String email) {
         User user = null;
-        for(User u: findAllUsers()){
-            if(u.getEmail().equals(email)){
-                user=u;
+        for (User u : findAllUsers()) {
+            if (u.getEmail().equalsIgnoreCase(email)) {
+                user = u;
             }
         }
-        if (user != null){
+        if (user != null) {
             return user;
-        }
-        else{
+        } else {
             throw new UsernameNotFoundException(email);
         }
     }
@@ -53,50 +53,9 @@ public class UserDaoImpl implements UserDao, UserDetailsManager {
     }
 
     @Override
-    public void createUser(UserDetails userDetails) {
-
-    }
-
-    @Override
-    public void updateUser(UserDetails userDetails) {
-
-    }
-
-    @Override
-    public void deleteUser(String s) {
-
-    }
-
-    @Override
-    public void changePassword(String s, String s1) {
-
-    }
-
-    @Override
-    public boolean userExists(String s) {
-        return false;
-    }
-
-    @Override
     @Transactional
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-            return buildSecurityUserFromUserEntity(findByEmail(userName));
-    }
-
-    private UserDetails buildSecurityUserFromUserEntity(User userEntity) {
-        String username = userEntity.getEmail();
-        String password = userEntity.getPasswordMd5();
-        GrantedAuthority userRole = new SimpleGrantedAuthority(userEntity
-                .getRole().name());
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(userRole);
-
-        if (userEntity.getRole() == User.UserRole.ROLE_DRIVER) {
-            return new DriverUserModel(username, password, authorities,
-                    userEntity.getDriver().getDriverId());
-        } else {
-            return new UserModel(username, password, authorities);
-        }
+    public User findUserById(int id) {
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.load(User.class, id);
     }
 }

@@ -23,7 +23,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     @SequenceGenerator(name="user_sequence",sequenceName = "user_sequence",allocationSize = 1)
     @Column(name = "user_id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_name", nullable = false, unique = true)
     private String email;
@@ -36,7 +36,8 @@ public class User {
     private String passwordMd5;
 
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,optional = false)
+//    @MapsId
     private Driver driver;
 
 

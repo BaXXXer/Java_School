@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyOrderController {
 
     @GetMapping("")
-    public String list(Model modelUi) throws BusinessLogicException {
-        return "myOrder/myAccount";
+    public String list(Model model) throws BusinessLogicException {
 
+        return "myOrder/myAccount";
     }
+
+
 
 
 

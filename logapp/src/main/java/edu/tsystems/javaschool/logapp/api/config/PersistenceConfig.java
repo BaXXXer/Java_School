@@ -48,12 +48,12 @@ public class PersistenceConfig {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
-                "validate");
+                "update");
         hibernateProperties.setProperty("hibernate.dialect",env.getProperty("hibernate.dialect"));
         return hibernateProperties;
     }
 
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));

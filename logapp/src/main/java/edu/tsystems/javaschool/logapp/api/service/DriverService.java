@@ -5,9 +5,9 @@ import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
+import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,27 +21,47 @@ public class DriverService {
     private DriverDao driverDao;
     private final DriverMapper mapper;
     private TruckDao truckDao;
+    private UserService userService;
 
     @Autowired
-    public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao) {
+    public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao, UserService userService) {
         this.driverDao = driverDao;
         this.mapper = mapper;
         this.truckDao = truckDao;
+        this.userService = userService;
     }
 
     @Transactional
     public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
         Driver driver = toEntity(driverDTO);
-        try {
-            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-            driverDao.saveDriver(driver);
 
-        } catch (DataIntegrityViolationException ex) {
-            throw new EntityNotFoundException("Truck", driverDTO.getDriversTruckId());
+        try {
+            User user = createUser(driver);
+            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            driver.setUser(user);
+            driverDao.saveDriver(driver);
+            userService.createUser(user);
+
+
+
+//        } catch (DataIntegrityViolationException ex) {
+//            throw new EntityNotFoundException("Truck", driverDTO.getDriversTruckId());
         } catch (IOException ex) {
             throw new RuntimeException("exception while saving" + ex);
         }
 
+
+    }
+
+    @Transactional
+    User createUser(Driver driver){
+        User user = new User();
+//        user.setId(driver.getDriverId());
+        user.setEmail(driver.getDriverFirstName().toLowerCase()+"."+driver.getDriverSurname().toLowerCase()+"@logapp.com");
+        user.setRole(User.UserRole.ROLE_DRIVER);
+        user.setPasswordMd5("password");
+        user.setDriver(driver);
+        return user;
 
     }
 
@@ -72,7 +92,6 @@ public class DriverService {
         dto.setDriverFirstName(entity.getDriverFirstName());
         dto.setDriverSurname(entity.getDriverSurname());
         dto.setDriverWorkedHours(entity.getDriverWorkedHours());
-
         return dto;
     }
 

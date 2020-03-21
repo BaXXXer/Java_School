@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
+import javax.validation.constraints.Null;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,5 +24,8 @@ public class DriverDTO {
     private Driver.Status driverStatus;
     private Integer driverCityId;
     private Integer driversTruckId;
+    @Null
+    private Integer userId;
+
 
 }

@@ -23,7 +23,7 @@
         font-weight: bold;
     }
 </style>
-<springForm:form action="/addDriver" method = "POST" modelAttribute="driverToAdd" >
+<springForm:form action="./addDriver" method = "POST" modelAttribute="driverToAdd" >
 
     <table>
 
@@ -138,7 +138,7 @@
 </springForm:form>
 
 <a class="btn btn-primary" href="
-    ${pageContext.request.contextPath}/allDrivers" role="button">Get all drivers</a>
+    ${pageContext.request.contextPath}./allDrivers" role="button">Get all drivers</a>
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 
 </body>

@@ -21,6 +21,8 @@
 
 <a href="/logout">Logout</a>
 
+<br>
+
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/trucks/addTruck" role="button">Add truck</a>
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/trucks/allTrucks" role="button">See all
     trucks</a><br><br><br>

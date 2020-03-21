@@ -3,9 +3,9 @@
 <html>
 <head>
     <title>All Drivers</title>
-    <link href = "webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <script scr="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script scr="webjars/jquery/3.0.0/jquery.js"></script>
+    <link href = "../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script scr="../webjars/jquery/3.0.0/jquery.js"></script>
 </head>
 <body>
 <div class="container">
@@ -59,14 +59,14 @@
                         </c:forEach>
                     </td>
 
-                    <td><a href = "<c:url value='/editDriver/${driver.driverId}' />">Edit</a></td>
-                    <td><a href = "<c:url value='/removeDriver/${driver.driverId}' />">Delete</a></td>
+                    <td><a href = "<c:url value='drivers/editDriver/${driver.driverId}' />">Edit</a></td>
+                    <td><a href = "<c:url value='drivers/removeDriver/${driver.driverId}' />">Delete</a></td>
                 </tr>
             </c:forEach>
         </table>
     </c:if>
 
-    <a class="btn btn-primary" href="${pageContext.request.contextPath}/addDriver" role="button">Add driver</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}drivers/addDriver" role="button">Add driver</a>
     <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 </div>
 

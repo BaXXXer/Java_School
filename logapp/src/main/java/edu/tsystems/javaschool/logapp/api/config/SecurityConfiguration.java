@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -14,11 +15,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password("password").authorities("ROLE_MANAGER")
+    private UserDetailsService userDetails;
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("admin").password("password").authorities("ROLE_MANAGER")
+//                .and()
+//                .withUser("driver").password("password").authorities("ROLE_DRIVER");
+        auth.userDetailsService(userDetails)
                 .and()
-                .withUser("driver").password("password").authorities("ROLE_DRIVER");
+                .inMemoryAuthentication()
+                .withUser("admin")
+                .password("password")
+                .authorities("ROLE_MANAGER");
     }
 
 
@@ -26,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-//                .antMatchers("/").access("hasRole('MANAGER') or hasRole('DRIVER')")
                 .antMatchers("/drivers/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/trucks/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/orders/**").access("hasRole('ROLE_MANAGER')")
@@ -54,16 +62,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .httpBasic();
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder() {
             @Override
             public String encode(CharSequence charSequence) {
+
                 return charSequence.toString();
             }
 
             @Override
             public boolean matches(CharSequence charSequence, String s) {
+
                 return charSequence.toString().equals(s);
             }
         };
