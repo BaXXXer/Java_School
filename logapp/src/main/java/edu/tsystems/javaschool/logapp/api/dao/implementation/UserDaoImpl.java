@@ -31,6 +31,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public User findByEmail(String email) {
         User user = null;
         for (User u : findAllUsers()) {
@@ -46,6 +47,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public List<User> findAllUsers() {
         Session session = this.sessionFactory.getCurrentSession();
         List<User> userList = session.createQuery("from User").list();

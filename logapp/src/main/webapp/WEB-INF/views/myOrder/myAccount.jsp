@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Андрей
@@ -15,8 +16,76 @@
     <title>My Account</title>
 </head>
 <body>
-<h3>Driver page</h3>
-<a href="/logout">Logout</a>
+<div class="container">
+    <h3>Hello, ${driver.driverFirstName}!</h3>
+    <a href="${pageContext.request.contextPath}/logout">Logout</a>
+    <br>
+    <br>
+    <table class="table table-condensed">
+        <tr>
+            <td>Your private Number:</td>
+            <td>${driver.driverPrivateNum}</td>
+        </tr>
+        <tr>
+            <td>Truck Registration Number:</td>
+            <td>${driver.truckRegNumber}</td>
+        </tr>
+        <tr>
+            <td>Current order:</td>
+            <c:choose>
+                <c:when test="${driver.assignedOrder!=null}">
+                    <td>${driver.assignedOrder.orderId}</td>
+                </c:when>
+                <c:otherwise>
+                    <td>No order</td>
+                </c:otherwise>
+
+            </c:choose>
+        </tr>
+        <c:choose>
+            <c:when test="${driver.assignedOrder!=null}">
+        <tr>
+            <td>Order points:</td>
+            <td>
+            <c:forEach items="${pointList}" var="point" >
+                ${pointMap.get(point)} <br>
+            </c:forEach>
+            </td>
+        </tr>
+<%--        <tr>--%>
+<%--            <td>Where to go:</td>--%>
+<%--            <td>--%>
+<%--                <c:forEach items="${pointList}" var="point" >--%>
+<%--                    ${cityMap.get(point)}--%>
+<%--                </c:forEach>--%>
+<%--            </td>--%>
+<%--        </tr>--%>
+
+        <tr>
+            <td>Co-driver(s) private number(s):</td>
+            <td>
+            <c:forEach items="${driverList}" var="driverId" >
+                <c:choose>
+                    <c:when test="${driverMap.get(driverId) != driver.driverPrivateNum}">
+                        ${driverMap.get(driverId)}
+                    </c:when>
+                    <c:otherwise>
+                        You have no co-drivers for this trip!
+                    </c:otherwise>
+                </c:choose>
+
+            </c:forEach>
+            </td>
+<%--            <td>${driver.order.driversOnOrder}</td>--%>
+
+        </tr>
+
+            </c:when>
+            <c:otherwise>
+            </c:otherwise>
+
+        </c:choose>
+
 
 </body>
 </html>

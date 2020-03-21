@@ -25,4 +25,9 @@ public class UserService {
     public void createUser(User user){
         userDao.saveUser(user);
     }
+
+    @Transactional
+    public User findByEmail(String email){
+        return userDao.findByEmail(email);
+    }
 }

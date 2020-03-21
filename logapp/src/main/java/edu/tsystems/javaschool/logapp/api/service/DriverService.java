@@ -3,6 +3,7 @@ package edu.tsystems.javaschool.logapp.api.service;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
+import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
@@ -13,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DriverService {
@@ -22,6 +25,9 @@ public class DriverService {
     private final DriverMapper mapper;
     private TruckDao truckDao;
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao, UserService userService) {
@@ -56,7 +62,6 @@ public class DriverService {
     @Transactional
     User createUser(Driver driver){
         User user = new User();
-//        user.setId(driver.getDriverId());
         user.setEmail(driver.getDriverFirstName().toLowerCase()+"."+driver.getDriverSurname().toLowerCase()+"@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
         user.setPasswordMd5("password");
@@ -133,6 +138,41 @@ public class DriverService {
 
         return dtos;
     }
+
+    /**
+     * Converts Driver entity to DriverUserDTO
+     * @param entity
+     * @return DriverUserDTO
+     */
+    public DriverUserDTO toDUDto(Driver entity){
+        DriverUserDTO dto = new DriverUserDTO();
+        dto.setDriverId(entity.getDriverId());
+        dto.setDriverPrivateNum(entity.getDriverPrivateNum());
+        dto.setDriverStatus(entity.getDriverStatus());
+        dto.setDriverFirstName(entity.getDriverFirstName());
+        dto.setDriverSurname(entity.getDriverSurname());
+        dto.setAssignedOrder(orderService.toDto(entity.getOrder()));
+        dto.setTruckRegNumber(entity.getDriversTruck().getRegNumber());
+        return dto;
+    }
+
+    @Transactional
+    public DriverUserDTO getDUDtoByEmail(String email){
+        Driver entity = userService.findByEmail(email).getDriver();
+        return toDUDto(entity);
+    }
+
+    @Transactional
+    public Map<Integer, Integer> getDriverMap(){
+        List<Driver> drivers = driverDao.getAllDrivers();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (Driver d: drivers){
+            map.put(d.getDriverId(),d.getDriverPrivateNum());
+        }
+        return map;
+
+    }
+
 
 
 }
