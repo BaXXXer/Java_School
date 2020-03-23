@@ -76,11 +76,11 @@ public class DriverController {
     @RequestMapping(value = "/removeDriver/{id}", method = RequestMethod.GET)
     public String removeDriver(@PathVariable("id") int id) {
         driverService.removeDriver(id);
-        return "redirect:/allDrivers";
+        return "redirect:drivers/allDrivers";
     }
 
     @RequestMapping(value = "/editDriver/{id}", method = RequestMethod.GET)
-    public ModelAndView editShowForm(@PathVariable("id") int id, Model model) {
+    public ModelAndView editShowForm(@PathVariable("id") int id) {
         ModelAndView mav = new ModelAndView("drivers/editDriver");
         mav.addObject("driverToEdit", driverService.getDriverById(id));
         mav.addObject("enumStatus", Driver.Status.values());

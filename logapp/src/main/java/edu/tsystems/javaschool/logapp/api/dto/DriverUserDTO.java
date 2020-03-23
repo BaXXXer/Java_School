@@ -1,6 +1,5 @@
 package edu.tsystems.javaschool.logapp.api.dto;
 
-import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,11 @@ public class DriverUserDTO {
     private String driverFirstName;
     private String driverSurname;
     private Integer driverPrivateNum;
-    private Driver.Status driverStatus;
+    public enum Status {
+        CARGO_HANDLING,REST,DRIVING,CO_DRIVER
+    }
+
+    private Status driverStatus;
     private String truckRegNumber;
     private OrderDTO assignedOrder;
 }

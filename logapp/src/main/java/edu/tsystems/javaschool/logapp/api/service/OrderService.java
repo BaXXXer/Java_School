@@ -4,6 +4,7 @@ import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
+import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
@@ -34,10 +35,11 @@ public class OrderService {
     private final DriverService driverService;
     private final DistanceCalculator distanceCalculator;
     private final LogappConfig appConfig;
+    private final UserService userService;
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService, DistanceCalculator distanceCalculator, LogappConfig appConfig) {
+    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService, DistanceCalculator distanceCalculator, LogappConfig appConfig, UserService userService) {
         this.orderDao = orderDao;
         this.mapper = mapper;
         this.driverDao = driverDao;
@@ -50,6 +52,7 @@ public class OrderService {
 
         this.distanceCalculator = distanceCalculator;
         this.appConfig = appConfig;
+        this.userService = userService;
     }
 
 
@@ -74,8 +77,8 @@ public class OrderService {
     }
 
     public Order toEntity(OrderDTO dto) {
-        Order order = new Order();
-        order.setOrderId(dto.getOrderId());
+        Order order = orderDao.getOrderById(dto.getOrderId());
+//        order.setOrderId(dto.getOrderId());
         List<Integer> driverIds = dto.getDriversOnOrderIds();
         List<Driver> drivers = new ArrayList();
         for (Integer id : driverIds) {
@@ -84,11 +87,20 @@ public class OrderService {
         order.setDriversOnOrder(drivers);
         order.setOrderIsDone(dto.isOrderIsDone());
         order.setTruckOnOrder(truckDao.getTruckById(dto.getTruckId()));
-        List<Integer> waypointsIds = dto.getWayPointsIds();
+//        List<Integer> waypointsIds = dto.getWayPointsIds();
         List<OrderWaypoint> points = new ArrayList();
-        for (Integer id : waypointsIds) {
-            points.add(wayPointsDao.getWaypointById(id));
+//        for (Integer id : waypointsIds) {
+//            points.add(wayPointsDao.getWaypointById(id));
+//        }
+        for(CargoWaypointDTO cdto: dto.getPoints()){
+            OrderWaypoint orderWaypoint = pointService.toEntity(cdto);
+            orderWaypoint.setOrder(order);
+            points.add(orderWaypoint);
         }
+        Set<OrderWaypoint> set = new HashSet<>(points);
+        points.clear();
+        points.addAll(set);//remove duplicates if any
+
         order.setWayPoints(points);
         return order;
     }
@@ -104,11 +116,15 @@ public class OrderService {
         }
         dto.setDriversOnOrderIds(driverIds);
         List<Integer> pointIds = new ArrayList<>();
+        List<CargoWaypointDTO> pointDtos = new ArrayList<>();
         Collection<OrderWaypoint> points = order.getWayPoints();
         for (OrderWaypoint p : points) {
             pointIds.add(p.getId());
+            pointDtos.add(pointService.toDto(p));
         }
         dto.setWayPointsIds(pointIds);
+        dto.setPoints(pointDtos);
+
         return dto;
     }
 
@@ -223,6 +239,7 @@ public class OrderService {
     @Transactional
     public void assignDriver(DriverDTO driverDTO, OrderDTO orderDTO){
         Driver driver = driverService.toEntity(driverDTO);
+        driver.setUser(userService.findUserById(driverDTO.getUserId()));
         Order order = toEntity(orderDTO);
         List<Driver> assignedDrivers = order.getDriversOnOrder(); //get current drivers on this order
         assignedDrivers.add(driver); // add a driver to assign
@@ -234,4 +251,21 @@ public class OrderService {
         orderDao.updateOrder(order);//update entity
     }
 
+    @Transactional
+    public void updateCargoStatus(int orderId, int pointId) {
+        Order order = orderDao.getOrderById(orderId);
+        OrderDTO orderDTO = getOrderById(orderId);
+        List<CargoWaypointDTO> points = orderDTO.getPoints();
+        List<CargoWaypointDTO> waypointDTOSUpdated =
+                pointService.setLoadedById(points, pointId);
+        List<OrderWaypoint> pointEntities = new ArrayList();//returned an array with updated cargo status
+        for(CargoWaypointDTO dto: waypointDTOSUpdated){
+            pointEntities.add(pointService.toEntity(dto));
+        }
+        for(OrderWaypoint owpoint: pointEntities){
+            owpoint.setOrder(order);
+        }
+        order.setWayPoints(pointEntities);
+        orderDao.updateOrder(order);
+    }
 }

@@ -31,7 +31,7 @@ public class OrderWaypoint {
     @Column(name = "ow_operation")
     private Operation operationType;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="cargo_id")
     private Cargo cargo;
 

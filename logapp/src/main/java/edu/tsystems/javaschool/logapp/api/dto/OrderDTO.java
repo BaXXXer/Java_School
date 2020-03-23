@@ -24,6 +24,8 @@ public class OrderDTO {
 
     private List <Integer> driversOnOrderIds;
 
+    private List<CargoWaypointDTO> points;
+
 
 
 }

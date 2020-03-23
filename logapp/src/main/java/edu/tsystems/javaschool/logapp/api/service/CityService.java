@@ -1,6 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.dao.CityDao;
+import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
 import edu.tsystems.javaschool.logapp.api.entity.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,25 @@ public class CityService {
             cityMap.put(c.getCityId(),c.getCityName());
         }
         return cityMap;
+    }
+
+    @Transactional
+    public CityDTO toDto(City entity){
+        CityDTO dto = new CityDTO();
+        dto.setCityId(entity.getCityId());
+        dto.setCityName(entity.getCityName());
+        dto.setLat(entity.getLat());
+        dto.setLng(entity.getLng());
+        return dto;
+
+    }
+
+    @Transactional
+    public City toEntity(CityDTO dto){
+        City entity = new City();
+        entity.setCityName(dto.getCityName());
+        entity.setLat(dto.getLat());
+        entity.setLng(dto.getLng());
+        return entity;
     }
 }

@@ -43,49 +43,52 @@
             </c:choose>
         </tr>
         <c:choose>
-            <c:when test="${driver.assignedOrder!=null}">
+        <c:when test="${driver.assignedOrder!=null}">
         <tr>
             <td>Order points:</td>
             <td>
-            <c:forEach items="${pointList}" var="point" >
-                ${pointMap.get(point)} <br>
-            </c:forEach>
+                <c:forEach items="${pointList}" var="point">
+                    ${pointMap.get(point)} <br>
+                </c:forEach>
             </td>
         </tr>
-<%--        <tr>--%>
-<%--            <td>Where to go:</td>--%>
-<%--            <td>--%>
-<%--                <c:forEach items="${pointList}" var="point" >--%>
-<%--                    ${cityMap.get(point)}--%>
-<%--                </c:forEach>--%>
-<%--            </td>--%>
-<%--        </tr>--%>
+            <%--        <tr>--%>
+            <%--            <td>Where to go:</td>--%>
+            <%--            <td>--%>
+            <%--                <c:forEach items="${pointList}" var="point" >--%>
+            <%--                    ${cityMap.get(point)}--%>
+            <%--                </c:forEach>--%>
+            <%--            </td>--%>
+            <%--        </tr>--%>
 
         <tr>
             <td>Co-driver(s) private number(s):</td>
+            <c:choose>
+            <c:when test="${driverList.size()>1}">
             <td>
-            <c:forEach items="${driverList}" var="driverId" >
-                <c:choose>
-                    <c:when test="${driverMap.get(driverId) != driver.driverPrivateNum}">
-                        ${driverMap.get(driverId)}
-                    </c:when>
-                    <c:otherwise>
-                        You have no co-drivers for this trip!
-                    </c:otherwise>
+                <c:forEach items="${driverList}" var="driverId">
+                    ${driverMap.get(driverId)} <br>
+                </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <td>You have no co-drivers for this trip!</td>
+                </c:otherwise>
                 </c:choose>
-
-            </c:forEach>
             </td>
-<%--            <td>${driver.order.driversOnOrder}</td>--%>
+                <%--            <td>${driver.order.driversOnOrder}</td>--%>
 
         </tr>
 
-            </c:when>
-            <c:otherwise>
-            </c:otherwise>
+        </c:when>
+        <c:otherwise>
+        </c:otherwise>
 
         </c:choose>
+        <br>
+        <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">edit</a>
+    </table>
 
+</div>
 
 </body>
 </html>

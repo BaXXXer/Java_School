@@ -17,7 +17,7 @@
 <body>
 <h3>Enter order details below:</h3>
 
-<springForm:form action="/addOrder" method="POST" modelAttribute="orderToAdd">
+<springForm:form action="./addOrder" method="POST" modelAttribute="orderToAdd">
 
 
     <table>
@@ -35,7 +35,7 @@
                         <select name="pointFromId">
                             <option label="---Select city---">
                                 <c:forEach items="${pointList}" var="point">
-                            <option value=${point.id}>${point.pointName}</option>
+                            <option value=${point.id}>${point.name}</option>
                             </c:forEach>
 
                         </select>
@@ -48,7 +48,7 @@
                         <select name="pointToId">
                             <option label="---Select point---">
                                 <c:forEach items="${pointList}" var="point">
-                            <option value=${point.id}>${point.pointName}</option>
+                            <option value=${point.id}>${point.name}</option>
                             </c:forEach>
 
                         </select>

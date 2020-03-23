@@ -40,11 +40,12 @@ public class DriverService {
     @Transactional
     public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
         Driver driver = toEntity(driverDTO);
+        User user = createUser(driver);
+        driver.setUser(user);
 
         try {
-            User user = createUser(driver);
             driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-            driver.setUser(user);
+//            driver.setUser(user);
             driverDao.saveDriver(driver);
             userService.createUser(user);
 
@@ -79,6 +80,8 @@ public class DriverService {
         driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
         driver.setDriverStatus(driverDTO.getDriverStatus());
         driver.setDriverCityId(driverDTO.getDriverCityId());
+//        driver.setUser(userService.findUserById(driverDTO.getUserId()));
+        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
         return driver;
     }
 
@@ -148,11 +151,22 @@ public class DriverService {
         DriverUserDTO dto = new DriverUserDTO();
         dto.setDriverId(entity.getDriverId());
         dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-        dto.setDriverStatus(entity.getDriverStatus());
+        switch (entity.getDriverStatus()){
+            case DRIVING:
+                dto.setDriverStatus(DriverUserDTO.Status.DRIVING);
+            case REST:
+                dto.setDriverStatus(DriverUserDTO.Status.REST);
+            case ON_SHIFT:
+                dto.setDriverStatus(DriverUserDTO.Status.CO_DRIVER);
+        }
         dto.setDriverFirstName(entity.getDriverFirstName());
         dto.setDriverSurname(entity.getDriverSurname());
-        dto.setAssignedOrder(orderService.toDto(entity.getOrder()));
-        dto.setTruckRegNumber(entity.getDriversTruck().getRegNumber());
+        if(entity.getOrder()!=null) {
+            dto.setAssignedOrder(orderService.toDto(entity.getOrder()));
+        }
+        if(entity.getDriversTruck()!=null) {
+            dto.setTruckRegNumber(entity.getDriversTruck().getRegNumber());
+        }
         return dto;
     }
 
