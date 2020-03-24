@@ -71,7 +71,7 @@ public class OrderController {
 
     @RequestMapping(value = "/allOrders",method = RequestMethod.GET)
     public String getAllOrders(Model model) {
-        model.addAttribute("order",new OrderDTO());
+//        model.addAttribute("order",new OrderDTO());
         model.addAttribute("orders",orderService.getAllOrders());
         model.addAttribute("pointService", pointService);
         model.addAttribute("driverService", driverService);
@@ -114,6 +114,8 @@ public class OrderController {
         orderService.assignDriver(driverService.getDriverById(driverId),orderService.getOrderById(orderId));
         return "orders/readyForTripDrivers";
     }
+
+
 
 
 

@@ -9,6 +9,7 @@
     <title>All orders</title>
 </head>
 <body>
+
 <c:forEach items="${orders}" var="order">
     <table class="table table-striped">
         <h3>Order #${order.orderId}</h3>

@@ -19,10 +19,11 @@ public class DriverUserDTO {
     private String driverSurname;
     private Integer driverPrivateNum;
     public enum Status {
-        CARGO_HANDLING,REST,DRIVING,CO_DRIVER
+        CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER,OFF
     }
 
     private Status driverStatus;
     private String truckRegNumber;
     private OrderDTO assignedOrder;
+//    private CargoWaypointDTO waypointDTO;
 }

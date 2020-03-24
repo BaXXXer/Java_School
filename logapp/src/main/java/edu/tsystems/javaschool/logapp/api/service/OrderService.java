@@ -108,6 +108,7 @@ public class OrderService {
     public OrderDTO toDto(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setOrderId(order.getOrderId());
+        dto.setOrderIsDone(order.isOrderIsDone());
         dto.setTruckId(order.getTruckOnOrder().getId());
         List<Integer> driverIds = new ArrayList<>();
         List<Driver> drivers = order.getDriversOnOrder();
@@ -268,4 +269,22 @@ public class OrderService {
         order.setWayPoints(pointEntities);
         orderDao.updateOrder(order);
     }
+
+
+    @Transactional
+    public void checkIfOrderIsDone(int orderId){
+        OrderDTO orderDTO = getOrderById(orderId);
+        List<CargoWaypointDTO> points = orderDTO.getPoints();
+        int i=0;
+        for(CargoWaypointDTO point: points){
+            if(point.isCompleted()){
+                i++;
+            }
+        }
+        if(points.size()==i){
+            orderDTO.setOrderIsDone(true);
+        }
+        orderDao.updateOrder(toEntity(orderDTO));
+    }
+
 }

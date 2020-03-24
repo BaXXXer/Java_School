@@ -133,6 +133,11 @@ public class DriverService {
         driverDao.updateDriver(entity);
     }
 
+    @Transactional
+    public void updateDriver(Driver driver) {
+        driverDao.updateDriver(driver);
+    }
+
     public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours){
         List<DriverDTO> dtos = new ArrayList();
         for(Driver d: driverDao.findFreeDriversInCity(cityId,maxHours)){
@@ -154,10 +159,13 @@ public class DriverService {
         switch (entity.getDriverStatus()){
             case DRIVING:
                 dto.setDriverStatus(DriverUserDTO.Status.DRIVING);
+                break;
             case REST:
-                dto.setDriverStatus(DriverUserDTO.Status.REST);
+                dto.setDriverStatus(DriverUserDTO.Status.OFF);
+                break;
             case ON_SHIFT:
-                dto.setDriverStatus(DriverUserDTO.Status.CO_DRIVER);
+                dto.setDriverStatus(DriverUserDTO.Status.REST_ON_SHIFT);
+                break;
         }
         dto.setDriverFirstName(entity.getDriverFirstName());
         dto.setDriverSurname(entity.getDriverSurname());
@@ -169,6 +177,28 @@ public class DriverService {
         }
         return dto;
     }
+
+    @Transactional
+    public Driver fromDUDtoToEntity(DriverUserDTO dto){
+        Driver entity = driverDao.getDriverById(dto.getDriverId());
+        switch(dto.getDriverStatus()){
+            case DRIVING:
+                entity.setDriverStatus(Driver.Status.DRIVING);
+                break;
+            case OFF:
+                entity.setDriverStatus(Driver.Status.REST);
+                break;
+            case CO_DRIVER:
+            case CARGO_HANDLING:
+            case REST_ON_SHIFT:
+                entity.setDriverStatus(Driver.Status.ON_SHIFT);
+                break;
+        }
+        return entity;
+
+    }
+
+
 
     @Transactional
     public DriverUserDTO getDUDtoByEmail(String email){
@@ -184,9 +214,18 @@ public class DriverService {
             map.put(d.getDriverId(),d.getDriverPrivateNum());
         }
         return map;
+    }
 
+    @Transactional
+    public void setDriverOnRest(DriverUserDTO dto){
+        dto.setDriverStatus(DriverUserDTO.Status.OFF);
+        updateDriver(fromDUDtoToEntity(dto));
     }
 
 
-
+    @Transactional
+    public void setDriverOnShift(DriverUserDTO dto) {
+        dto.setDriverStatus(DriverUserDTO.Status.REST_ON_SHIFT);
+        updateDriver(fromDUDtoToEntity(dto));
+    }
 }

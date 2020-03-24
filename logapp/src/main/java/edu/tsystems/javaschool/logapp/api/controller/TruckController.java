@@ -75,7 +75,7 @@ public class TruckController {
     @RequestMapping(value = "/removeTruck/{id}",method = RequestMethod.GET)
     public String removeTruck(@PathVariable("id") int id) {
         truckService.removeTruck(id);
-        return "redirect:/allTrucks";
+        return "redirect:trucks/allTrucks";
     }
 
     @RequestMapping(value="/editTruck/{id}",method = RequestMethod.GET)

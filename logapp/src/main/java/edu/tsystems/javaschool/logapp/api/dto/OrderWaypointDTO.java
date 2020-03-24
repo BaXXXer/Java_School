@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 @NoArgsConstructor
 @Getter
 @Setter
+//TODO: DELETE CLASS
 public class OrderWaypointDTO {
 
     @GeneratedValue

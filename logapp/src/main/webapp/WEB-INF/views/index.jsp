@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<a href="/logout">Logout</a>
+<a class="btn btn-danger" href="${pageContext.request.contextPath}/logout" role="button">Logout</a>
 
 <br>
 

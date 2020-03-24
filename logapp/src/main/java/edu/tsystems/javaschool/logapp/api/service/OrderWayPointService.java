@@ -2,7 +2,6 @@ package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
-import edu.tsystems.javaschool.logapp.api.dto.mapper.CargoMapper;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.CityMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
@@ -19,23 +18,16 @@ public class OrderWayPointService {
     private WayPointsDao dao;
     private CargoService cargoService;
     private CityService cityService;
-    private CargoMapper cargoMapper;
     private CityMapper cityMapper;
 
     @Autowired
-    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityService cityService, CargoMapper cargoMapper, CityMapper cityMapper) {
+    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityService cityService, CityMapper cityMapper) {
         this.dao = dao;
         this.cargoService = cargoService;
         this.cityService = cityService;
-        this.cargoMapper = cargoMapper;
         this.cityMapper = cityMapper;
     }
 
-    @Transactional
-    public CargoWaypointDTO getCGWPDto(int id){
-        OrderWaypoint waypoint = dao.getWaypointById(id);
-        return toDto(waypoint);
-    }
 
     @Transactional
     public OrderWaypoint getPointById(int id){
@@ -69,14 +61,20 @@ public class OrderWayPointService {
     public List<CargoWaypointDTO> setLoadedById(List<CargoWaypointDTO> points, int pointId) {
         for(CargoWaypointDTO dto: points){
             if(dto.getId()==pointId){
-                dto.setOperationType(OrderWaypoint.Operation.UNLOAD);
-                dto.getCargo().setCargoStatus(Cargo.Status.SHIPPED);
+                if(dto.getOperationType()== OrderWaypoint.Operation.LOAD) {
+                    dto.setOperationType(OrderWaypoint.Operation.UNLOAD);
+                    dto.getCargo().setCargoStatus(Cargo.Status.SHIPPED);
+                }else if(dto.getOperationType()== OrderWaypoint.Operation.UNLOAD){
+                    dto.getCargo().setCargoStatus(Cargo.Status.DELIVERED);
+                    dto.setCompleted(true);
+                }
             }
         }
         return points;
 
     }
 
+    @Transactional
     public OrderWaypoint toEntity(CargoWaypointDTO cdto) {
         OrderWaypoint entity = getPointById(cdto.getId());
         entity.setCargo(cargoService.toEntity(cdto.getCargo()));

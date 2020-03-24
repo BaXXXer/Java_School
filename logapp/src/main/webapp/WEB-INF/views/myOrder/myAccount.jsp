@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Андрей
@@ -18,7 +21,8 @@
 <body>
 <div class="container">
     <h3>Hello, ${driver.driverFirstName}!</h3>
-    <a href="${pageContext.request.contextPath}/logout">Logout</a>
+    <a class="btn btn-danger" href="${pageContext.request.contextPath}/logout" role="button">Logout</a>
+    <%--    <a href="${pageContext.request.contextPath}/logout">Logout</a>--%>
     <br>
     <br>
     <table class="table table-condensed">
@@ -26,6 +30,65 @@
             <td>Your private Number:</td>
             <td>${driver.driverPrivateNum}</td>
         </tr>
+        <tr>
+            <td>Currently you are:</td>
+            <c:choose>
+                <c:when test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'
+                || 'DRIVING' || 'CO_DRIVER'}">
+                    <td>On a shift</td>
+                    <%--                    <td>--%>
+                    <%--                        <form action="/myOrder/setOnRest" method="post" >--%>
+                    <%--                            <input type="submit" value="Finish shift" />--%>
+                    <%--                        </form>--%>
+                    <%--                    </td>--%>
+                </c:when>
+                <c:otherwise>
+                    <td>On a rest</td>
+                    <%--                    <td>--%>
+                    <%--                        <form action="/myOrder/setOnShift" method="post" >--%>
+                    <%--                            <input type="submit" value="Start shift" />--%>
+                    <%--                        </form>--%>
+                    <%--                    </td>--%>
+
+                </c:otherwise>
+
+            </c:choose>
+        </tr>
+        <tr>
+            <td>Working status:</td>
+            <td><c:choose>
+                <c:when test="${driver.driverStatus=='CARGO_HANDLING'}">
+                    Cargo handling
+                </c:when>
+                <c:otherwise>
+                    <c:choose>
+                        <c:when test="${driver.driverStatus=='REST_ON_SHIFT'}">
+                            Rest
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${driver.driverStatus=='DRIVING'}">
+                                    Driving
+                                </c:when>
+                                <c:otherwise>
+                                    <c:choose>
+                                        <c:when test="${driver.driverStatus=='CO_DRIVER'}">
+                                            Co-Driver
+                                        </c:when>
+                                        <c:otherwise></c:otherwise>
+                                    </c:choose>
+                                </c:otherwise>
+                            </c:choose>
+
+                        </c:otherwise>
+                    </c:choose>
+
+                </c:otherwise>
+            </c:choose></td>
+        </tr>
+
+
+
         <tr>
             <td>Truck Registration Number:</td>
             <td>${driver.truckRegNumber}</td>
@@ -43,49 +106,134 @@
             </c:choose>
         </tr>
         <c:choose>
-        <c:when test="${driver.assignedOrder!=null}">
-        <tr>
-            <td>Order points:</td>
-            <td>
-                <c:forEach items="${pointList}" var="point">
-                    ${pointMap.get(point)} <br>
-                </c:forEach>
-            </td>
-        </tr>
-            <%--        <tr>--%>
-            <%--            <td>Where to go:</td>--%>
-            <%--            <td>--%>
-            <%--                <c:forEach items="${pointList}" var="point" >--%>
-            <%--                    ${cityMap.get(point)}--%>
-            <%--                </c:forEach>--%>
-            <%--            </td>--%>
-            <%--        </tr>--%>
+            <c:when test="${driver.assignedOrder!=null}">
+                <tr>
+                    <td>Order points:</td>
+                    <td>
+                        <c:forEach items="${pointList}" var="point">
+                            ${pointMap.get(point)} <br>
+                        </c:forEach>
+                    </td>
+                </tr>
+                <%--        <tr>--%>
+                <%--            <td>Where to go:</td>--%>
+                <%--            <td>--%>
+                <%--                <c:forEach items="${pointList}" var="point" >--%>
+                <%--                    ${cityMap.get(point)}--%>
+                <%--                </c:forEach>--%>
+                <%--            </td>--%>
+                <%--        </tr>--%>
 
-        <tr>
-            <td>Co-driver(s) private number(s):</td>
-            <c:choose>
-            <c:when test="${driverList.size()>1}">
-            <td>
-                <c:forEach items="${driverList}" var="driverId">
-                    ${driverMap.get(driverId)} <br>
-                </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <td>You have no co-drivers for this trip!</td>
-                </c:otherwise>
-                </c:choose>
-            </td>
-                <%--            <td>${driver.order.driversOnOrder}</td>--%>
+                <tr>
+                    <td>Co-driver(s) private number(s):</td>
+                    <c:choose>
+                        <c:when test="${driverList.size()>1}">
+                            <td>
+                            <c:forEach items="${driverList}" var="driverId">
+                                ${driverMap.get(driverId)} <br>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <td>You have no co-drivers for this trip!</td>
+                        </c:otherwise>
+                    </c:choose>
+                    </td>
+                        <%--            <td>${driver.order.driversOnOrder}</td>--%>
 
-        </tr>
+                </tr>
 
-        </c:when>
-        <c:otherwise>
-        </c:otherwise>
+            </c:when>
+            <c:otherwise>
+            </c:otherwise>
 
         </c:choose>
+        <c:choose>
+            <c:when test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'
+                || 'DRIVING' || 'CO_DRIVER'}">
+                <td>
+                    <form action="${pageContext.request.contextPath}/myOrder/setOnRest" method="post">
+                        <input type="submit" value="Finish shift"/>
+                    </form>
+                </td>
+            </c:when>
+            <c:otherwise>
+                <td>
+                    <form action="${pageContext.request.contextPath}/myOrder/setOnShift" method="post">
+                        <input type="submit" value="Start shift"/>
+                    </form>
+                </td>
+
+            </c:otherwise>
+
+        </c:choose>
+<%--        <c:if test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'--%>
+<%--                || 'DRIVING' || 'CO_DRIVER'}">--%>
+<%--&lt;%&ndash;            <td>&ndash;%&gt;--%>
+<%--&lt;%&ndash;                <form action="${pageContext.request.contextPath}/myOrder/setStatus" method="get">&ndash;%&gt;--%>
+<%--&lt;%&ndash;                    <input type="submit" value="Change work status"/>&ndash;%&gt;--%>
+<%--&lt;%&ndash;                </form>&ndash;%&gt;--%>
+<%--&lt;%&ndash;            </td>&ndash;%&gt;--%>
+
+
+<%--        </c:if>--%>
         <br>
-        <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">edit</a>
+        <%--        <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">edit</a>--%>
+        <a class="btn btn-secondary btn-sm" href="/myOrder/editOrder/${driver.assignedOrder.orderId}" role="button">Edit
+            order details</a>
+        <br>
+        <br>
+        <br>
+        <br>
+        <tr>
+            <td>
+            Set my status to
+            </td>
+            <td>
+            <springForm:form action="${pageContext.request.contextPath}/myOrder/" method="POST" modelAttribute="driver">
+
+                <c:forEach items="${statusEnum}" var="status">
+                    <c:choose>
+                        <c:when test="${status=='CARGO_HANDLING'}">
+                            <input type="radio" name="driverStatus" value="${'CARGO_HANDLING'}"/> Cargo handling
+                            <br>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${status=='REST_ON_SHIFT'}">
+                                    <input type="radio" name="driverStatus" value="${'REST_ON_SHIFT'}"/> Rest
+                                    <br>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:choose>
+                                        <c:when test="${status=='DRIVING'}">
+                                            <input type="radio" name="driverStatus" value="${'DRIVING'}"/> Driving
+                                            <br>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:choose>
+                                                <c:when test="${status=='CO_DRIVER'}">
+                                                    <input type="radio" name="driverStatus" value="${'CO_DRIVER'}"/> Co-Driver
+                                                    <br>
+                                                </c:when>
+                                                <c:otherwise></c:otherwise>
+                                            </c:choose>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </c:otherwise>
+                            </c:choose>
+
+                        </c:otherwise>
+                    </c:choose>
+
+                </c:forEach>
+                <input type="submit" value="Submit"/>
+
+            </springForm:form>
+            </td>
+        </tr>
+        </tr>
+
     </table>
 
 </div>
