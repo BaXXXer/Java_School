@@ -19,8 +19,9 @@ public class DriverUserDTO {
     private String driverSurname;
     private Integer driverPrivateNum;
     public enum Status {
-        CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER,OFF
+        CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER,REST
     }
+
 
     private Status driverStatus;
     private String truckRegNumber;

@@ -38,7 +38,7 @@ public class MyOrderController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET,RequestMethod.POST})
-    public String list( @RequestParam(required = false, name = "driverStatus") DriverUserDTO.Status status,Model model, Principal principal) throws BusinessLogicException {
+    public String list(Model model, Principal principal) throws BusinessLogicException {
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
         if (driver.getAssignedOrder() != null) {
             List<Integer> wayPoints = driver.getAssignedOrder().getWayPointsIds();
@@ -51,26 +51,15 @@ public class MyOrderController {
         model.addAttribute("cityMap", cityService.getCityMap());
         model.addAttribute("driverMap", driverService.getDriverMap());
         model.addAttribute("statusEnum", DriverUserDTO.Status.values());
-
-        driver.setDriverStatus(status);
-        if (status == DriverUserDTO.Status.DRIVING) {
-            driverService.updateDriver(driverService.fromDUDtoToEntity(driver));
-        }
-
         return "myOrder/myAccount";
     }
 
-//    @RequestMapping(value = "", method = {RequestMethod.POST})
-//    public String setStatusSubmit(@RequestParam(name = "driverStatus") DriverUserDTO.Status status, @ModelAttribute("driver") DriverUserDTO driver, Principal principal) {
-////        DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());// get current DriverUser
-//        driver.setDriverStatus(status);
-////        model.addAttribute("driverDto", driver);
-////        model.addAttribute("driverStatus", driver);
-//        if (status == DriverUserDTO.Status.DRIVING) {
-//            driverService.updateDriver(driverService.fromDUDtoToEntity(driver));
-//        }
-//        return "redirect: .";
-//    }
+    @RequestMapping(value = "/setNewStatus", method = {RequestMethod.POST})
+    public String setStatusSubmit(@RequestParam(name = "driverStatus") String status, Principal principal) {
+        driverService.getDUDtoByEmailAndSetStatus(principal.getName(),status);
+
+        return "redirect: .";
+    }
 
     @GetMapping("/editOrder/{id}")
     public ModelAndView editOrderShow(@PathVariable("id") int id) {

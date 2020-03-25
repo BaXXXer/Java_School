@@ -46,7 +46,7 @@ public class Driver {
     private Truck driversTruck;
 
     public enum Status {
-        REST, ON_SHIFT,DRIVING
+        REST,CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER
     }
 
     @ManyToOne()

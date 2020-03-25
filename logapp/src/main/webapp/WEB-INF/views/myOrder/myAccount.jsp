@@ -34,22 +34,12 @@
             <td>Currently you are:</td>
             <c:choose>
                 <c:when test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'
-                || 'DRIVING' || 'CO_DRIVER'}">
+                || driver.driverStatus =='DRIVING' || driver.driverStatus == 'CO_DRIVER'}">
                     <td>On a shift</td>
-                    <%--                    <td>--%>
-                    <%--                        <form action="/myOrder/setOnRest" method="post" >--%>
-                    <%--                            <input type="submit" value="Finish shift" />--%>
-                    <%--                        </form>--%>
-                    <%--                    </td>--%>
+
                 </c:when>
                 <c:otherwise>
                     <td>On a rest</td>
-                    <%--                    <td>--%>
-                    <%--                        <form action="/myOrder/setOnShift" method="post" >--%>
-                    <%--                            <input type="submit" value="Start shift" />--%>
-                    <%--                        </form>--%>
-                    <%--                    </td>--%>
-
                 </c:otherwise>
 
             </c:choose>
@@ -87,8 +77,6 @@
             </c:choose></td>
         </tr>
 
-
-
         <tr>
             <td>Truck Registration Number:</td>
             <td>${driver.truckRegNumber}</td>
@@ -115,14 +103,6 @@
                         </c:forEach>
                     </td>
                 </tr>
-                <%--        <tr>--%>
-                <%--            <td>Where to go:</td>--%>
-                <%--            <td>--%>
-                <%--                <c:forEach items="${pointList}" var="point" >--%>
-                <%--                    ${cityMap.get(point)}--%>
-                <%--                </c:forEach>--%>
-                <%--            </td>--%>
-                <%--        </tr>--%>
 
                 <tr>
                     <td>Co-driver(s) private number(s):</td>
@@ -149,7 +129,7 @@
         </c:choose>
         <c:choose>
             <c:when test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'
-                || 'DRIVING' || 'CO_DRIVER'}">
+                || driver.driverStatus =='DRIVING' || driver.driverStatus == 'CO_DRIVER'}">
                 <td>
                     <form action="${pageContext.request.contextPath}/myOrder/setOnRest" method="post">
                         <input type="submit" value="Finish shift"/>
@@ -166,30 +146,17 @@
             </c:otherwise>
 
         </c:choose>
-<%--        <c:if test="${driver.driverStatus == 'CARGO_HANDLING' || driver.driverStatus == 'REST_ON_SHIFT'--%>
-<%--                || 'DRIVING' || 'CO_DRIVER'}">--%>
-<%--&lt;%&ndash;            <td>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                <form action="${pageContext.request.contextPath}/myOrder/setStatus" method="get">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                    <input type="submit" value="Change work status"/>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                </form>&ndash;%&gt;--%>
-<%--&lt;%&ndash;            </td>&ndash;%&gt;--%>
 
-
-<%--        </c:if>--%>
-        <br>
-        <%--        <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">edit</a>--%>
         <a class="btn btn-secondary btn-sm" href="/myOrder/editOrder/${driver.assignedOrder.orderId}" role="button">Edit
             order details</a>
         <br>
-        <br>
-        <br>
-        <br>
+
         <tr>
             <td>
             Set my status to
             </td>
             <td>
-            <springForm:form action="${pageContext.request.contextPath}/myOrder/" method="POST" modelAttribute="driver">
+            <springForm:form action="${pageContext.request.contextPath}/myOrder/setNewStatus" method="POST" modelAttribute="driver">
 
                 <c:forEach items="${statusEnum}" var="status">
                     <c:choose>
