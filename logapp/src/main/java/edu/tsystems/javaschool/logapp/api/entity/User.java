@@ -37,6 +37,7 @@ public class User {
 
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,optional = false)
+    @JoinColumn()
 //    @MapsId
     private Driver driver;
 

@@ -31,7 +31,7 @@
         font-weight: bold;
     }
 </style>
-<springForm:form action="/addTruck" method = "POST" modelAttribute="truckToAdd" >
+<springForm:form action="./addTruck" method = "POST" modelAttribute="truckToAdd" >
 
 
     <table>
@@ -96,7 +96,7 @@
 </springForm:form>
 
     <a class="btn btn-primary" href="
-    ${pageContext.request.contextPath}/allTrucks" role="button">Get all trucks</a>
+    ${pageContext.request.contextPath}./allTrucks" role="button">Get all trucks</a>
     <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 
     </body>

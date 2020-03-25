@@ -8,6 +8,7 @@ import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,32 +39,20 @@ public class DriverService {
     }
 
     @Transactional
-    public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
+    public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException, IOException {
         Driver driver = toEntity(driverDTO);
+        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+        driverDao.saveDriver(driver);
         User user = createUser(driver);
-        driver.setUser(user);
-
-        try {
-            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-//            driver.setUser(user);
-            driverDao.saveDriver(driver);
-            userService.createUser(user);
-
-
-
-//        } catch (DataIntegrityViolationException ex) {
-//            throw new EntityNotFoundException("Truck", driverDTO.getDriversTruckId());
-        } catch (IOException ex) {
-            throw new RuntimeException("exception while saving" + ex);
-        }
-
-
+        userService.createUser(user);
+        driver.setUser(userService.findUserById(user.getId()));
+        driverDao.updateDriver(driver);
     }
 
     @Transactional
-    User createUser(Driver driver){
+    User createUser(Driver driver) {
         User user = new User();
-        user.setEmail(driver.getDriverFirstName().toLowerCase()+"."+driver.getDriverSurname().toLowerCase()+"@logapp.com");
+        user.setEmail(driver.getDriverFirstName().toLowerCase() + "." + driver.getDriverSurname().toLowerCase() + "@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
         user.setPasswordMd5("password");
         user.setDriver(driver);
@@ -72,17 +61,30 @@ public class DriverService {
     }
 
     public Driver toEntity(DriverDTO driverDTO) {
-        Driver driver = mapper.toEntity(driverDTO);
+        try {
+            Driver driver = driverDao.getDriverById(driverDTO.getDriverId());
+            driver.setDriverSurname(driverDTO.getDriverSurname());
+            driver.setDriverFirstName(driverDTO.getDriverFirstName());
+            driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
+            driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
+            driver.setDriverStatus(driverDTO.getDriverStatus());
+            driver.setDriverCityId(driverDTO.getDriverCityId());
+            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            return driver;
 
-        driver.setDriverSurname(driverDTO.getDriverSurname());
-        driver.setDriverFirstName(driverDTO.getDriverFirstName());
-        driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
-        driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
-        driver.setDriverStatus(driverDTO.getDriverStatus());
-        driver.setDriverCityId(driverDTO.getDriverCityId());
-//        driver.setUser(userService.findUserById(driverDTO.getUserId()));
-        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-        return driver;
+
+        } catch (ObjectNotFoundException ex) {
+            Driver driver = new Driver();
+            driver.setDriverSurname(driverDTO.getDriverSurname());
+            driver.setDriverFirstName(driverDTO.getDriverFirstName());
+            driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
+            driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
+            driver.setDriverStatus(driverDTO.getDriverStatus());
+            driver.setDriverCityId(driverDTO.getDriverCityId());
+            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            return driver;
+
+        }
     }
 
     public DriverDTO toDto(Driver entity) {
@@ -138,9 +140,9 @@ public class DriverService {
         driverDao.updateDriver(driver);
     }
 
-    public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours){
+    public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours) {
         List<DriverDTO> dtos = new ArrayList();
-        for(Driver d: driverDao.findFreeDriversInCity(cityId,maxHours)){
+        for (Driver d : driverDao.findFreeDriversInCity(cityId, maxHours)) {
             dtos.add(toDto(d));
         }
 
@@ -149,14 +151,15 @@ public class DriverService {
 
     /**
      * Converts Driver entity to DriverUserDTO
+     *
      * @param entity
      * @return DriverUserDTO
      */
-    public DriverUserDTO toDUDto(Driver entity){
+    public DriverUserDTO toDUDto(Driver entity) {
         DriverUserDTO dto = new DriverUserDTO();
         dto.setDriverId(entity.getDriverId());
         dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-        switch (entity.getDriverStatus()){
+        switch (entity.getDriverStatus()) {
             case DRIVING:
                 dto.setDriverStatus(DriverUserDTO.Status.DRIVING);
                 break;
@@ -169,19 +172,19 @@ public class DriverService {
         }
         dto.setDriverFirstName(entity.getDriverFirstName());
         dto.setDriverSurname(entity.getDriverSurname());
-        if(entity.getOrder()!=null) {
+        if (entity.getOrder() != null) {
             dto.setAssignedOrder(orderService.toDto(entity.getOrder()));
         }
-        if(entity.getDriversTruck()!=null) {
+        if (entity.getDriversTruck() != null) {
             dto.setTruckRegNumber(entity.getDriversTruck().getRegNumber());
         }
         return dto;
     }
 
     @Transactional
-    public Driver fromDUDtoToEntity(DriverUserDTO dto){
+    public Driver fromDUDtoToEntity(DriverUserDTO dto) {
         Driver entity = driverDao.getDriverById(dto.getDriverId());
-        switch(dto.getDriverStatus()){
+        switch (dto.getDriverStatus()) {
             case DRIVING:
                 entity.setDriverStatus(Driver.Status.DRIVING);
                 break;
@@ -199,25 +202,24 @@ public class DriverService {
     }
 
 
-
     @Transactional
-    public DriverUserDTO getDUDtoByEmail(String email){
+    public DriverUserDTO getDUDtoByEmail(String email) {
         Driver entity = userService.findByEmail(email).getDriver();
         return toDUDto(entity);
     }
 
     @Transactional
-    public Map<Integer, Integer> getDriverMap(){
+    public Map<Integer, Integer> getDriverMap() {
         List<Driver> drivers = driverDao.getAllDrivers();
         Map<Integer, Integer> map = new HashMap<>();
-        for (Driver d: drivers){
-            map.put(d.getDriverId(),d.getDriverPrivateNum());
+        for (Driver d : drivers) {
+            map.put(d.getDriverId(), d.getDriverPrivateNum());
         }
         return map;
     }
 
     @Transactional
-    public void setDriverOnRest(DriverUserDTO dto){
+    public void setDriverOnRest(DriverUserDTO dto) {
         dto.setDriverStatus(DriverUserDTO.Status.OFF);
         updateDriver(fromDUDtoToEntity(dto));
     }

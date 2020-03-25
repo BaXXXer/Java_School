@@ -51,15 +51,15 @@
                     </c:forEach>
                 </td>
 
-                <td><a href = "<c:url value='/editTruck/${truck.id}' />">Edit</a></td>
-                <td><a href = "<c:url value='/removeTruck/${truck.id}' />">Delete</a></td>
+                <td><a href = "<c:url value='./editTruck/${truck.id}' />">Edit</a></td>
+                <td><a href = "<c:url value='./removeTruck/${truck.id}' />">Delete</a></td>
 
             </tr>
         </c:forEach>
     </table>
 </c:if>
 
-    <a class="btn btn-primary" href="${pageContext.request.contextPath}/addTruck" role="button">Add truck</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}./addTruck" role="button">Add truck</a>
     <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 </div>
 

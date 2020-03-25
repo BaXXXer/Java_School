@@ -53,7 +53,7 @@ public class Driver {
     @JoinColumn(name = "orders_or_id")
     private Order order;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dr_user")
 //    @PrimaryKeyJoinColumn
     private User user;

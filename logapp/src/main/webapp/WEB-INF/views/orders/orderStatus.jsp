@@ -14,7 +14,8 @@
     <c:forEach items="${orders}" var="order">
         <table class="table table-striped">
         <h3>Order #${order.orderId}</h3><br>
-        <a href="<c:url value='/readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
+        <a href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
+        <a href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><br>
         <th scope="col">Order Id</th>
         <th scope="col">Order status</th>
         <th scope="col">Cargo names</th>

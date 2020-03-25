@@ -8,12 +8,12 @@
 <head>
     <title>Edit truck</title>
     <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
-    <link href="../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
     <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script scr="../webjars/jquery/3.0.0/jquery.js"></script>
 </head>
 <body>
-<springForm:form action="/editTruck/{id}" method="POST" modelAttribute="truckToEdit">
+<springForm:form action="../editTruck/{id}" method="POST" modelAttribute="truckToEdit">
     <table>
         <tr>
 
@@ -95,8 +95,8 @@
 </springForm:form>
 
 <a class="btn btn-primary" href="
-        ${pageContext.request.contextPath}/allTrucks" role="button">Get all trucks</a>
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
+        ${pageContext.request.contextPath}../allTrucks" role="button">Get all trucks</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}../" role="button">Main page</a>
 
 </body>
 </html>

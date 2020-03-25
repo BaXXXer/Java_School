@@ -13,8 +13,8 @@
 <c:forEach items="${orders}" var="order">
     <table class="table table-striped">
         <h3>Order #${order.orderId}</h3>
-        <a href="<c:url value='/readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
-        <a href="<c:url value='/readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><br>
+        <a href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
+        <a href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><br>
 <%--        <a class="btn btn-danger" href="<c:url value='/removeOrder/${order.orderId}' />" role="button">Delete order</a>--%>
         <br>
         <th scope="col">Order Id</th>
@@ -55,7 +55,7 @@
     </table>
 </c:forEach>
 
-<a class="btn btn-primary" href="/addOrder" role="button">Add order</a>
+<a class="btn btn-primary" href="./addOrder" role="button">Add order</a>
 <a class="btn btn-primary" href="/" role="button">Main page</a>
 
 

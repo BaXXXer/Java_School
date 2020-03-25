@@ -76,7 +76,7 @@ public class DriverController {
     @RequestMapping(value = "/removeDriver/{id}", method = RequestMethod.GET)
     public String removeDriver(@PathVariable("id") int id) {
         driverService.removeDriver(id);
-        return "redirect:drivers/allDrivers";
+        return "redirect: ../allDrivers";
     }
 
     @RequestMapping(value = "/editDriver/{id}", method = RequestMethod.GET)

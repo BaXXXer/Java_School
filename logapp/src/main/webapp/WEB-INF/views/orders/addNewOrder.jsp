@@ -70,29 +70,29 @@
                     </td>
                 </tr>
 
-                <tr>
-                <td>Select first driver:</td>
-                <td>
-                    <select name="driverId1">
-                        <option label="---Select driver---">
-                            <c:forEach items="${driverList}" var="driver">
-                        <option value=${driver.driverId}>${driver.driverSurname}</option>
-                        </c:forEach>
-                    </select>
-                </td>
-            </tr>
+<%--                <tr>--%>
+<%--                <td>Select first driver:</td>--%>
+<%--                <td>--%>
+<%--                    <select name="driverId1">--%>
+<%--                        <option label="---Select driver---">--%>
+<%--                            <c:forEach items="${driverList}" var="driver">--%>
+<%--                        <option value=${driver.driverId}>${driver.driverSurname}</option>--%>
+<%--                        </c:forEach>--%>
+<%--                    </select>--%>
+<%--                </td>--%>
+<%--            </tr>--%>
 
-                <tr>
-                    <td>Select second driver:</td>
-                    <td>
-                        <select name="driverId2">
-                            <option label="---Select driver---">
-                                <c:forEach items="${driverList}" var="driver">
-                            <option value=${driver.driverId}>${driver.driverSurname}</option>
-                            </c:forEach>
-                        </select>
-                    </td>
-                </tr>
+<%--                <tr>--%>
+<%--                    <td>Select second driver:</td>--%>
+<%--                    <td>--%>
+<%--                        <select name="driverId2">--%>
+<%--                            <option label="---Select driver---">--%>
+<%--                                <c:forEach items="${driverList}" var="driver">--%>
+<%--                            <option value=${driver.driverId}>${driver.driverSurname}</option>--%>
+<%--                            </c:forEach>--%>
+<%--                        </select>--%>
+<%--                    </td>--%>
+<%--                </tr>--%>
 
 
 
@@ -109,7 +109,7 @@
 </springForm:form>
 
 <a class="btn btn-primary" href="
-    ${pageContext.request.contextPath}/allOrders" role="button">Get all orders</a>
+    ${pageContext.request.contextPath}./allOrders" role="button">Get all orders</a>
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 
 </body>

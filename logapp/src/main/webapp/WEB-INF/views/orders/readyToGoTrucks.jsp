@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-10">
-    <link href="../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
     <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script scr="../webjars/jquery/3.0.0/jquery.js"></script>
     <title>Ready to go trucks</title>

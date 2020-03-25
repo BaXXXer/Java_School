@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <link href = "../webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href = "/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script scr="../webjars/jquery/3.0.0/jquery.js"></script>
     <title>Ready for trip drivers</title>
