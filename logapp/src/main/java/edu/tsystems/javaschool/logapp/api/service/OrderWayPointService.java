@@ -34,6 +34,14 @@ public class OrderWayPointService {
         return dao.getWaypointById(id);
     }
 
+
+    @Transactional
+    public CargoWaypointDTO getPointDtoById(int id){
+        return toDto(dao.getWaypointById(id));
+    }
+
+
+
     @Transactional
     public List<CargoWaypointDTO> getAllWaypoints() {
         List<OrderWaypoint> waypoints = dao.getAllWaypoints();
@@ -45,13 +53,16 @@ public class OrderWayPointService {
 
     }
 
-    @Transactional
     public CargoWaypointDTO toDto(OrderWaypoint entity){
         CargoWaypointDTO dto = new CargoWaypointDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getPointName());
-        dto.setCargo(cargoService.toDto(entity.getCargo()));
-        dto.setCity(cityService.toDto(entity.getCity()));
+        if(entity.getCargo()!=null) {
+            dto.setCargo(cargoService.toDto(entity.getCargo()));
+        }
+        if(entity.getCity()!=null) {
+            dto.setDestCity(cityService.toDto(entity.getCity()));
+        }
         dto.setCompleted(entity.isCompleted());
         dto.setOperationType(entity.getOperationType());
         return dto;
@@ -78,7 +89,7 @@ public class OrderWayPointService {
     public OrderWaypoint toEntity(CargoWaypointDTO cdto) {
         OrderWaypoint entity = getPointById(cdto.getId());
         entity.setCargo(cargoService.toEntity(cdto.getCargo()));
-        entity.setCity(cityMapper.toEntity(cdto.getCity()));
+        entity.setCity(cityMapper.toEntity(cdto.getDestCity()));
         entity.setCompleted(cdto.isCompleted());
         entity.setPointName(cdto.getName());
         entity.setOperationType(cdto.getOperationType());

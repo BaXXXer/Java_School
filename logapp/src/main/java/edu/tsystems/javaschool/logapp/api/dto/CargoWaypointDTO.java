@@ -14,11 +14,9 @@ public class CargoWaypointDTO {
     private Integer id;
     private String name;
     private CargoDTO cargo;
-    private CityDTO city;
+    private CityDTO destCity;
     private boolean isCompleted;
     private OrderWaypoint.Operation operationType;
-//    public enum Operation{
-//        LOAD,UNLOAD
-//    }
+
 
 }

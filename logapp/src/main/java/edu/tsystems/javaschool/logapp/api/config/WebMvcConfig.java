@@ -20,11 +20,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolver.setViewClass(JstlView.class);
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
-//        resolver.setSuffix(".xhtml");
         return resolver;
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
+//        registry.addResourceHandler("/orders/**").addResourceLocations("/orders/**");
     }
 }

@@ -48,7 +48,7 @@ public class Cargo {
         READY, SHIPPED, DELIVERED
     }
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cargo_currentCity_id", nullable = false)
     private City currentCity;
 }

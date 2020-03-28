@@ -49,30 +49,19 @@
                 max="176"
                 placeholder="Worker hours" ></p>
 
+
 <%--        <tr>--%>
-<%--            <td><springForm:label path="driverStatus">Status:</springForm:label></td>--%>
+<%--            <td>Select Status:</td>--%>
 <%--            <td>--%>
+<%--                <select name="driverStatus">--%>
+<%--                    <option label="---Select status---">--%>
+<%--                        <c:forEach items="${enumStatus}" var="status">--%>
+<%--                    <option value=${status}>${status}</option>--%>
+<%--                    </c:forEach>--%>
 
-<%--                <springForm:select path="driverStatus">--%>
-<%--                    <springForm:option value="" label="Choose Type.." />--%>
-<%--                    <springForm:options items="${enumStatus}"/>--%>
-<%--                </springForm:select>--%>
-
+<%--                </select>--%>
 <%--            </td>--%>
 <%--        </tr>--%>
-
-        <tr>
-            <td>Select Status:</td>
-            <td>
-                <select name="driverStatus">
-                    <option label="---Select status---">
-                        <c:forEach items="${enumStatus}" var="status">
-                    <option value=${status}>${status}</option>
-                    </c:forEach>
-
-                </select>
-            </td>
-        </tr>
         <br>
 
 
@@ -103,29 +92,6 @@
             </td>
         </tr>
 
-
-
-<%--            <p>City Id: <input--%>
-<%--                    name="driverCityId"--%>
-<%--                    min="0"--%>
-<%--                    max="176"--%>
-<%--                    placeholder="City Id" ></p>--%>
-
-
-
-<%--        <tr>--%>
-<%--            <td><springForm:label path="currentTruck">Truck:</springForm:label></td>--%>
-<%--            <td>--%>
-
-<%--                <springForm:select path="currentTruck">--%>
-<%--                    <springForm:option value="" label="Choose Truck..." />--%>
-<%--                    <springForm:options items="${truckList}"/>--%>
-<%--                </springForm:select>--%>
-
-<%--            </td>--%>
-
-
-<%--        <tr>--%>
             <td><input type="submit" value="Submit"/></td>
         </tr>
 

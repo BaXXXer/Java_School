@@ -37,7 +37,7 @@
                     ${point.operationType}
             </td>
             <td>
-                    ${point.city.cityName}
+                    ${point.destCity.cityName}
             </td>
 
             <td>

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class CityDTO {
 
-    private int cityId;
+    private Integer cityId;
     private String cityName;
     private double lat;
     private double lng;

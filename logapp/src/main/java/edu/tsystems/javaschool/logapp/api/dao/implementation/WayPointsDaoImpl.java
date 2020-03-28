@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,11 +18,13 @@ public class WayPointsDaoImpl implements WayPointsDao {
         this.sessionFactory = sessionFactory;
     }
 
+
     @Override
-    @Transactional
     public OrderWaypoint getWaypointById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        return session.load(OrderWaypoint.class, id);
+        OrderWaypoint orderWaypoint = session.get(OrderWaypoint.class, id);
+        session.flush();
+        return orderWaypoint;
 
     }
 

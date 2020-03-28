@@ -23,5 +23,6 @@ public class CargoDTO {
     private String title;
     private int cargoWeightKilos;
    private Cargo.Status cargoStatus;
+   private CityDTO currentCity;
 
 }

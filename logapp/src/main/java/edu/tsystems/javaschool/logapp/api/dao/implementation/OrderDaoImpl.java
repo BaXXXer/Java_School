@@ -41,6 +41,7 @@ public class OrderDaoImpl implements OrderDao {
         return order;
     }
 
+    @Transactional
     public void updateOrder(Order order){
         Session session = this.sessionFactory.getCurrentSession();
         session.update(order);

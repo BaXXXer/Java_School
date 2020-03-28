@@ -36,10 +36,11 @@ public class OrderService {
     private final DistanceCalculator distanceCalculator;
     private final LogappConfig appConfig;
     private final UserService userService;
+    private final CargoService cargoService;
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService, DistanceCalculator distanceCalculator, LogappConfig appConfig, UserService userService) {
+    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, WayPointsDao wayPointsDao, HttpServletRequest request, DriverService driverService, DistanceCalculator distanceCalculator, LogappConfig appConfig, UserService userService, CargoService cargoService) {
         this.orderDao = orderDao;
         this.mapper = mapper;
         this.driverDao = driverDao;
@@ -53,44 +54,53 @@ public class OrderService {
         this.distanceCalculator = distanceCalculator;
         this.appConfig = appConfig;
         this.userService = userService;
+        this.cargoService = cargoService;
     }
 
 
     @Transactional
     public void saveOrder(OrderDTO dto) throws InvalidStateException {
         Order order = toEntity(dto);
-        List<Integer> pointIds = dto.getWayPointsIds();
-        for (Integer id : pointIds) {
-            OrderWaypoint point = pointService.getPointById(id);
-            Cargo.Status cargoStatus = point.getCargo().getCargoStatus();
-            OrderWaypoint.Operation operationType = point.getOperationType();
-            if (operationType == OrderWaypoint.Operation.LOAD && cargoStatus == Cargo.Status.READY ||
-                    operationType == OrderWaypoint.Operation.UNLOAD && cargoStatus == Cargo.Status.DELIVERED) {
-                point.setOrder(order);
-                orderDao.saveOrder(order);
+        if(dto.getWayPointsIds()!=null) {
+            List<Integer> pointIds = dto.getWayPointsIds();
+            for (Integer id : pointIds) {
+                OrderWaypoint point = pointService.getPointById(id);
+                Cargo.Status cargoStatus = point.getCargo().getCargoStatus();
+                OrderWaypoint.Operation operationType = point.getOperationType();
+                if (operationType == OrderWaypoint.Operation.LOAD && cargoStatus == Cargo.Status.READY ||
+                        operationType == OrderWaypoint.Operation.UNLOAD && cargoStatus == Cargo.Status.DELIVERED) {
+                    point.setOrder(order);
 
-            } else
-                throw new InvalidStateException("Incorrect operation Status is "
-                        + cargoStatus + " and operation is " + operationType);
 
+                } else
+                    throw new InvalidStateException("Incorrect operation Status is "
+                            + cargoStatus + " and operation is " + operationType);
+
+            }
         }
+        orderDao.saveOrder(order);
     }
 
     public Order toEntity(OrderDTO dto) {
-        Order order = null;
+        Order order;
         if (dto.getOrderId() != null) {
             order = orderDao.getOrderById(dto.getOrderId());
         } else {
             order = new Order();
         }
-        List<Integer> driverIds = dto.getDriversOnOrderIds();
-        List<Driver> drivers = new ArrayList();
-        for (Integer id : driverIds) {
-            drivers.add(driverDao.getDriverById(id));
-        }
-        order.setDriversOnOrder(drivers);
         order.setOrderIsDone(dto.isOrderIsDone());
-        order.setTruckOnOrder(truckDao.getTruckById(dto.getTruckId()));
+        if (dto.getDriversOnOrderIds() != null) {
+            List<Integer> driverIds = dto.getDriversOnOrderIds();
+            List<Driver> drivers = new ArrayList();
+            for (Integer id : driverIds) {
+                drivers.add(driverDao.getDriverById(id));
+            }
+            order.setDriversOnOrder(drivers);
+        }
+        if (dto.getTruckId() != null) {
+
+            order.setTruckOnOrder(truckDao.getTruckById(dto.getTruckId()));
+        }
         if (dto.getPoints() != null) {
             List<OrderWaypoint> points = new ArrayList();
             for (CargoWaypointDTO cdto : dto.getPoints()) {
@@ -104,7 +114,6 @@ public class OrderService {
 
             order.setWayPoints(points);
         }
-
         return order;
     }
 
@@ -112,22 +121,31 @@ public class OrderService {
         OrderDTO dto = new OrderDTO();
         dto.setOrderId(order.getOrderId());
         dto.setOrderIsDone(order.isOrderIsDone());
-        dto.setTruckId(order.getTruckOnOrder().getId());
-        List<Integer> driverIds = new ArrayList<>();
-        List<Driver> drivers = order.getDriversOnOrder();
-        for (Driver d : drivers) {
-            driverIds.add(d.getDriverId());
+        if (order.getTruckOnOrder() != null) {
+
+            dto.setTruckId(order.getTruckOnOrder().getId());
         }
-        dto.setDriversOnOrderIds(driverIds);
-        List<Integer> pointIds = new ArrayList<>();
-        List<CargoWaypointDTO> pointDtos = new ArrayList<>();
-        Collection<OrderWaypoint> points = order.getWayPoints();
-        for (OrderWaypoint p : points) {
-            pointIds.add(p.getId());
-            pointDtos.add(pointService.toDto(p));
+
+        if (order.getDriversOnOrder() != null) {
+            List<Integer> driverIds = new ArrayList<>();
+            List<Driver> drivers = order.getDriversOnOrder();
+            for (Driver d : drivers) {
+                driverIds.add(d.getDriverId());
+            }
+            dto.setDriversOnOrderIds(driverIds);
+
         }
-        dto.setWayPointsIds(pointIds);
-        dto.setPoints(pointDtos);
+        if (order.getWayPoints() != null) {
+            List<Integer> pointIds = new ArrayList<>();
+            List<CargoWaypointDTO> pointDtos = new ArrayList<>();
+            Collection<OrderWaypoint> points = order.getWayPoints();
+            for (OrderWaypoint p : points) {
+                pointIds.add(p.getId());
+                pointDtos.add(pointService.toDto(p));
+            }
+            dto.setWayPointsIds(pointIds);
+            dto.setPoints(pointDtos);
+        }
 
         return dto;
     }
@@ -149,6 +167,7 @@ public class OrderService {
         return points;
 
     }
+
 
     public List<Integer> getListOfDriverIds() {
         List<Integer> drivers = new ArrayList<>();
@@ -258,6 +277,11 @@ public class OrderService {
     }
 
     @Transactional
+    public void updateOrder(OrderDTO dto){
+        orderDao.updateOrder(toEntity(dto));
+    }
+
+    @Transactional
     public void updateCargoStatus(int orderId, int pointId) {
         Order order = orderDao.getOrderById(orderId);
         OrderDTO orderDTO = getOrderById(orderId);
@@ -292,4 +316,14 @@ public class OrderService {
         orderDao.updateOrder(toEntity(orderDTO));
     }
 
+
+    public void assignCargoAndPointToOrder(OrderDTO order, CargoWaypointDTO cargoWaypointDTO) {
+//        CargoWaypointDTO point = pointService.toDto(pointService.getPointById(pointId));
+
+        List<CargoWaypointDTO> points = order.getPoints();
+        points.add(cargoWaypointDTO);
+        order.setPoints(points);
+        orderDao.updateOrder(toEntity(order));
+
+    }
 }

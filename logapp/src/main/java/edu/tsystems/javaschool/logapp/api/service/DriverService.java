@@ -77,11 +77,14 @@ public class DriverService {
             driver.setDriverFirstName(driverDTO.getDriverFirstName());
             driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
             driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
-            driver.setDriverStatus(driverDTO.getDriverStatus());
+            if (driverDTO.getDriverStatus() == null) {
+                driver.setDriverStatus(Driver.Status.REST);
+            } else {
+                driver.setDriverStatus(driverDTO.getDriverStatus());
+            }
             driver.setDriverCityId(driverDTO.getDriverCityId());
             driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
             return driver;
-
         }
     }
 

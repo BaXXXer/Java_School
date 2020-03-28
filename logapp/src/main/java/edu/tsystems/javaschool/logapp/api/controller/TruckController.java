@@ -31,7 +31,7 @@ public class TruckController {
 
 
     @GetMapping
-    public String startPage(){
+    public String startPage(Model model){
         return "index";
     }
 

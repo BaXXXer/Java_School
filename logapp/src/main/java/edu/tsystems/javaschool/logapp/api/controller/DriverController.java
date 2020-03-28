@@ -55,7 +55,7 @@ public class DriverController {
         model.addAttribute("driverSurname", driverDTO);
         model.addAttribute("driverPrivateNum", driverDTO);
         model.addAttribute("driverWorkedHours", driverDTO);
-        model.addAttribute("driverStatus", driverDTO);
+//        model.addAttribute("driverStatus", driverDTO);
         model.addAttribute("driverCityId", driverDTO);
         model.addAttribute("driversTruckId", driverDTO);
         driverService.saveDriver(driverDTO);
