@@ -29,26 +29,26 @@
             </thead>
         </tr>
 
-        <c:forEach items="${points}" var="cargoPoint">
-            <springForm:form action="../notAssignedCargoes/${order.orderId}/${cargoPoint.id}" method="POST">
+        <c:forEach items="${cargoes}" var="cargo">
+            <springForm:form action="../notAssignedCargoes/${order.orderId}/${cargo.cargoId}" method="POST">
 
                 <tr>
 
-                    <td>${cargoPoint.id}</td>
+                    <td>${cargo.cargoId}</td>
                         <%--                    <input type="text" name="cargoId" value="${cargoPoint.id}" hidden>--%>
 
 
-                    <td>${cargoPoint.cargo.cargoName}</td>
-                    <td>${cargoPoint.cargo.title}</td>
-                    <td>${cargoPoint.cargo.cargoWeightKilos}</td>
-                    <td>${cargoPoint.cargo.cargoStatus}</td>
-                    <td>${cargoPoint.cargo.currentCity.cityName}</td>
+                    <td>${cargo.cargoName}</td>
+                    <td>${cargo.title}</td>
+                    <td>${cargo.cargoWeightKilos}</td>
+                    <td>${cargo.cargoStatus}</td>
+                    <td>${cargo.currentCity.cityName}</td>
                     <td>
                         <select name="destCity" id="destCity">
 
                             <option label="---Select city---">
-                                <c:forEach items="${cityList}" var="city">
-                            <option value=${city.cityId}>${city.cityName}</option>
+                                <c:forEach items="${points}" var="point">
+                            <option value=${point.id}>${point.name} in ${point.destCity.cityName}</option>
                             </c:forEach>
 
                         </select>

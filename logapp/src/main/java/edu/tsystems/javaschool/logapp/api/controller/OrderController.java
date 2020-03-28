@@ -1,7 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
+import edu.tsystems.javaschool.logapp.api.dto.CargoDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
-import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
@@ -89,41 +89,33 @@ public class OrderController {
         return mav;
     }
 
-    @RequestMapping(value = "/notAssignedCargoes/{orderId}/{pointId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/notAssignedCargoes/{orderId}/{cargoId}", method = {RequestMethod.POST})
     public String setCargoAndPointToOrder(@RequestBody MultiValueMap<String, String> formData,
-                                          @PathVariable(name = "orderId") int id,ModelMap model,
-                                          @PathVariable(name = "pointId") int pointId) {
+                                          @PathVariable(name = "orderId") int id,
+                                          @PathVariable(name = "cargoId") int cargoId) {
 
-
-
-        CargoWaypointDTO CWPdto = pointService.getPointDtoById(pointId);
-        String cityIdString = null;
+        CargoDTO cargo = cargoService.findCargoById(cargoId);
+        String pointIdString = null;
         Collection<List<String>> values = formData.values();
         for(List<String> list: values){
             for (String value: list){
                 if(value!=null){
-                    cityIdString=value;
+                    pointIdString=value;
                     break;
                 }
             }
         }
-        if(cityIdString!=null) {
-            int cityId = Integer.parseInt(cityIdString);
-            CityDTO cityDto = cityService.getCityDtoById(cityId);
-            CWPdto.setDestCity(cityDto);
+        if(pointIdString!=null) {
+            int pointId = Integer.parseInt(pointIdString);
+            CargoWaypointDTO CWPdto = pointService.getPointDtoById(pointId);
+            CWPdto.setCargo(cargo);
+            OrderDTO order = orderService.getOrderById(id);
+            List<CargoWaypointDTO> points = order.getPoints();
+            points.add(CWPdto);
+            order.setPoints(points);
+            orderService.updateOrder(order);
         }
-        OrderDTO order = orderService.getOrderById(id);
-        List<CargoWaypointDTO> points = order.getPoints();
-        points.add(CWPdto);
-        order.setPoints(points);
-        orderService.updateOrder(order);
-
-
-
-
-
-
-        return "orders/notAssignedCargoes";
+        return "redirect: .";
     }
 
 

@@ -61,23 +61,7 @@ public class OrderService {
     @Transactional
     public void saveOrder(OrderDTO dto) throws InvalidStateException {
         Order order = toEntity(dto);
-        if(dto.getWayPointsIds()!=null) {
-            List<Integer> pointIds = dto.getWayPointsIds();
-            for (Integer id : pointIds) {
-                OrderWaypoint point = pointService.getPointById(id);
-                Cargo.Status cargoStatus = point.getCargo().getCargoStatus();
-                OrderWaypoint.Operation operationType = point.getOperationType();
-                if (operationType == OrderWaypoint.Operation.LOAD && cargoStatus == Cargo.Status.READY ||
-                        operationType == OrderWaypoint.Operation.UNLOAD && cargoStatus == Cargo.Status.DELIVERED) {
-                    point.setOrder(order);
 
-
-                } else
-                    throw new InvalidStateException("Incorrect operation Status is "
-                            + cargoStatus + " and operation is " + operationType);
-
-            }
-        }
         orderDao.saveOrder(order);
     }
 
@@ -278,7 +262,40 @@ public class OrderService {
 
     @Transactional
     public void updateOrder(OrderDTO dto){
-        orderDao.updateOrder(toEntity(dto));
+        Order order = toEntity(dto);
+        if(dto.getPoints()!=null){
+            List<CargoWaypointDTO> points = dto.getPoints();
+            for(CargoWaypointDTO point: points){
+                if(point.getOperationType()== OrderWaypoint.Operation.LOAD && point.getCargo().getCargoStatus()==Cargo.Status.READY
+                || point.getOperationType()== OrderWaypoint.Operation.UNLOAD && point.getCargo().getCargoStatus()==Cargo.Status.SHIPPED){
+                    continue;
+                }else{
+                    throw new InvalidStateException("Incorrect operation - Cargo #" + point.getCargo().getCargoId() + " status is "
+                            + point.getCargo().getCargoStatus() + " and operation is " + point.getOperationType());
+                }
+            }
+        }
+
+
+
+        if(dto.getWayPointsIds()!=null) {
+            List<Integer> pointIds = dto.getWayPointsIds();
+            for (Integer id : pointIds) {
+                OrderWaypoint point = pointService.getPointById(id);
+                Cargo.Status cargoStatus = point.getCargo().getCargoStatus();
+                OrderWaypoint.Operation operationType = point.getOperationType();
+                if (operationType == OrderWaypoint.Operation.LOAD && cargoStatus == Cargo.Status.READY ||
+                        operationType == OrderWaypoint.Operation.UNLOAD && cargoStatus == Cargo.Status.DELIVERED) {
+                    point.setOrder(order);
+
+
+                } else
+                    throw new InvalidStateException("Incorrect operation Status is "
+                            + cargoStatus + " and operation is " + operationType);
+
+            }
+        }
+        orderDao.updateOrder(order);
     }
 
     @Transactional
