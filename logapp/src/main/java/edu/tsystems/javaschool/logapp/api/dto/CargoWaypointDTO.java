@@ -15,6 +15,7 @@ public class CargoWaypointDTO {
     private String name;
     private CargoDTO cargo;
     private CityDTO destCity;
+    private TruckDTO assignedTruck;
     private boolean isCompleted;
     private OrderWaypoint.Operation operationType;
 

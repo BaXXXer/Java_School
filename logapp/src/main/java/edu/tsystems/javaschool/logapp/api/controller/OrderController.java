@@ -1,7 +1,5 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
-import edu.tsystems.javaschool.logapp.api.dto.CargoDTO;
-import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
@@ -13,9 +11,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Collection;
-import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
@@ -83,7 +78,7 @@ public class OrderController {
     public ModelAndView getNotAssignedCargoes(@PathVariable(name = "id") int id ) {
         ModelAndView mav = new ModelAndView("orders/notAssignedCargoes");
         mav.addObject("order",orderService.getOrderById(id));
-        mav.addObject("cargoes", cargoService.getAllCargoes());
+        mav.addObject("cargoes", pointService.getNotAssignedCargoes());
         mav.addObject("points", pointService.getAllWaypoints());
         mav.addObject("cityList",cityService.getAllCitiesDTO());
         return mav;
@@ -94,27 +89,8 @@ public class OrderController {
                                           @PathVariable(name = "orderId") int id,
                                           @PathVariable(name = "cargoId") int cargoId) {
 
-        CargoDTO cargo = cargoService.findCargoById(cargoId);
-        String pointIdString = null;
-        Collection<List<String>> values = formData.values();
-        for(List<String> list: values){
-            for (String value: list){
-                if(value!=null){
-                    pointIdString=value;
-                    break;
-                }
-            }
-        }
-        if(pointIdString!=null) {
-            int pointId = Integer.parseInt(pointIdString);
-            CargoWaypointDTO CWPdto = pointService.getPointDtoById(pointId);
-            CWPdto.setCargo(cargo);
-            OrderDTO order = orderService.getOrderById(id);
-            List<CargoWaypointDTO> points = order.getPoints();
-            points.add(CWPdto);
-            order.setPoints(points);
-            orderService.updateOrder(order);
-        }
+        orderService.getParamsAndSetToOrder(formData,cargoId,id);
+
         return "redirect: .";
     }
 
@@ -133,9 +109,22 @@ public class OrderController {
     public ModelAndView getReadyToGoTrucks(@PathVariable("id") int id, Model model) {
         ModelAndView mav = new ModelAndView("orders/readyToGoTrucks");
         mav.addObject("truckList", orderService.getReadyToGoTrucks(orderService.getOrderById(id)));
+        mav.addObject("order", orderService.getOrderById(id));
         mav.addObject("cityMap", cityService.getCityMap());
         return mav;
     }
+
+    @RequestMapping(value = "/readyToGoTrucks/{orderId}/{truckId}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String submitTruckAssign(@PathVariable("orderId") int orderId,
+                               ModelMap model, @PathVariable("truckId") int truckId) {
+
+        orderService.assignTruck(truckService.getTruckById(truckId),orderService.getOrderById(orderId));
+        return "orders/readyForTripDrivers";
+    }
+
+
+
+
 
     @RequestMapping(value = "/readyForTripDrivers/{id}", method = RequestMethod.GET)
     public ModelAndView getReadyForTripDrivers(@PathVariable("id") int id, Model model) {

@@ -13,25 +13,32 @@
 <c:forEach items="${orders}" var="order">
     <table class="table table-striped">
         <h3>Order #${order.orderId}</h3>
+        <c:if test="${order.truckId==null}">
         <a href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
+        </c:if>
+        <c:if test="${order.truckId!=null}">
         <a href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><br>
+        </c:if>
         <a href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign</a><br>
 <%--        <a class="btn btn-danger" href="<c:url value='/removeOrder/${order.orderId}' />" role="button">Delete order</a>--%>
         <br>
         <th scope="col">Order Id</th>
         <th scope="col">Point</th>
+        <th scope="col">City</th>
         <th scope="col">Status</th>
         <th scope="col">Assigned drivers</th>
+        <th scope="col">Assigned truck</th>
         <c:if test="${!empty orders}">
 
 
-            <c:forEach items="${order.wayPointsIds}" var="wpId">
+            <c:forEach items="${order.points}" var="point">
                 <tr>
 
                     <td>${order.orderId}</td>
 
 
-                    <td>${pointMap.get(wpId)}</td>
+                    <td>${point.name}</td>
+                    <td>${point.destCity.cityName}</td>
 
                     <c:choose>
                         <c:when test="${order.orderIsDone==true}">
@@ -46,6 +53,8 @@
 
                             ${driverService.getDriverById(driverId).driverSurname}
                         </c:forEach>
+                    </td>
+                    <td>${point.assignedTruck.regNumber} </td>
 
 
                 </tr>

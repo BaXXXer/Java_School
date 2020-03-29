@@ -1,6 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
+import edu.tsystems.javaschool.logapp.api.dto.CargoDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.CityMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
@@ -19,13 +20,15 @@ public class OrderWayPointService {
     private CargoService cargoService;
     private CityService cityService;
     private CityMapper cityMapper;
+    private TruckService truckService;
 
     @Autowired
-    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityService cityService, CityMapper cityMapper) {
+    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityService cityService, CityMapper cityMapper, TruckService truckService) {
         this.dao = dao;
         this.cargoService = cargoService;
         this.cityService = cityService;
         this.cityMapper = cityMapper;
+        this.truckService = truckService;
     }
 
 
@@ -53,10 +56,41 @@ public class OrderWayPointService {
 
     }
 
+
+    /**
+     * Takes all the cargoes and all the waypoints
+     * Checks if current point has cargo assigned
+     * If yes, removes that cargo by id from the list
+     * Otherwise it is in the list
+     * @return
+     */
+    @Transactional
+    public List<CargoDTO> getNotAssignedCargoes(){
+        List <CargoDTO> allCargo = cargoService.getAllCargoes();
+        List<CargoWaypointDTO> allWaypoints = getAllWaypoints();
+        for(CargoWaypointDTO point: allWaypoints){
+            int cargoId=0;
+            if(point.getCargo()!=null){
+                cargoId = point.getCargo().getCargoId();
+                CargoDTO cargo = cargoService.findCargoById(cargoId);
+                allCargo.remove(cargo);
+            }
+        }
+
+        return allCargo;
+
+
+    }
+
     public CargoWaypointDTO toDto(OrderWaypoint entity){
         CargoWaypointDTO dto = new CargoWaypointDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getPointName());
+        if(entity.getOrder()!=null){
+            if(entity.getOrder().getTruckOnOrder()!=null) {
+                dto.setAssignedTruck(truckService.toDTO(entity.getOrder().getTruckOnOrder()));
+            }
+        }
         if(entity.getCargo()!=null) {
             dto.setCargo(cargoService.toDto(entity.getCargo()));
         }
@@ -69,6 +103,14 @@ public class OrderWayPointService {
 
     }
 
+
+    /**
+     * Changes the cargo status when a driver had set it
+     * "Loaded" or "Unloaded"
+     * @param points
+     * @param pointId
+     * @return
+     */
     public List<CargoWaypointDTO> setLoadedById(List<CargoWaypointDTO> points, int pointId) {
         for(CargoWaypointDTO dto: points){
             if(dto.getId()==pointId){
@@ -89,6 +131,9 @@ public class OrderWayPointService {
     public OrderWaypoint toEntity(CargoWaypointDTO cdto) {
         OrderWaypoint entity = getPointById(cdto.getId());
         entity.setCargo(cargoService.toEntity(cdto.getCargo()));
+        if(cdto.getAssignedTruck()!=null){
+            entity.getOrder().setTruckOnOrder(truckService.toEntity(cdto.getAssignedTruck()));
+        }
         entity.setCity(cityMapper.toEntity(cdto.getDestCity()));
         entity.setCompleted(cdto.isCompleted());
         entity.setPointName(cdto.getName());

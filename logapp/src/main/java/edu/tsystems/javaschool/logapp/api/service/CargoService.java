@@ -44,15 +44,7 @@ public class CargoService {
         return entity;
     }
 
-    @Transactional
-    public List<CargoDTO> getNotAssignedCargoes(){
-        List<Cargo> entities = cargoDao.getNotAssignedCargoes();
-        List<CargoDTO> dtos = new ArrayList<>();
-        for(Cargo c:entities){
-            dtos.add(toDto(c));
-        }
-        return dtos;
-    }
+
 
     @Transactional
     public List<CargoDTO> getAllCargoes(){

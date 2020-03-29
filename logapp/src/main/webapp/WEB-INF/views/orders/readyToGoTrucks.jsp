@@ -25,6 +25,7 @@
                 <th scope="col">Truck capacity (Kg)</th>
                 <th scope="col">Condition</th>
                 <th scope="col">Current city</th>
+                </thead>
 
                 </tr>
                 <c:forEach items="${truckList}" var="truck">
@@ -43,7 +44,10 @@
                             </c:if>
                         </c:forEach>
                     </td>
+
+                    <td><a href="<c:url value='${order.orderId}/${truck.id}'/>"> Assign to current order </a></td>
                 </tr>
+
                 </c:forEach>
 
 

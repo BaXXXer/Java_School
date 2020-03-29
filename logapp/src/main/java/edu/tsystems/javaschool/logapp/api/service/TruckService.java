@@ -74,7 +74,7 @@ public class TruckService {
         return toDTO(entity);
     }
 
-    private TruckDTO toDTO(Truck entity) {
+    public TruckDTO toDTO(Truck entity) {
         TruckDTO truckDTO = new TruckDTO();
         truckDTO.setId(entity.getId());
         truckDTO.setRegNumber(entity.getRegNumber());
@@ -87,7 +87,7 @@ public class TruckService {
 
     }
 
-    private Truck toEntity(TruckDTO dto) {
+    public Truck toEntity(TruckDTO dto) {
         Truck entity = new Truck();
         entity.setId(dto.getId());
         entity.setCapacityTons(dto.getCapacityTons());

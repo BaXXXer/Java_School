@@ -1,16 +1,15 @@
 package edu.tsystems.javaschool.logapp.api.dto;
 
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
+
 public class CargoDTO {
     private int cargoId;
     /**
@@ -24,5 +23,6 @@ public class CargoDTO {
     private int cargoWeightKilos;
    private Cargo.Status cargoStatus;
    private CityDTO currentCity;
+
 
 }
