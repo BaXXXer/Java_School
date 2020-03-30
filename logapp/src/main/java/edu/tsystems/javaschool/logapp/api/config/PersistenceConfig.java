@@ -1,8 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
-
-import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 
 @Configuration
@@ -77,17 +73,7 @@ public class PersistenceConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.LOOSE)
-                .setFieldMatchingEnabled(true)
-                .setSkipNullEnabled(true)
-                .setFieldAccessLevel(PRIVATE);
-        return mapper;
-    }
 
 
 }

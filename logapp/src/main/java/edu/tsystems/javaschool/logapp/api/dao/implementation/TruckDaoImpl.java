@@ -3,7 +3,6 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.entity.City;
-import edu.tsystems.javaschool.logapp.api.entity.Order;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 import edu.tsystems.javaschool.logapp.api.service.CityService;
 import org.hibernate.Session;
@@ -74,7 +73,7 @@ public class TruckDaoImpl implements TruckDao {
         session.save(truck);
     }
 
-    public List<Truck> getReadyToGoTrucks(Order order){
+    public List<Truck> getReadyToGoTrucks(){
         Session session = this.sessionFactory.getCurrentSession();
         return session.createQuery("select t from Truck t " +
                 "where t.condition='OK'").list();

@@ -55,6 +55,9 @@
             </tr>
         </table>
     </c:if>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
+    <a class="btn btn-primary" href="/orders/allOrders" role="button">All orders</a>
+
 </div>
 </body>
 </html>

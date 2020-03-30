@@ -59,7 +59,7 @@ public class DriverController {
         model.addAttribute("driverCityId", driverDTO);
         model.addAttribute("driversTruckId", driverDTO);
         driverService.saveDriver(driverDTO);
-        return "drivers/addNewDriver";
+        return "drivers/driverAddedSuccess";
     }
 
     @RequestMapping(value = "/allDrivers", method = RequestMethod.GET)

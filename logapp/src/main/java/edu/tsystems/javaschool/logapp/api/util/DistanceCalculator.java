@@ -1,19 +1,28 @@
 package edu.tsystems.javaschool.logapp.api.util;
 
-import edu.tsystems.javaschool.logapp.api.entity.City;
-import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
+import edu.tsystems.javaschool.logapp.api.dao.BusinessConstantsDao;
+import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
+import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
+import edu.tsystems.javaschool.logapp.api.entity.BusinessLogicConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 @Service
 public class DistanceCalculator {
 
-    private final LogappConfig appConfig;
+//    private final LogappConfig appConfig;
+//
+//    public DistanceCalculator(LogappConfig appConfig) {
+//        this.appConfig = appConfig;
+//    }
 
-    public DistanceCalculator(LogappConfig appConfig) {
-        this.appConfig = appConfig;
+    private final BusinessConstantsDao constantsDao;
+
+    @Autowired
+    public DistanceCalculator(BusinessConstantsDao constantsDao) {
+        this.constantsDao = constantsDao;
     }
 
     /**
@@ -40,24 +49,58 @@ public class DistanceCalculator {
      * @param waypointCollection Waypoints
      * @return route length in KM
      */
+//
+//    public Integer getRouteDistance(Collection<OrderWaypoint> waypointCollection) {
+//
+//        if (waypointCollection.size() <= 1) {
+//            return 0;
+//        }
+//        Iterator<OrderWaypoint> iterator = waypointCollection.iterator();
+//        City lastCity = iterator.next().getCity();
+//        int totalDistance = 0;
+//
+//        while (iterator.hasNext()) {
+//            City thisCity = iterator.next().getCity();
+//            if (!thisCity.equals(lastCity)) {
+//                totalDistance += getCityDistance( lastCity.getLat(), lastCity.getLng(), thisCity.getLat(),thisCity.getLng());
+//            }
+//            lastCity = thisCity;
+//        }
+//        return totalDistance;
+//    }
 
-    public Integer getRouteDistance(Collection<OrderWaypoint> waypointCollection) {
+    public Integer getRouteDistance(Collection<CargoWaypointDTO> waypointCollection, CityDTO currentCity) {
 
-        if (waypointCollection.size() <= 1) {
-            return 0;
-        }
-        Iterator<OrderWaypoint> iterator = waypointCollection.iterator();
-        City lastCity = iterator.next().getCity();
+
         int totalDistance = 0;
-
-        while (iterator.hasNext()) {
-            City thisCity = iterator.next().getCity();
-            if (!thisCity.equals(lastCity)) {
-                totalDistance += getCityDistance( lastCity.getLat(), lastCity.getLng(), thisCity.getLat(),thisCity.getLng());
+        for(CargoWaypointDTO point:waypointCollection){
+            CityDTO cityFrom = point.getCargo().getCurrentCity();
+            if(!cityFrom.equals(currentCity)){
+                totalDistance += getCityDistance( cityFrom.getLat(), cityFrom.getLng(), currentCity.getLat(),currentCity.getLng());
             }
-            lastCity = thisCity;
+            CityDTO cityTo = point.getDestCity();
+            if (!cityFrom.equals(cityTo)) {
+                totalDistance += getCityDistance( cityFrom.getLat(), cityFrom.getLng(), cityTo.getLat(),cityTo.getLng());
+            }
+            currentCity=cityTo;
         }
         return totalDistance;
+
+//        if (waypointCollection.size() <= 1) {
+//            return 0;
+//        }
+//        Iterator<CargoWaypointDTO> iterator = waypointCollection.iterator();
+//        CityDTO lastCity = iterator.next().getDestCity();
+//
+//
+//        while (iterator.hasNext()) {
+//            CityDTO thisCity = iterator.next().getDestCity();
+//            if (!thisCity.equals(lastCity)) {
+//                totalDistance += getCityDistance( lastCity.getLat(), lastCity.getLng(), thisCity.getLat(),thisCity.getLng());
+//            }
+//            lastCity = thisCity;
+//        }
+
     }
 
     /**
@@ -68,10 +111,11 @@ public class DistanceCalculator {
      * @return double number of total hours required to trip, include rest time.
      */
 
-    public double getRouteDuration(int routeLength, int numCoDrivers) {
-        double distancePerDay = (Math.min(numCoDrivers * appConfig.getLimitHoursPerDay(), 24) * appConfig.getTruckAvgSpeed());
-        return Math.floor(routeLength / distancePerDay) * 24
-                + (routeLength % distancePerDay) / appConfig.getTruckAvgSpeed();
+    public double getRouteHoursDuration(int routeLength, int numCoDrivers) {
+        BusinessLogicConstants constants = constantsDao.getConstants();
+
+        double distancePerDay = (Math.min(numCoDrivers * constants.getLimitHoursPerDay(), 24) * constants.getTruckAvgSpeed());
+        return Math.floor(routeLength / distancePerDay)*24;
     }
 
 }

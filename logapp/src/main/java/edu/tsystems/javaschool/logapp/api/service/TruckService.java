@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,7 @@ public class TruckService {
 
 
     @Transactional
-    public void saveTruck(TruckDTO truckDTO) throws IOException {
+    public void saveTruck(TruckDTO truckDTO) {
         Truck entity = toEntity(truckDTO);
         List<Truck> trucks = entity.getCurrentCity().getTruckList();
         if (!trucks.contains(entity)) {

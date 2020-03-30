@@ -1,10 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.dto;
 
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.Null;
@@ -13,6 +10,7 @@ import javax.validation.constraints.Null;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class DriverDTO {
 
     @GeneratedValue

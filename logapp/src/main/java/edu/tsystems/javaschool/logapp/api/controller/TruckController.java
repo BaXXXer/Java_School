@@ -46,10 +46,9 @@ public class TruckController {
         return model;
     }
 
-    //TODO: make error view + add redirect to success
     @RequestMapping(value = "/addTruck", method = RequestMethod.POST)
     public String submit(@ModelAttribute("truckToAdd") TruckDTO truck,
-                         ModelMap model) throws IOException {
+                         ModelMap model){
 
         model.addAttribute("regNum", truck);
         model.addAttribute("driverWorkingHours", truck);
@@ -58,7 +57,7 @@ public class TruckController {
         model.addAttribute("currentCityId", truck);
         truckService.saveTruck(truck);
 
-        return "trucks/addNewTruck";
+        return "trucks/truckAddedSuccess";
     }
 
 

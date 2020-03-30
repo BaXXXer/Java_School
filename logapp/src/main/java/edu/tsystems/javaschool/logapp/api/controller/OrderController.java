@@ -34,36 +34,13 @@ public class OrderController {
         this.cityService = cityService;
     }
 
-//    @RequestMapping(value = "/addOrder", method = RequestMethod.GET)
-//    public ModelAndView showForm() {
-//        ModelAndView model = new ModelAndView("orders/addNewOrder");
-//        model.addObject("orderToAdd", new OrderDTO());
-//        model.addObject("enumOperations", OrderWaypoint.Operation.values());
-//        model.addObject("enumCargoStatus", Cargo.Status.values());
-//        model.addObject("truckList", truckService.getAllTrucks());
-//        model.addObject("pointList", pointService.getAllWaypoints());
-////        model.addObject("driverList", driverService.getAllDrivers());
-//        return model;
-//    }
 
-    //TODO: make error view + add redirect to success
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     public String submit(@ModelAttribute("orderToAdd") OrderDTO orderDto,
                          ModelMap model) throws InvalidStateException {
         orderDto.setOrderIsDone(false);
         orderService.saveOrder(orderDto);
-        return "index";
-
-//        if(request.getParameter("orderIsDone").equals("Yes")){
-//            orderDto.setOrderIsDone(true);
-//        }else{
-//            orderDto.setOrderIsDone(false);
-//        }
-//        model.addAttribute("orderId", orderDto);
-//        orderDto.setWayPointsIds(orderService.getListOfPointIds());
-//        model.addAttribute("truckId", orderDto);
-//        orderDto.setDriversOnOrderIds(orderService.getListOfDriverIds());
-
+        return "redirect: /orders/allOrders";
     }
 
     @RequestMapping(value = "/allOrders", method = RequestMethod.GET)
@@ -71,6 +48,7 @@ public class OrderController {
         model.addAttribute("orders", orderService.getAllOrders());
         model.addAttribute("pointMap", orderService.getPointMap());
         model.addAttribute("driverService", driverService);
+        model.addAttribute("truckMap",truckService.getTruckMap());
         return "orders/allOrdersTables";
     }
 
@@ -91,7 +69,7 @@ public class OrderController {
 
         orderService.getParamsAndSetToOrder(formData,cargoId,id);
 
-        return "redirect: .";
+        return "redirect: /orders/notAssignedCargoes/"+id;
     }
 
 
@@ -102,7 +80,7 @@ public class OrderController {
         model.addAttribute("order", new OrderStatusDTO());
         model.addAttribute("orders", orderService.getOrderStatus());
 
-        return "orders/orderStatus";
+        return "orderStatus_old";
     }
 
     @RequestMapping(value = "/readyToGoTrucks/{id}", method = RequestMethod.GET)
@@ -119,7 +97,7 @@ public class OrderController {
                                ModelMap model, @PathVariable("truckId") int truckId) {
 
         orderService.assignTruck(truckService.getTruckById(truckId),orderService.getOrderById(orderId));
-        return "orders/readyForTripDrivers";
+        return "redirect: /orders/readyToGoTrucks/"+orderId;
     }
 
 
@@ -141,7 +119,7 @@ public class OrderController {
                                ModelMap model, @PathVariable("driverId") int driverId) {
 
         orderService.assignDriver(driverService.getDriverById(driverId), orderService.getOrderById(orderId));
-        return "orders/readyForTripDrivers";
+        return "redirect: /orders/readyForTripDrivers/"+orderId;
     }
 
 

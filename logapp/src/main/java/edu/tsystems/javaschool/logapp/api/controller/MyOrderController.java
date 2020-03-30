@@ -73,14 +73,14 @@ public class MyOrderController {
     @RequestMapping(value = "/setLoaded/{orderId}/{pointId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String setLoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId) {
         orderService.updateCargoStatus(orderId, pointId);
-        return "myOrder/editOrder";
+        return "redirect: /myOrder/editOrder/"+orderId;
     }
 
     @RequestMapping(value = "/setUnloaded/{orderId}/{pointId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String setUnoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId) {
         orderService.updateCargoStatus(orderId, pointId);
         orderService.checkIfOrderIsDone(orderId);
-        return "myOrder/editOrder";
+        return "redirect: /myOrder/editOrder/"+orderId;
     }
 
     @RequestMapping(value = "/setOnRest", method = {RequestMethod.GET, RequestMethod.POST})

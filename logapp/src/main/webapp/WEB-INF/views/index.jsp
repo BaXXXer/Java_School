@@ -30,13 +30,10 @@
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/drivers/allDrivers" role="button">See all
     drivers</a><br><br><br>
 <%--<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/addOrder" role="button">Add new order</a>--%>
-<form action="${pageContext.request.contextPath}/orders/addOrder" class="btn btn-primary" method="post">
 
-    <input type="submit" value="Add Empty Order"/>
-</form>
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/allOrders" role="button">See all orders</a>
-<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/orderStatus" role="button">Get order
-    status</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/allOrders" role="button">See order details</a>
+<%--<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/orderStatus" role="button">Get order--%>
+<%--    status</a>--%>
 
 </body>
 </html>

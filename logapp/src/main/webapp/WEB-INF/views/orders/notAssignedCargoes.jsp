@@ -35,7 +35,7 @@
                 <tr>
 
                     <td>${cargo.cargoId}</td>
-                        <%--                    <input type="text" name="cargoId" value="${cargoPoint.id}" hidden>--%>
+
 
 
                     <td>${cargo.cargoName}</td>
@@ -66,6 +66,9 @@
         </c:forEach>
     </table>
 </c:if>
+
+<a class="btn btn-primary" href="/" role="button">Main page</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/allOrders" role="button">See all orders</a>
 
 
 <%--<script scr="../webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>--%>
