@@ -14,7 +14,7 @@
     <title>Success</title>
 </head>
 <body>
-<h3>Driver was successfully added!</h3>
+<h3>Truck was successfully added!</h3>
 
 
 <a class="btn btn-primary" href="${pageContext.request.contextPath}/trucks/addTruck" role="button">Add another truck</a>

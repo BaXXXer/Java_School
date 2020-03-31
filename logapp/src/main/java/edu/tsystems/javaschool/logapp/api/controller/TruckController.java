@@ -22,7 +22,6 @@ public class TruckController {
     private final CityService cityService;
 
 
-
     @Autowired
     public TruckController(TruckService truckService, CityService cityService) {
         this.truckService = truckService;
@@ -31,7 +30,7 @@ public class TruckController {
 
 
     @GetMapping
-    public String startPage(Model model){
+    public String startPage(Model model) {
         return "index";
     }
 
@@ -40,15 +39,18 @@ public class TruckController {
     public ModelAndView showForm() {
         ModelAndView model = new ModelAndView("trucks/addNewTruck");
         model.addObject("truckToAdd", new TruckDTO());
-        model.addObject("enumCondition",Truck.Condition.values());
-        model.addObject("cityList",cityService.getAllCities());
+        model.addObject("enumCondition", Truck.Condition.values());
+        model.addObject("cityList", cityService.getAllCities());
 
         return model;
     }
 
+
+
+
     @RequestMapping(value = "/addTruck", method = RequestMethod.POST)
     public String submit(@ModelAttribute("truckToAdd") TruckDTO truck,
-                         ModelMap model){
+                         ModelMap model) {
 
         model.addAttribute("regNum", truck);
         model.addAttribute("driverWorkingHours", truck);
@@ -60,39 +62,44 @@ public class TruckController {
         return "trucks/truckAddedSuccess";
     }
 
+    @RequestMapping(value = "500Error", method = RequestMethod.GET)
+    public void throwRuntimeException() {
+        throw new NullPointerException("Throwing a null pointer exception");
+    }
 
-    @RequestMapping(value = "/allTrucks",method = RequestMethod.GET)
+
+    @RequestMapping(value = "/allTrucks", method = RequestMethod.GET)
     public String getAllTrucks(Model model) {
-        model.addAttribute("truck",new TruckDTO());
-        model.addAttribute("cityService",cityService);
-        model.addAttribute("cityMap",cityService.getCityMap());
-        model.addAttribute("trucks",truckService.getAllTrucks());
+        model.addAttribute("truck", new TruckDTO());
+        model.addAttribute("cityService", cityService);
+        model.addAttribute("cityMap", cityService.getCityMap());
+        model.addAttribute("trucks", truckService.getAllTrucks());
 
         return "trucks/allTrucks";
     }
 
-    @RequestMapping(value = "/removeTruck/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/removeTruck/{id}", method = RequestMethod.GET)
     public String removeTruck(@PathVariable("id") int id) {
         truckService.removeTruck(id);
         return "redirect: ../allTrucks";
     }
 
-    @RequestMapping(value="/editTruck/{id}",method = RequestMethod.GET)
-    public ModelAndView editShowForm (@PathVariable("id") int id, Model model){
+    @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.GET)
+    public ModelAndView editShowForm(@PathVariable("id") int id, Model model) {
         ModelAndView mav = new ModelAndView("trucks/editTruck");
-        mav.addObject("truckToEdit",truckService.getTruckById(id));
+        mav.addObject("truckToEdit", truckService.getTruckById(id));
         mav.addObject("enumCondition", Truck.Condition.values());
-        mav.addObject("cityList",cityService.getAllCities());
-        mav.addObject("cityMap",cityService.getCityMap());
+        mav.addObject("cityList", cityService.getAllCities());
+        mav.addObject("cityMap", cityService.getCityMap());
 
         return mav;
     }
 
     @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.POST)
     public String submitEdit(@ModelAttribute("truckToEdit") TruckDTO truck,
-                         ModelMap model) throws IOException {
+                             ModelMap model) throws IOException {
 
-        model.addAttribute("id",truck);
+        model.addAttribute("id", truck);
         model.addAttribute("regNumber", truck);
         model.addAttribute("driverWorkingHours", truck);
         model.addAttribute("capacityTons", truck);
@@ -102,11 +109,6 @@ public class TruckController {
 
         return "trucks/editTruck";
     }
-
-
-
-
-
 
 
 }

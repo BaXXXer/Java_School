@@ -2,9 +2,10 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
-import edu.tsystems.javaschool.logapp.api.entity.City;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
-import edu.tsystems.javaschool.logapp.api.service.CityService;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,18 @@ import java.util.List;
 public class TruckDaoImpl implements TruckDao {
 
     private SessionFactory sessionFactory;
-    private CityService cityService;
+    private static final Logger LOG = Logger.getLogger(TruckDaoImpl.class);
 
     @Override
     @Transactional
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Truck truck = session.load(Truck.class, id);
-        City city = truck.getCurrentCity();
-
+        try {
+            Truck truck = session.load(Truck.class, id);
+        } catch (ObjectNotFoundException ex) {
+            LOG.error("Truck Entity with id#" + id + " does not exist");
+            throw new EntityNotFoundException();
+        }
         return session.load(Truck.class, id);
 
     }
@@ -52,9 +56,8 @@ public class TruckDaoImpl implements TruckDao {
 
 
     @Autowired
-    public TruckDaoImpl(SessionFactory sessionFactory, CityService cityService) {
+    public TruckDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.cityService = cityService;
     }
 
     public TruckDaoImpl() {
@@ -73,7 +76,7 @@ public class TruckDaoImpl implements TruckDao {
         session.save(truck);
     }
 
-    public List<Truck> getReadyToGoTrucks(){
+    public List<Truck> getReadyToGoTrucks() {
         Session session = this.sessionFactory.getCurrentSession();
         return session.createQuery("select t from Truck t " +
                 "where t.condition='OK'").list();

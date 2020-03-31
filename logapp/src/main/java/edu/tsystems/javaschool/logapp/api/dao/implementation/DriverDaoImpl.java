@@ -2,6 +2,9 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.apache.log4j.Logger;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import java.util.List;
 public class DriverDaoImpl implements DriverDao {
 
     private SessionFactory sessionFactory;
+    private static final Logger LOG = Logger.getLogger(DriverDaoImpl.class);
 
     @Autowired
     public DriverDaoImpl(SessionFactory sessionFactory) {
@@ -61,8 +65,13 @@ public class DriverDaoImpl implements DriverDao {
     @Transactional
     public Driver getDriverById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Driver driver = session.load(Driver.class, id);
-        return driver;
+        try {
+            Driver driver = session.load(Driver.class, id);
+        } catch (ObjectNotFoundException ex) {
+            LOG.error("Driver Entity with id#" + id + " does not exist");
+            throw new EntityNotFoundException();
+        }
+        return session.load(Driver.class, id);
     }
 
     @Override

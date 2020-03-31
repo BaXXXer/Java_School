@@ -39,7 +39,7 @@
 
                     <td>
                         <c:forEach var="hash" items="${cityMap}">
-                            <c:if test="${hash.key == truck.currentCity.cityId}">
+                            <c:if test="${hash.key == truck.currentCityId}">
                                 ${hash.value}
                             </c:if>
                         </c:forEach>

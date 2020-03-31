@@ -29,6 +29,7 @@ public class OrderService {
     private final DriverService driverService;
     private final DistanceCalculator distanceCalculator;
     private final CityService cityService;
+    private final TruckService truckService;
 
     private final UserService userService;
     private final CargoService cargoService;
@@ -36,7 +37,7 @@ public class OrderService {
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, DriverService driverService, DistanceCalculator distanceCalculator, CityService cityService, UserService userService, CargoService cargoService, BusinessConstantsDao constantsDao) {
+    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, DriverService driverService, DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService, UserService userService, CargoService cargoService, BusinessConstantsDao constantsDao) {
         this.orderDao = orderDao;
         this.mapper = mapper;
         this.driverDao = driverDao;
@@ -45,6 +46,7 @@ public class OrderService {
         this.driverService = driverService;
         this.distanceCalculator = distanceCalculator;
         this.cityService = cityService;
+        this.truckService = truckService;
 
         this.userService = userService;
         this.cargoService = cargoService;
@@ -165,10 +167,10 @@ public class OrderService {
     }
 
     @Transactional
-    public List<Truck> getReadyToGoTrucks(OrderDTO orderDto) {
+    public List<TruckDTO> getReadyToGoTrucks(OrderDTO orderDto) {
         Order order = toEntity(orderDto);
-        List<Truck> readyTrucks = truckDao.getReadyToGoTrucks();
-        List<Truck> readyToGoTrucks = new ArrayList<>();
+        List<TruckDTO> readyTrucks = truckService.getReadyToGoTrucks();
+        List<TruckDTO> readyToGoTrucks = new ArrayList<>();
         for (OrderDTO o : getAllOrders()) {
             if (o.getTruckId() != null) {
                 readyTrucks.removeIf(t -> t.getId() == o.getTruckId());
@@ -179,12 +181,12 @@ public class OrderService {
         for (OrderWaypoint point : points) {
             totalWeight+=point.getCargo().getCargoWeightKilos();
         }
-        for (Truck t : readyTrucks) {
+        for (TruckDTO t : readyTrucks) {
             if (t.getCapacityTons() * 1000 >= totalWeight) {
                 readyToGoTrucks.add(t);
             }
         }
-        Set<Truck> set = new HashSet<>(readyToGoTrucks);
+        Set<TruckDTO> set = new HashSet<>(readyToGoTrucks);
         readyToGoTrucks.clear();
         readyToGoTrucks.addAll(set);
 
@@ -209,7 +211,7 @@ public class OrderService {
     @Transactional
     public List<DriverDTO> findDriversForTrip(OrderDTO orderDto) {
         List<DriverDTO> driversForTrip = new ArrayList();
-        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDto);
+        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDto,null);
         for(CargoWaypointDTO point:orderDto.getPoints()){
             driversForTrip.addAll(driverService.findFreeDriversInCity(truckDao.getTruckById(orderDto.getTruckId())
                     .getCurrentCity().getCityId(),
@@ -223,11 +225,16 @@ public class OrderService {
 
     /**
      * Calculates the duration of trip and hours required per driver
+     * CurrentCity can be null in order to find current city without assigned trucks
      * @param orderDto
      * @return
      */
-    private double getRequiredWorkingHoursPerDriver(OrderDTO orderDto) {
-        CityDTO currentCity = cityService.toDto(truckDao.getTruckById(orderDto.getTruckId()).getCurrentCity());
+    @Transactional
+    double getRequiredWorkingHoursPerDriver(OrderDTO orderDto, CityDTO currentCity) {
+        if(currentCity==null) {
+            currentCity = cityService.toDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId()).getCurrentCityId()));
+        }
+
         int routeDistance = distanceCalculator.getRouteDistance(orderDto.getPoints(), currentCity); //cumulative distance between all the cities over all the waypoints
         double routeDuration = distanceCalculator.getRouteHoursDuration(routeDistance, 2);
         LocalDateTime expectedArrival = LocalDateTime.now().plusHours((long) routeDuration);
@@ -262,7 +269,7 @@ public class OrderService {
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
         int currentWorkedHours = driverDTO.getDriverWorkedHours();
-        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO);
+        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO,null);
         currentWorkedHours+=requiredWorkingHoursPerDriver;
         driverDTO.setDriverWorkedHours(currentWorkedHours);
         driverService.updateDriver(driverService.toEntity(driverDTO));
@@ -391,6 +398,9 @@ public class OrderService {
 
     /**
      * Assignes chosen truck to current order
+     * If there is 1 driver on order, sets the working hours per driver to current truck
+     * If there is more drivers, sets the working hours per driver*number of drivers
+     * and set to current truck
      * @param truckDTO
      * @param orderDTO
      */
@@ -401,5 +411,18 @@ public class OrderService {
         Order order = toEntity(orderDTO);
         order.setTruckOnOrder(truck);
         orderDao.updateOrder(order);
+        int currentWorkingHours=0;
+        CityDTO currentTruckCity = cityService.toDto(cityService.getCityById(truckDTO.getCurrentCityId()));
+        if(truckDTO.getDriverWorkingHours()!=null){
+            currentWorkingHours=truckDTO.getDriverWorkingHours();
+        }
+        if(orderDTO.getDriversOnOrderIds().size()<=1){
+
+            truckDTO.setDriverWorkingHours( currentWorkingHours +(int)getRequiredWorkingHoursPerDriver(orderDTO,currentTruckCity));
+        }else if(orderDTO.getDriversOnOrderIds().size()>1){
+            truckDTO.setDriverWorkingHours(currentWorkingHours+
+                    (int)getRequiredWorkingHoursPerDriver(orderDTO,currentTruckCity)*orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
+        }
+        truckService.updateTruck(truckDTO);
     }
 }

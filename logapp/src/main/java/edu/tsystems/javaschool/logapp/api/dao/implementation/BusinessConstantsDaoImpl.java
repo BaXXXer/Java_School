@@ -23,6 +23,5 @@ public class BusinessConstantsDaoImpl implements BusinessConstantsDao {
         Session session = sessionFactory.getCurrentSession();
         BusinessLogicConstants constants = session.load(BusinessLogicConstants.class, 1);
         return constants;
-
     }
 }

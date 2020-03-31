@@ -2,6 +2,8 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.CityDao;
 import edu.tsystems.javaschool.logapp.api.entity.City;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.util.List;
 public class CityDaoImpl implements CityDao {
 
     private SessionFactory sessionFactory;
+    private static final Logger LOG = Logger.getLogger(CityDaoImpl.class);
 
     @Autowired
     public CityDaoImpl(SessionFactory sessionFactory) {
@@ -32,7 +35,13 @@ public class CityDaoImpl implements CityDao {
     @Transactional
     public City getCityById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        City city = session.load(City.class, id);
-        return city;
+        try{
+
+            session.load(City.class, id);
+        }catch(NullPointerException ex){
+            LOG.error("City not found. Id: " + id + ex.getStackTrace());
+            throw new EntityNotFoundException();
+        }
+        return session.load(City.class, id);
     }
 }

@@ -45,10 +45,10 @@
                                       placeholder="Registration Number"
                                       pattern="[A-Z]{2}\d{5}" ></p>
 
-    <p>Working Hours:<input type = "number"
-                                  name="driverWorkingHours"
-                                  required minlength="7"
-                                  placeholder="Working Hours"></p>
+<%--    <p>Working Hours:<input type = "number"--%>
+<%--                                  name="driverWorkingHours"--%>
+<%--                                  required minlength="7"--%>
+<%--                                  placeholder="Working Hours"></p>--%>
 
                 <tr>
                     <td><springForm:label path="condition">Condition</springForm:label></td>

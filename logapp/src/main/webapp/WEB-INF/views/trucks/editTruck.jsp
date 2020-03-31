@@ -72,10 +72,10 @@
                                                        value=${truckToEdit.regNumber}
                                                                pattern="[A-Z]{2}\d{5}"></p>
 
-        <p>Working Hours:<input type="number"
-                                name="driverWorkingHours"
-                                required minlength="7"
-                                value=${truckToEdit.driverWorkingHours}></p>
+<%--        <p>Working Hours:<input type="number"--%>
+<%--                                name="driverWorkingHours"--%>
+<%--                                required minlength="7"--%>
+<%--                                value=${truckToEdit.driverWorkingHours}></p>--%>
 
 
         <p>Capacity:<input type="number"

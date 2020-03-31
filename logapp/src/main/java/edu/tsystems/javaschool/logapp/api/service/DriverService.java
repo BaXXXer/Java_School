@@ -7,8 +7,10 @@ import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
+import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
 import edu.tsystems.javaschool.logapp.api.util.EnumConverter;
+import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class DriverService {
     private final DriverMapper mapper;
     private TruckDao truckDao;
     private UserService userService;
+    private static final Logger LOG = Logger.getLogger(DriverService.class);
 
     @Autowired
     private OrderService orderService;
@@ -38,6 +41,13 @@ public class DriverService {
 
     @Transactional
     public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException, IOException {
+        for(DriverDTO d:getAllDrivers()){
+            if(driverDTO.getDriverPrivateNum().equals(d.getDriverPrivateNum())){
+                LOG.error("Driver with private number #" + d.getDriverPrivateNum()+ " already exists in DB!");
+                throw new DuplicateEntityException();
+            }
+        }
+
         Driver driver = toEntity(driverDTO);
         driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
         driverDao.saveDriver(driver);
@@ -72,6 +82,7 @@ public class DriverService {
 
 
         } catch (ObjectNotFoundException ex) {
+            LOG.info("driver was not found! id: " +driverDTO.getDriverId());
             Driver driver = new Driver();
             driver.setDriverSurname(driverDTO.getDriverSurname());
             driver.setDriverFirstName(driverDTO.getDriverFirstName());
@@ -91,11 +102,10 @@ public class DriverService {
     public DriverDTO toDto(Driver entity) {
         DriverDTO dto = new DriverDTO();
 
-        try {
-            dto.setDriversTruckId(entity.getDriversTruck().getId());
-        } catch (NullPointerException ex) {
+        if(entity.getDriversTruck().getId()==null){
             dto.setDriversTruckId(0);
         }
+
         dto.setDriverId(entity.getDriverId());
         dto.setDriverPrivateNum(entity.getDriverPrivateNum());
         dto.setDriverStatus(entity.getDriverStatus());

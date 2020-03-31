@@ -3,6 +3,8 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 import edu.tsystems.javaschool.logapp.api.dao.CargoDao;
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Repository
 public class CargoDaoImpl implements CargoDao {
 
     private SessionFactory sessionFactory;
     private WayPointsDao pointsDao;
+    private static final Logger LOG = Logger.getLogger(CargoDaoImpl.class);
 
     @Autowired
     public CargoDaoImpl(SessionFactory sessionFactory, WayPointsDao pointsDao) {
@@ -27,8 +31,14 @@ public class CargoDaoImpl implements CargoDao {
     @Transactional
     public Cargo findCargoById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Cargo cargo= session.load(Cargo.class, id);
-        return cargo;
+        try{
+
+            Cargo cargo= session.load(Cargo.class, id);
+        }catch(NullPointerException ex){
+            LOG.error("Cargo not found" + ex.getStackTrace());
+            throw new EntityNotFoundException();
+        }
+        return session.load(Cargo.class, id);
     }
 
     @Override
@@ -46,15 +56,6 @@ public class CargoDaoImpl implements CargoDao {
                 "where ow.cargo is null and c.currentCity.id=ow.city.id")
                 .list();
 
-//        List<Cargo> notAssignedCargoes = new ArrayList<>();
-
-
-//        List <OrderWaypoint> points = pointsDao.getAllWaypoints();
-//        for(OrderWaypoint point:points){
-//            if(point.getCargo()==null){
-//                notAssignedCargoes.add(point.getCargo());
-//            }
-//        }
         return notAssignedCargoes;
     }
 }

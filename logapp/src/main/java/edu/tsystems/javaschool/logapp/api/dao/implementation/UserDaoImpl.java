@@ -2,6 +2,8 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.UserDao;
 import edu.tsystems.javaschool.logapp.api.entity.User;
+import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     private final SessionFactory sessionFactory;
+    private static final Logger LOG = Logger.getLogger(UserDaoImpl.class);
 
     @Autowired
     public UserDaoImpl(SessionFactory sessionFactory) {
@@ -27,7 +30,9 @@ public class UserDaoImpl implements UserDao {
     public void saveUser(User user) {
         Session session = this.sessionFactory.getCurrentSession();
         session.save(user);
-//        session.flush();
+        LOG.info("User was created");
+
+
     }
 
     @Override
@@ -42,6 +47,7 @@ public class UserDaoImpl implements UserDao {
         if (user != null) {
             return user;
         } else {
+            LOG.error("Username was not found");
             throw new UsernameNotFoundException(email);
         }
     }
@@ -58,6 +64,12 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public User findUserById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
+        try{
+            session.load(User.class, id);
+        }catch(NullPointerException ex){
+            LOG.error("User not found. Id:" + id + ex.getStackTrace());
+            throw new EntityNotFoundException();
+        }
         return session.load(User.class, id);
     }
 }

@@ -1,10 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.dto;
 
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.GeneratedValue;
 
@@ -12,13 +9,14 @@ import javax.persistence.GeneratedValue;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class TruckDTO {
     @GeneratedValue
     private int id;
 
     private String regNumber;
 
-    private int driverWorkingHours;
+    private Integer driverWorkingHours;
 
 
     private int capacityTons;

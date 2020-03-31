@@ -4,6 +4,8 @@ import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.TruckMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
+import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,8 @@ public class TruckService {
 
     private TruckDao truckDao;
     private CityService cityService;
-//    private OrderService orderService;
+    private static final Logger LOG  = Logger.getLogger(TruckService.class);
+
 
     private final TruckMapper mapper;
 
@@ -37,13 +40,17 @@ public class TruckService {
 
     @Transactional
     public void saveTruck(TruckDTO truckDTO) {
-        Truck entity = toEntity(truckDTO);
-        List<Truck> trucks = entity.getCurrentCity().getTruckList();
-        if (!trucks.contains(entity)) {
-            trucks.add(entity);
+        List<TruckDTO> allTrucks = getAllTrucks();
+        for (TruckDTO t : allTrucks) {
+            if (t.getRegNumber().equals(truckDTO.getRegNumber())) {
+                LOG.error("Truck with number " + truckDTO.getRegNumber()+ " already exists in DB!");
+                throw new DuplicateEntityException();
+            }
         }
+        Truck entity = toEntity(truckDTO);
         truckDao.saveTruck(entity);
     }
+
 
     @Transactional
     public List<TruckDTO> getAllTrucks() {
@@ -69,7 +76,7 @@ public class TruckService {
     @Transactional
     public TruckDTO getTruckById(int id) {
         Truck entity = truckDao.getTruckById(id);
-        entity.getCurrentCity().getTruckList().add(entity);// adds truck to the city
+//        entity.getCurrentCity().getTruckList().add(entity);// adds truck to the city
         return toDTO(entity);
     }
 
@@ -92,7 +99,12 @@ public class TruckService {
         entity.setCapacityTons(dto.getCapacityTons());
         entity.setCondition(dto.getCondition());
         entity.setCurrentCity(cityService.getCityById(dto.getCurrentCityId()));
-        entity.setDriverWorkingHours(dto.getDriverWorkingHours());
+        if(dto.getDriverWorkingHours()==null){
+            dto.setDriverWorkingHours(0);
+        }else{
+            entity.setDriverWorkingHours(dto.getDriverWorkingHours());
+        }
+
         entity.setRegNumber(dto.getRegNumber());
         return entity;
 
@@ -107,7 +119,13 @@ public class TruckService {
         return map;
     }
 
-
+    public List<TruckDTO> getReadyToGoTrucks() {
+        List<TruckDTO> readyDtos = new ArrayList<>();
+        for(Truck t: truckDao.getReadyToGoTrucks()){
+            readyDtos.add(toDTO(t));
+        }
+        return readyDtos;
+    }
 
 
 //    }

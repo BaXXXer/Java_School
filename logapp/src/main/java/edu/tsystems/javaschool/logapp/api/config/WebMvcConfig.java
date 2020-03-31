@@ -43,4 +43,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
     }
+
+//    @Bean
+//    HandlerExceptionResolver customExceptionResolver(){
+//        CustomSimpleMappingExceptionResolver  resolver = new CustomSimpleMappingExceptionResolver();
+//        return resolver;
+//    }
+
+
+
+
 }
