@@ -55,10 +55,10 @@ public class OrderService {
 
 
     @Transactional
-    public void saveOrder(OrderDTO dto) throws InvalidStateException {
+    public int saveOrder(OrderDTO dto) throws InvalidStateException {
         Order order = toEntity(dto);
 
-        orderDao.saveOrder(order);
+        return orderDao.saveOrder(order);
     }
 
     public Order toEntity(OrderDTO dto) {
@@ -140,6 +140,11 @@ public class OrderService {
         return dtos;
     }
 
+    public int getLastAddedOrderId() {
+        int index = getAllOrders().size() - 1;
+        return getAllOrders().get(index).getOrderId();
+    }
+
     @Transactional
     public List<OrderStatusDTO> getOrderStatus() {
         List<Order> allOrders = orderDao.getAllOrders();
@@ -177,15 +182,20 @@ public class OrderService {
             }
         }
         List<OrderWaypoint> points = (List<OrderWaypoint>) order.getWayPoints();
-        int totalWeight=0;
-        for (OrderWaypoint point : points) {
-            totalWeight+=point.getCargo().getCargoWeightKilos();
-        }
+        int checkCounter = 0;
+
         for (TruckDTO t : readyTrucks) {
-            if (t.getCapacityTons() * 1000 >= totalWeight) {
+            for (OrderWaypoint point : points) {
+                if (t.getCapacityTons() * 1000 >= point.getCargo().getCargoWeightKilos()) {
+                    checkCounter++;
+                }
+            }
+            if(checkCounter==points.size()){
                 readyToGoTrucks.add(t);
             }
+            checkCounter=0;
         }
+
         Set<TruckDTO> set = new HashSet<>(readyToGoTrucks);
         readyToGoTrucks.clear();
         readyToGoTrucks.addAll(set);
@@ -211,10 +221,10 @@ public class OrderService {
     @Transactional
     public List<DriverDTO> findDriversForTrip(OrderDTO orderDto) {
         List<DriverDTO> driversForTrip = new ArrayList();
-        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDto,null);
-        for(CargoWaypointDTO point:orderDto.getPoints()){
+        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDto, null);
+        for (CargoWaypointDTO point : orderDto.getPoints()) {
             driversForTrip.addAll(driverService.findFreeDriversInCity(truckDao.getTruckById(orderDto.getTruckId())
-                    .getCurrentCity().getCityId(),
+                            .getCurrentCity().getCityId(),
                     (int) (constantsDao.getConstants().getMaxWorkingHours() - requiredWorkingHoursPerDriver)));
         }
         Set<DriverDTO> set = new HashSet<>(driversForTrip);
@@ -226,12 +236,13 @@ public class OrderService {
     /**
      * Calculates the duration of trip and hours required per driver
      * CurrentCity can be null in order to find current city without assigned trucks
+     *
      * @param orderDto
      * @return
      */
     @Transactional
     double getRequiredWorkingHoursPerDriver(OrderDTO orderDto, CityDTO currentCity) {
-        if(currentCity==null) {
+        if (currentCity == null) {
             currentCity = cityService.toDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId()).getCurrentCityId()));
         }
 
@@ -252,6 +263,7 @@ public class OrderService {
 
     /**
      * Assignes chosen driver to a current order
+     *
      * @param driverDTO
      * @param orderDTO
      */
@@ -269,8 +281,8 @@ public class OrderService {
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
         int currentWorkedHours = driverDTO.getDriverWorkedHours();
-        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO,null);
-        currentWorkedHours+=requiredWorkingHoursPerDriver;
+        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
+        currentWorkedHours += requiredWorkingHoursPerDriver;
         driverDTO.setDriverWorkedHours(currentWorkedHours);
         driverService.updateDriver(driverService.toEntity(driverDTO));
         orderDao.updateOrder(order);//update entity
@@ -280,24 +292,25 @@ public class OrderService {
     /**
      * Checks if the operation type and the cargo status assigned for new order
      * are compatible
+     *
      * @param dto
      */
     @Transactional
-    public void updateOrder(OrderDTO dto){
+    public void updateOrder(OrderDTO dto) {
         Order order = toEntity(dto);
-        if(dto.getPoints()!=null){
+        if (dto.getPoints() != null) {
             List<CargoWaypointDTO> points = dto.getPoints();
-            for(CargoWaypointDTO point: points){
-                if(point.getOperationType()== OrderWaypoint.Operation.LOAD && point.getCargo().getCargoStatus()==Cargo.Status.READY
-                || point.getOperationType()== OrderWaypoint.Operation.UNLOAD && point.getCargo().getCargoStatus()==Cargo.Status.SHIPPED){
+            for (CargoWaypointDTO point : points) {
+                if (point.getOperationType() == OrderWaypoint.Operation.LOAD && point.getCargo().getCargoStatus() == Cargo.Status.READY
+                        || point.getOperationType() == OrderWaypoint.Operation.UNLOAD && point.getCargo().getCargoStatus() == Cargo.Status.SHIPPED) {
                     continue;
-                }else{
+                } else {
                     throw new InvalidStateException("Incorrect operation - Cargo #" + point.getCargo().getCargoId() + " status is "
                             + point.getCargo().getCargoStatus() + " and operation is " + point.getOperationType());
                 }
             }
         }
-        if(dto.getWayPointsIds()!=null) {
+        if (dto.getWayPointsIds() != null) {
             List<Integer> pointIds = dto.getWayPointsIds();
             for (Integer id : pointIds) {
                 OrderWaypoint point = pointService.getPointById(id);
@@ -320,6 +333,7 @@ public class OrderService {
     /**
      * Changes the cargo status when a driver had set it
      * "Loaded" or "Unloaded"
+     *
      * @param orderId
      * @param pointId
      */
@@ -345,6 +359,7 @@ public class OrderService {
     /**
      * Checks if all the waypoints of the order were completed
      * If yes, sets the order status to 'Completed'
+     *
      * @param orderId
      */
     @Transactional
@@ -353,7 +368,7 @@ public class OrderService {
         List<CargoWaypointDTO> points = orderDTO.getPoints();
         int i = 0;
         for (CargoWaypointDTO point : points) {
-            if (point.getCargo().getCargoStatus()== Cargo.Status.DELIVERED) {
+            if (point.getCargo().getCargoStatus() == Cargo.Status.DELIVERED) {
                 i++;
             }
         }
@@ -367,6 +382,7 @@ public class OrderService {
     /**
      * Takes parameters from request to assign cargo and point
      * to current order and sets it
+     *
      * @param formData
      * @param cargoId
      * @param orderId
@@ -376,15 +392,15 @@ public class OrderService {
         CargoDTO cargo = cargoService.findCargoById(cargoId);
         String pointIdString = null;
         Collection<List<String>> values = formData.values();
-        for(List<String> list: values){
-            for (String value: list){
-                if(value!=null){
-                    pointIdString=value;
+        for (List<String> list : values) {
+            for (String value : list) {
+                if (value != null) {
+                    pointIdString = value;
                     break;
                 }
             }
         }
-        if(pointIdString!=null) {
+        if (pointIdString != null) {
             int pointId = Integer.parseInt(pointIdString);
             CargoWaypointDTO CWPdto = pointService.getPointDtoById(pointId);
             CWPdto.setCargo(cargo);
@@ -401,6 +417,7 @@ public class OrderService {
      * If there is 1 driver on order, sets the working hours per driver to current truck
      * If there is more drivers, sets the working hours per driver*number of drivers
      * and set to current truck
+     *
      * @param truckDTO
      * @param orderDTO
      */
@@ -411,17 +428,17 @@ public class OrderService {
         Order order = toEntity(orderDTO);
         order.setTruckOnOrder(truck);
         orderDao.updateOrder(order);
-        int currentWorkingHours=0;
+        int currentWorkingHours = 0;
         CityDTO currentTruckCity = cityService.toDto(cityService.getCityById(truckDTO.getCurrentCityId()));
-        if(truckDTO.getDriverWorkingHours()!=null){
-            currentWorkingHours=truckDTO.getDriverWorkingHours();
+        if (truckDTO.getDriverWorkingHours() != null) {
+            currentWorkingHours = truckDTO.getDriverWorkingHours();
         }
-        if(orderDTO.getDriversOnOrderIds().size()<=1){
+        if (orderDTO.getDriversOnOrderIds().size() <= 1) {
 
-            truckDTO.setDriverWorkingHours( currentWorkingHours +(int)getRequiredWorkingHoursPerDriver(orderDTO,currentTruckCity));
-        }else if(orderDTO.getDriversOnOrderIds().size()>1){
-            truckDTO.setDriverWorkingHours(currentWorkingHours+
-                    (int)getRequiredWorkingHoursPerDriver(orderDTO,currentTruckCity)*orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
+            truckDTO.setDriverWorkingHours(currentWorkingHours + (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity));
+        } else if (orderDTO.getDriversOnOrderIds().size() > 1) {
+            truckDTO.setDriverWorkingHours(currentWorkingHours +
+                    (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity) * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
         }
         truckService.updateTruck(truckDTO);
     }

@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -40,7 +39,7 @@ public class DriverService {
     }
 
     @Transactional
-    public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException, IOException {
+    public void saveDriver(DriverDTO driverDTO) throws EntityNotFoundException {
         for(DriverDTO d:getAllDrivers()){
             if(driverDTO.getDriverPrivateNum().equals(d.getDriverPrivateNum())){
                 LOG.error("Driver with private number #" + d.getDriverPrivateNum()+ " already exists in DB!");
@@ -77,7 +76,9 @@ public class DriverService {
             driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
             driver.setDriverStatus(driverDTO.getDriverStatus());
             driver.setDriverCityId(driverDTO.getDriverCityId());
-            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            if(driverDTO.getDriversTruckId() != 0){
+                driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            }
             return driver;
 
 
@@ -99,21 +100,32 @@ public class DriverService {
         }
     }
 
+    public int getLastDriverId(){
+        int index = getAllDrivers().size()-1;
+        return getAllDrivers().get(index).getDriverId();
+    }
+
     public DriverDTO toDto(Driver entity) {
-        DriverDTO dto = new DriverDTO();
+            DriverDTO dto = new DriverDTO();
 
-        if(entity.getDriversTruck().getId()==null){
-            dto.setDriversTruckId(0);
-        }
+            if (entity.getDriversTruck() == null) {
+                dto.setDriversTruckId(0);
+            }else{
+                dto.setDriversTruckId(entity.getDriversTruck().getId());
+            }
 
-        dto.setDriverId(entity.getDriverId());
-        dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-        dto.setDriverStatus(entity.getDriverStatus());
-        dto.setDriverCityId(entity.getDriverCityId());
-        dto.setDriverFirstName(entity.getDriverFirstName());
-        dto.setDriverSurname(entity.getDriverSurname());
-        dto.setDriverWorkedHours(entity.getDriverWorkedHours());
-        return dto;
+            if(entity.getUser()!=null){
+                dto.setUserId(entity.getUser().getId());
+            }
+
+            dto.setDriverId(entity.getDriverId());
+            dto.setDriverPrivateNum(entity.getDriverPrivateNum());
+            dto.setDriverStatus(entity.getDriverStatus());
+            dto.setDriverCityId(entity.getDriverCityId());
+            dto.setDriverFirstName(entity.getDriverFirstName());
+            dto.setDriverSurname(entity.getDriverSurname());
+            dto.setDriverWorkedHours(entity.getDriverWorkedHours());
+            return dto;
     }
 
 

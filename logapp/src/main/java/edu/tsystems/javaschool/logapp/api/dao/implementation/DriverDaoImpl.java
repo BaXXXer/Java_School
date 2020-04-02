@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 
 @Repository
@@ -37,7 +36,7 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     @Transactional
-    public void saveDriver(Driver driver) throws IOException {
+    public void saveDriver(Driver driver){
         Session session = this.sessionFactory.getCurrentSession();
         session.save(driver);
 

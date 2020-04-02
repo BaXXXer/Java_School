@@ -129,12 +129,22 @@ public class OrderWayPointService {
 
     @Transactional
     public OrderWaypoint toEntity(CargoWaypointDTO cdto) {
-        OrderWaypoint entity = getPointById(cdto.getId());
-        entity.setCargo(cargoService.toEntity(cdto.getCargo()));
+        OrderWaypoint entity;
+        if(cdto.getId()!=null){
+            entity = getPointById(cdto.getId());
+        }else{
+            entity = new OrderWaypoint();
+        }
+        if(cdto.getCargo()!=null){
+
+            entity.setCargo(cargoService.toEntity(cdto.getCargo()));
+        }
         if(cdto.getAssignedTruck()!=null){
             entity.getOrder().setTruckOnOrder(truckService.toEntity(cdto.getAssignedTruck()));
         }
-        entity.setCity(cityMapper.toEntity(cdto.getDestCity()));
+        if(cdto.getDestCity()!=null) {
+            entity.setCity(cityService.toEntity(cdto.getDestCity()));
+        }
         entity.setCompleted(cdto.isCompleted());
         entity.setPointName(cdto.getName());
         entity.setOperationType(cdto.getOperationType());

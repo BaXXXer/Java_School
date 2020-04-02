@@ -44,13 +44,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return mapper;
     }
 
-//    @Bean
-//    HandlerExceptionResolver customExceptionResolver(){
-//        CustomSimpleMappingExceptionResolver  resolver = new CustomSimpleMappingExceptionResolver();
-//        return resolver;
-//    }
-
-
-
 
 }

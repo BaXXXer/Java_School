@@ -49,25 +49,6 @@ public class DistanceCalculator {
      * @param waypointCollection Waypoints
      * @return route length in KM
      */
-//
-//    public Integer getRouteDistance(Collection<OrderWaypoint> waypointCollection) {
-//
-//        if (waypointCollection.size() <= 1) {
-//            return 0;
-//        }
-//        Iterator<OrderWaypoint> iterator = waypointCollection.iterator();
-//        City lastCity = iterator.next().getCity();
-//        int totalDistance = 0;
-//
-//        while (iterator.hasNext()) {
-//            City thisCity = iterator.next().getCity();
-//            if (!thisCity.equals(lastCity)) {
-//                totalDistance += getCityDistance( lastCity.getLat(), lastCity.getLng(), thisCity.getLat(),thisCity.getLng());
-//            }
-//            lastCity = thisCity;
-//        }
-//        return totalDistance;
-//    }
 
     public Integer getRouteDistance(Collection<CargoWaypointDTO> waypointCollection, CityDTO currentCity) {
 
@@ -86,21 +67,6 @@ public class DistanceCalculator {
         }
         return totalDistance;
 
-//        if (waypointCollection.size() <= 1) {
-//            return 0;
-//        }
-//        Iterator<CargoWaypointDTO> iterator = waypointCollection.iterator();
-//        CityDTO lastCity = iterator.next().getDestCity();
-//
-//
-//        while (iterator.hasNext()) {
-//            CityDTO thisCity = iterator.next().getDestCity();
-//            if (!thisCity.equals(lastCity)) {
-//                totalDistance += getCityDistance( lastCity.getLat(), lastCity.getLng(), thisCity.getLat(),thisCity.getLng());
-//            }
-//            lastCity = thisCity;
-//        }
-
     }
 
     /**
@@ -115,7 +81,7 @@ public class DistanceCalculator {
         BusinessLogicConstants constants = constantsDao.getConstants();
 
         double distancePerDay = (Math.min(numCoDrivers * constants.getLimitHoursPerDay(), 24) * constants.getTruckAvgSpeed());
-        return Math.floor(routeLength / distancePerDay)*24;
+        return Math.floor(routeLength / distancePerDay)*24 + (routeLength % distancePerDay) / constants.getTruckAvgSpeed();
     }
 
 }

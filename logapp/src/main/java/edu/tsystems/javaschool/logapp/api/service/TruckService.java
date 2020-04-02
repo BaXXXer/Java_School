@@ -63,8 +63,8 @@ public class TruckService {
 
     }
 
+    @Transactional
     public void updateTruck(TruckDTO truck) {
-
         truckDao.updateTruck(toEntity(truck));
     }
 
@@ -94,7 +94,13 @@ public class TruckService {
     }
 
     public Truck toEntity(TruckDTO dto) {
-        Truck entity = new Truck();
+        Truck entity;
+        if(dto.getId()==null){
+
+            entity = new Truck();
+        }else{
+            entity = truckDao.getTruckById(dto.getId());
+        }
         entity.setId(dto.getId());
         entity.setCapacityTons(dto.getCapacityTons());
         entity.setCondition(dto.getCondition());
@@ -125,6 +131,11 @@ public class TruckService {
             readyDtos.add(toDTO(t));
         }
         return readyDtos;
+    }
+
+    public int getLastAddedTruckIndex() {
+        int index = getAllTrucks().size() - 1;
+        return getAllTrucks().get(index).getId();
     }
 
 

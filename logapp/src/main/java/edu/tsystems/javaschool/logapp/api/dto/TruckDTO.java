@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 @EqualsAndHashCode
 public class TruckDTO {
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     private String regNumber;
 

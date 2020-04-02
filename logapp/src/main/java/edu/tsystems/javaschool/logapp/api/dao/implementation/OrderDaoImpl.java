@@ -30,10 +30,11 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void saveOrder(Order order) {
+    public int saveOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
         session.save(order);
-        LOG.info("New order created");
+        LOG.info("New order created id:" + order.getOrderId());
+        return order.getOrderId();
 
     }
 
