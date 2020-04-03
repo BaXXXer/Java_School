@@ -69,6 +69,7 @@ public class TruckService {
     }
 
     public void removeTruck(int id) {
+
         truckDao.removeTruck(id);
     }
 

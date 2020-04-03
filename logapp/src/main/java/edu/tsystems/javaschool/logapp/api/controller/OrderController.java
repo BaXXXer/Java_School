@@ -1,7 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
-import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
 import edu.tsystems.javaschool.logapp.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,8 @@ public class OrderController {
 
 
     @Autowired
-    public OrderController(DriverService driverService, TruckService truckService, OrderWayPointService pointService, OrderService orderService, CargoService cargoService, CityService cityService) {
+    public OrderController(DriverService driverService, TruckService truckService, OrderWayPointService pointService,
+                           OrderService orderService, CargoService cargoService, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.pointService = pointService;
@@ -36,7 +36,7 @@ public class OrderController {
 
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     public String submit(@ModelAttribute("orderToAdd") OrderDTO orderDto,
-                         ModelMap model) throws InvalidStateException {
+                         ModelMap model){
         orderDto.setOrderIsDone(false);
         orderService.saveOrder(orderDto);
         return "redirect: /orders/allOrders";
@@ -48,6 +48,8 @@ public class OrderController {
         model.addAttribute("pointMap", orderService.getPointMap());
         model.addAttribute("driverService", driverService);
         model.addAttribute("truckMap",truckService.getTruckMap());
+        model.addAttribute("truckService",truckService);
+        model.addAttribute("cityService",cityService);
         return "orders/allOrdersTables";
     }
 

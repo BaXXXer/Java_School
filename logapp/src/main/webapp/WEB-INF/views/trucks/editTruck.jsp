@@ -44,7 +44,7 @@
             <td>Select City:</td>
             <td>
                 <select name="currentCityId">
-                    <option selected>${cityService.getCityDtoById(truckToEdit.currentCityId)}</option>
+<%--                    <option selected>${cityService.getCityDtoById(truckToEdit.currentCityId)}</option>--%>
                         <c:forEach items="${cityList}" var="city">
                     <option value=${city.cityId}>${city.cityName}</option>
                     </c:forEach>

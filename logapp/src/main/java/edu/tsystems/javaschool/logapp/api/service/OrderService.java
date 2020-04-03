@@ -243,7 +243,8 @@ public class OrderService {
     @Transactional
     double getRequiredWorkingHoursPerDriver(OrderDTO orderDto, CityDTO currentCity) {
         if (currentCity == null) {
-            currentCity = cityService.toDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId()).getCurrentCityId()));
+            currentCity = cityService.toDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId())
+                    .getCurrentCityId()));
         }
 
         int routeDistance = distanceCalculator.getRouteDistance(orderDto.getPoints(), currentCity); //cumulative distance between all the cities over all the waypoints
@@ -301,11 +302,14 @@ public class OrderService {
         if (dto.getPoints() != null) {
             List<CargoWaypointDTO> points = dto.getPoints();
             for (CargoWaypointDTO point : points) {
-                if (point.getOperationType() == OrderWaypoint.Operation.LOAD && point.getCargo().getCargoStatus() == Cargo.Status.READY
-                        || point.getOperationType() == OrderWaypoint.Operation.UNLOAD && point.getCargo().getCargoStatus() == Cargo.Status.SHIPPED) {
+                if (point.getOperationType() == OrderWaypoint.Operation.LOAD && point.getCargo().getCargoStatus()
+                        == Cargo.Status.READY
+                        || point.getOperationType() == OrderWaypoint.Operation.UNLOAD && point.getCargo().getCargoStatus()
+                        == Cargo.Status.SHIPPED) {
                     continue;
                 } else {
-                    throw new InvalidStateException("Incorrect operation - Cargo #" + point.getCargo().getCargoId() + " status is "
+                    throw new InvalidStateException("Incorrect operation - Cargo #" + point.getCargo().getCargoId() +
+                            " status is "
                             + point.getCargo().getCargoStatus() + " and operation is " + point.getOperationType());
                 }
             }
@@ -435,10 +439,12 @@ public class OrderService {
         }
         if (orderDTO.getDriversOnOrderIds().size() <= 1) {
 
-            truckDTO.setDriverWorkingHours(currentWorkingHours + (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity));
+            truckDTO.setDriverWorkingHours(currentWorkingHours +
+                    (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity));
         } else if (orderDTO.getDriversOnOrderIds().size() > 1) {
             truckDTO.setDriverWorkingHours(currentWorkingHours +
-                    (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity) * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
+                    (int) getRequiredWorkingHoursPerDriver(orderDTO, currentTruckCity)
+                            * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
         }
         truckService.updateTruck(truckDTO);
     }

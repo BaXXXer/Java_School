@@ -63,11 +63,11 @@
             <td>Select City:</td>
             <td>
                 <select name="driverCityId">
-                    <option selected>${cityService.getCityDtoById(driverToEdit.driverCityId)}</option>
+<%--                    <option selected>${cityService.getCityDtoById(driverToEdit.driverCityId)}</option>--%>
                     <c:forEach items="${cityList}" var="city">
-                        <c:if test="${driverToEdit.driverCityId != city.cityId}">
+<%--                        <c:if test="${driverToEdit.driverCityId != city.cityId}">--%>
                             <option value=${city.cityId}>${city.cityName}</option>
-                        </c:if>
+<%--                        </c:if>--%>
                     </c:forEach>
 
                 </select>

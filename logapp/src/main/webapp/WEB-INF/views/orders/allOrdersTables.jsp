@@ -12,8 +12,8 @@
 
 <c:forEach items="${orders}" var="order">
 <table class="table table-striped">
-    <h3>Order #${order.orderId}</h3>
-    <p>Order status:
+    <h3><u>Order #${order.orderId}</u></h3>
+    <p><b>Order status:</b>
         <c:choose>
             <c:when test="${order.orderIsDone==true}">
                 Completed
@@ -23,8 +23,7 @@
             </c:otherwise>
         </c:choose>
     </p>
-    <p>Assigned drivers:
-        <br>
+    <p><b>Assigned drivers:</b>
         <c:forEach items="${order.driversOnOrderIds}" var="driverId">
 
             ${driverService.getDriverById(driverId).driverPrivateNum}:
@@ -32,10 +31,21 @@
             ${driverService.getDriverById(driverId).driverSurname}
             <br>
         </c:forEach></p>
-    <p>Assigned truck:
+    <p><b>Assigned truck:</b>
         <c:choose>
             <c:when test="${order.truckId!=0}">
                 ${truckMap.get(order.truckId)}
+            </c:when>
+            <c:otherwise>
+                No truck is assigned yet
+            </c:otherwise>
+        </c:choose>
+    </p>
+
+    <p><b>Current driver and truck city:</b>
+        <c:choose>
+            <c:when test="${order.truckId!=null}">
+                ${cityService.getCityDtoById(truckService.getTruckById(order.truckId).currentCityId).cityName}
             </c:when>
             <c:otherwise>
                 No truck is assigned yet
@@ -50,6 +60,16 @@
         <th scope="col">Cargo current city</th>
         <th scope="col">Cargo destination city</th>
         <th scope="col">Cargo status</th>
+
+        <c:if test="${order.truckId==null}">
+            <a class="btn btn-secondary btn-sm" href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><emsp>
+        </c:if>
+        <c:if test="${order.truckId!=null}">
+            <a class="btn btn-secondary btn-sm" href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><emsp>
+        </c:if>
+        <a class="btn btn-secondary btn-sm" href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign</a><emsp>
+
+        <br>
 
         <c:forEach items="${order.points}" var="point">
             <tr>
@@ -66,56 +86,6 @@
     </table>
 
 
-                <c:if test="${order.truckId==null}">
-                    <a href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks</a><br>
-                </c:if>
-                <c:if test="${order.truckId!=null}">
-                    <a href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers</a><br>
-                </c:if>
-                <a href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign</a><br>
-                    <%--        <a class="btn btn-danger" href="<c:url value='/removeOrder/${order.orderId}' />" role="button">Delete order</a>--%>
-                <br>
-        <%--        <th scope="col">Order Id</th>--%>
-        <%--        <th scope="col">Point</th>--%>
-        <%--        <th scope="col">City</th>--%>
-        <%--        <th scope="col">Status</th>--%>
-        <%--        <th scope="col">Assigned drivers</th>--%>
-        <%--        <th scope="col">Assigned truck</th>--%>
-        <%--        <c:if test="${!empty orders}">--%>
-
-
-        <%--            <c:forEach items="${order.points}" var="point">--%>
-        <%--                <tr>--%>
-
-        <%--                    <td>${order.orderId}</td>--%>
-
-
-        <%--                    <td>${point.name}</td>--%>
-        <%--                    <td>${point.destCity.cityName}</td>--%>
-
-        <%--                    <c:choose>--%>
-        <%--                        <c:when test="${order.orderIsDone==true}">--%>
-        <%--                            <td>Completed</td>--%>
-        <%--                        </c:when>--%>
-        <%--                        <c:otherwise>--%>
-        <%--                            <td>Not completed</td>--%>
-        <%--                        </c:otherwise>--%>
-        <%--                    </c:choose>--%>
-        <%--                    <td>--%>
-        <%--                        <c:forEach items="${order.driversOnOrderIds}" var="driverId">--%>
-
-        <%--                            ${driverService.getDriverById(driverId).driverSurname}--%>
-        <%--                        </c:forEach>--%>
-        <%--                    </td>--%>
-        <%--                    <td>${point.assignedTruck.regNumber} </td>--%>
-
-
-        <%--                </tr>--%>
-        <%--            </c:forEach>--%>
-        <%--        </c:if>--%>
-
-
-        <%--    </table>--%>
     </c:forEach>
 
     <a class="btn btn-primary" href="/" role="button">Main page</a>
