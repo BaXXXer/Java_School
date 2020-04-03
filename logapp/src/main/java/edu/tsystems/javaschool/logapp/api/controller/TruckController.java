@@ -8,11 +8,11 @@ import edu.tsystems.javaschool.logapp.api.service.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/trucks")
@@ -49,33 +49,25 @@ public class TruckController {
 
 
     @RequestMapping(value = "/addTruck", method = RequestMethod.POST)
-    public String submit(@ModelAttribute("truckToAdd") TruckDTO truck,
-                         ModelMap model) {
+    public String submit(@ModelAttribute("truckToAdd") @Valid TruckDTO truck,
+                         BindingResult bindingResult) {
 
-        model.addAttribute("regNum", truck);
-        model.addAttribute("driverWorkingHours", truck);
-        model.addAttribute("capacityTons", truck);
-        model.addAttribute("condition", truck);
-        model.addAttribute("currentCityId", truck);
+        if(bindingResult.hasErrors()){
+            return "trucks/addNewTruck";
+        }
+
         truckService.saveTruck(truck);
-
         return "trucks/truckAddedSuccess";
-    }
-
-    @RequestMapping(value = "500Error", method = RequestMethod.GET)
-    public void throwRuntimeException() {
-        throw new NullPointerException("Throwing a null pointer exception");
     }
 
 
     @RequestMapping(value = "/allTrucks", method = RequestMethod.GET)
-    public String getAllTrucks(Model model) {
-        model.addAttribute("truck", new TruckDTO());
-        model.addAttribute("cityService", cityService);
-        model.addAttribute("cityMap", cityService.getCityMap());
-        model.addAttribute("trucks", truckService.getAllTrucks());
+    public ModelAndView getAllTrucks(Model model) {
+        ModelAndView mav = new ModelAndView("trucks/allTrucks");
+        mav.addObject("trucks",truckService.getAllTrucks());
+        mav.addObject("cityMap", cityService.getCityMap());
 
-        return "trucks/allTrucks";
+        return mav;
     }
 
     @RequestMapping(value = "/removeTruck/{id}", method = RequestMethod.GET)
@@ -85,29 +77,25 @@ public class TruckController {
     }
 
     @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.GET)
-    public ModelAndView editShowForm(@PathVariable("id") int id, Model model) {
+    public ModelAndView editShowForm(@PathVariable("id") int id) {
         ModelAndView mav = new ModelAndView("trucks/editTruck");
         mav.addObject("truckToEdit", truckService.getTruckById(id));
         mav.addObject("enumCondition", Truck.Condition.values());
+        mav.addObject("cityService",cityService);
         mav.addObject("cityList", cityService.getAllCities());
         mav.addObject("cityMap", cityService.getCityMap());
-
         return mav;
     }
 
     @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.POST)
-    public String submitEdit(@ModelAttribute("truckToEdit") TruckDTO truck,
-                             ModelMap model) throws IOException {
+    public String submitEdit(@ModelAttribute("truckToEdit") @Valid TruckDTO truck,
+                             BindingResult bindingResult){
 
-        model.addAttribute("id", truck);
-        model.addAttribute("regNumber", truck);
-        model.addAttribute("driverWorkingHours", truck);
-        model.addAttribute("capacityTons", truck);
-        model.addAttribute("condition", truck);
-        model.addAttribute("currentCityId", truck);
+        if(bindingResult.hasErrors()){
+            return "trucks/editTruck";
+        }
         truckService.updateTruck(truck);
-
-        return "trucks/editTruck";
+        return "redirect: ../allTrucks";
     }
 
 

@@ -1,7 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
-import edu.tsystems.javaschool.logapp.api.dto.OrderStatusDTO;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
 import edu.tsystems.javaschool.logapp.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,18 +70,6 @@ public class OrderController {
 
         return "redirect: /orders/notAssignedCargoes/"+id;
     }
-
-
-
-
-    @RequestMapping(value = "/orderStatus", method = RequestMethod.GET)
-    public String getOrderStatus(Model model) {
-        model.addAttribute("order", new OrderStatusDTO());
-        model.addAttribute("orders", orderService.getOrderStatus());
-
-        return "orderStatus_old";
-    }
-
     @RequestMapping(value = "/readyToGoTrucks/{id}", method = RequestMethod.GET)
     public ModelAndView getReadyToGoTrucks(@PathVariable("id") int id, Model model) {
         ModelAndView mav = new ModelAndView("orders/readyToGoTrucks");
@@ -100,10 +87,6 @@ public class OrderController {
         return "redirect: /orders/readyToGoTrucks/"+orderId;
     }
 
-
-
-
-
     @RequestMapping(value = "/readyForTripDrivers/{id}", method = RequestMethod.GET)
     public ModelAndView getReadyForTripDrivers(@PathVariable("id") int id, Model model) {
         ModelAndView mav = new ModelAndView("orders/readyForTripDrivers");
@@ -115,8 +98,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/readyForTripDrivers/{orderId}/{driverId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String submitAssign(@PathVariable("orderId") int orderId,
-                               ModelMap model, @PathVariable("driverId") int driverId) {
+    public String submitAssign(@PathVariable("orderId") int orderId, @PathVariable("driverId") int driverId) {
 
         orderService.assignDriver(driverService.getDriverById(driverId), orderService.getOrderById(orderId));
         return "redirect: /orders/readyForTripDrivers/"+orderId;

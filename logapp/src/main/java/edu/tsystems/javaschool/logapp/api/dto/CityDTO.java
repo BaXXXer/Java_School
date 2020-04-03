@@ -14,4 +14,8 @@ public class CityDTO {
     private double lat;
     private double lng;
 
+    @Override
+    public String toString() {
+        return cityName;
+    }
 }

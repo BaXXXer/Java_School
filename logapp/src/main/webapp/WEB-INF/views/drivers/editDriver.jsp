@@ -29,7 +29,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="driverId" readonly="true" size="8" disabled="true" />
+                <form:input path="driverId" readonly="true" size="8" disabled="true"/>
                 <form:hidden path="driverId"/>
             </td>
         </tr>
@@ -39,39 +39,53 @@
             <td>
 
                 <springForm:select path="driverStatus">
-                    <springForm:option value="" label="Choose Type.." />
+                    <springForm:option value="" label="Choose Type.."/>
                     <springForm:options items="${enumStatus}"/>
                 </springForm:select>
 
             </td>
+        </tr>
+
+            <%--        <tr>--%>
+            <%--            <td><springForm:label path="driverCityId">City:</springForm:label></td>--%>
+            <%--            <td>--%>
+
+            <%--                <springForm:select path="driverCityId">--%>
+            <%--                    <springForm:option value="${cityService.getCityDtoById(driverToEdit.driverCityId).cityName}" label="Choose Type.." />--%>
+            <%--                    <springForm:options items="${cityList}"/>--%>
+            <%--                </springForm:select>--%>
+
+            <%--            </td>--%>
+            <%--        </tr>--%>
+
 
         <tr>
             <td>Select City:</td>
             <td>
                 <select name="driverCityId">
-                    <option label="---Select city---">
-                        <c:forEach items="${cityList}" var="city">
-                    <option value=${city.cityId}>${city.cityName}</option>
+                    <option selected>${cityService.getCityDtoById(driverToEdit.driverCityId)}</option>
+                    <c:forEach items="${cityList}" var="city">
+                        <c:if test="${driverToEdit.driverCityId != city.cityId}">
+                            <option value=${city.cityId}>${city.cityName}</option>
+                        </c:if>
                     </c:forEach>
 
                 </select>
             </td>
         </tr>
 
-        <tr>
-            <td>Select Truck:</td>
-            <td>
-                <select name="driversTruckId">
-                    <option label="---Select city---">
-                        <c:forEach items="${truckList}" var="truck">
-                    <option value=${truck.id}>${truck.regNumber}</option>
-                    </c:forEach>
+            <%--        <tr>--%>
+            <%--            <td>Select Truck:</td>--%>
+            <%--            <td>--%>
+            <%--                <select name="driversTruckId">--%>
+            <%--                    <option label="---Select city---">--%>
+            <%--                        <c:forEach items="${truckList}" var="truck">--%>
+            <%--                    <option value=${truck.id}>${truck.regNumber}</option>--%>
+            <%--                    </c:forEach>--%>
 
-                </select>
-            </td>
-        </tr>
-
-
+            <%--                </select>--%>
+            <%--            </td>--%>
+            <%--        </tr>--%>
 
 
         <p>First Name<input name="driverFirstName"
@@ -79,7 +93,7 @@
                             placeholder="First Name"
                             width="100" value=${driverToEdit.driverFirstName}></p>
 
-        <p>Surname:<input type = "text"
+        <p>Surname:<input type="text"
                           name="driverSurname"
                           required minlength="2"
                           placeholder="Surname" value=${driverToEdit.driverSurname}></p>
@@ -88,26 +102,12 @@
                 name="driverPrivateNum"
                 required minlength="8"
                 required maxlength="8"
-                placeholder="Private Number" value=${driverToEdit.driverPrivateNum} ></p>
+                placeholder="Private Number" value=${driverToEdit.driverPrivateNum}></p>
         <p>Worked Hours: <input
                 name="driverWorkedHours"
                 min="0"
                 max="176"
-                placeholder="Worked hours" value="${driverToEdit.driverWorkedHours}" ></p>
-
-
-
-<%--            <p>Truck Id: <input--%>
-<%--                    name="driversTruckId"--%>
-<%--                    min="0"--%>
-<%--                    max="176"--%>
-<%--                    placeholder="Truck Id" value=${driverToEdit.driversTruckId} ></p>--%>
-
-<%--            <p>City Id: <input--%>
-<%--                    name="driverCityId"--%>
-<%--                    min="0"--%>
-<%--                    max="176"--%>
-<%--                    placeholder="City Id" value=${driverToEdit.driverCityId}></p>--%>
+                placeholder="Worked hours" value="${driverToEdit.driverWorkedHours}"></p>
 
 
         <tr>

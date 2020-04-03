@@ -48,7 +48,7 @@ public class DriverService {
         }
 
         Driver driver = toEntity(driverDTO);
-        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+//        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
         driverDao.saveDriver(driver);
         User user = createUser(driver);
         userService.createUser(user);
@@ -76,7 +76,7 @@ public class DriverService {
             driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
             driver.setDriverStatus(driverDTO.getDriverStatus());
             driver.setDriverCityId(driverDTO.getDriverCityId());
-            if(driverDTO.getDriversTruckId() != 0){
+            if(driverDTO.getDriversTruckId() != null){
                 driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
             }
             return driver;
@@ -95,7 +95,9 @@ public class DriverService {
                 driver.setDriverStatus(driverDTO.getDriverStatus());
             }
             driver.setDriverCityId(driverDTO.getDriverCityId());
-            driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            if(driverDTO.getDriversTruckId() != null){
+                driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
+            }
             return driver;
         }
     }
@@ -108,9 +110,7 @@ public class DriverService {
     public DriverDTO toDto(Driver entity) {
             DriverDTO dto = new DriverDTO();
 
-            if (entity.getDriversTruck() == null) {
-                dto.setDriversTruckId(0);
-            }else{
+            if (entity.getDriversTruck() != null) {
                 dto.setDriversTruckId(entity.getDriversTruck().getId());
             }
 
@@ -154,7 +154,7 @@ public class DriverService {
     @Transactional
     public void updateDriver(DriverDTO driver) {
         Driver entity = toEntity(driver);
-        entity.setDriversTruck(truckDao.getTruckById(driver.getDriversTruckId()));
+//        entity.setDriversTruck(truckDao.getTruckById(driver.getDriversTruckId()));
         driverDao.updateDriver(entity);
     }
 

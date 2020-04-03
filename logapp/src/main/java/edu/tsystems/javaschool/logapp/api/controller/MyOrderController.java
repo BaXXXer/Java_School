@@ -40,6 +40,7 @@ public class MyOrderController {
     @RequestMapping(value = "", method = {RequestMethod.GET,RequestMethod.POST})
     public String list(Model model, Principal principal) throws BusinessLogicException {
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
+
         if (driver.getAssignedOrder() != null) {
             List<Integer> wayPoints = driver.getAssignedOrder().getWayPointsIds();
             model.addAttribute("pointList", wayPoints);
@@ -96,16 +97,5 @@ public class MyOrderController {
         driverService.setDriverOnShift(driver);
         return "redirect: .";
     }
-//
-//    @GetMapping("/setStatus")
-//    public ModelAndView setStatus(Model model, Principal principal) {
-//        ModelAndView mav = new ModelAndView("myOrder/setStatus");
-//        mav.addObject("driverDto", driverService.getDUDtoByEmail(principal.getName()));
-//        mav.addObject("statusEnum", DriverUserDTO.Status.values());
-//        return mav;
-//    }
-
-
-
 
 }

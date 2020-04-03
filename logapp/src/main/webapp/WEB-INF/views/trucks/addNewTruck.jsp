@@ -10,7 +10,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 
@@ -31,74 +31,68 @@
         font-weight: bold;
     }
 </style>
-<springForm:form action="./addTruck" method = "POST" modelAttribute="truckToAdd" >
+<springForm:form action="./addTruck" method="POST" modelAttribute="truckToAdd">
 
 
     <table>
-<%--        <tr>--%>
-<%--            <td><springForm:input path="regNumber" />Registration Number</td>--%>
-<%--            <td><springForm:errors path="regNumber" cssClass="error" /></td>--%>
-<%--        </tr>--%>
+            <%--        <tr>--%>
+            <%--            <td><springForm:input path="regNumber" />Registration Number</td>--%>
+            <%--            <td><springForm:errors path="regNumber" cssClass="error" /></td>--%>
+            <%--        </tr>--%>
 
-    <p>Registration Number (format AA00000):<input name="regNumber"
-                                      required minlength="7"
-                                      placeholder="Registration Number"
-                                      pattern="[A-Z]{2}\d{5}" ></p>
-
-<%--    <p>Working Hours:<input type = "number"--%>
-<%--                                  name="driverWorkingHours"--%>
-<%--                                  required minlength="7"--%>
-<%--                                  placeholder="Working Hours"></p>--%>
+        <p>Registration Number (format AA00000):<input name="regNumber"
+                                                       required minlength="7"
+                                                       placeholder="Registration Number"
+                                                       pattern="[A-Z]{2}\d{5}">
+            <form:errors path="regNumber" cssClass="error"/>
+        </p>
 
                 <tr>
-                    <td><springForm:label path="condition">Condition</springForm:label></td>
-                    <td>
+            <td><springForm:label path="condition">Condition</springForm:label></td>
+            <td>
 
-                        <springForm:select path="condition">
-                            <springForm:option value="" label="Choose Type.." />
-                            <springForm:options items="${enumCondition}"/>
-                        </springForm:select>
+                <springForm:select path="condition">
+                    <springForm:option value="" label="Choose Type.."/>
+                    <springForm:options items="${enumCondition}"/>
+                </springForm:select>
 
-                    </td>
+            </td>
 
-    <tr>
-        <td>Select City:</td>
-        <td>
-            <select name="currentCityId">
-                <option label="---Select city---">
-                    <c:forEach items="${cityList}" var="city">
-                <option value=${city.cityId}>${city.cityName}</option>
-                </c:forEach>
+        <tr>
+            <td>Select City:</td>
+            <td>
+                <select name="currentCityId">
+                    <option label="---Select city---">
+                        <c:forEach items="${cityList}" var="city">
+                    <option value=${city.cityId}>${city.cityName}</option>
+                    </c:forEach>
+                    <form:errors path="currentCityId" cssClass="error"/>
 
-            </select>
-        </td>
-    </tr>
+                </select>
+            </td>
+        </tr>
 
 
-    <p>Capacity:<input type = "number"
-                                  name="capacityTons"
-                                  min = "10";
-                                  max="30"
-                                  placeholder="Capacity"></p>
-<%--    <p>City Id:<input type = "number"--%>
-<%--                                  name="currentCityId"--%>
-<%--                                  required maxength="2"--%>
-<%--                                  placeholder="City ID"></p>--%>
-
+        <p>Capacity:<input type="number"
+                           name="capacityTons"
+<%--                           min="5" --%>
+<%--                           max="25"--%>
+                           placeholder="Capacity">
+            <form:errors path="capacityTons" cssClass="error"/>
+        </p>
 
         <tr>
             <td><input type="submit" value="Submit"/></td>
         </tr>
 
 
-
     </table>
 </springForm:form>
 
-    <a class="btn btn-primary" href="
+<a class="btn btn-primary" href="
     ${pageContext.request.contextPath}./allTrucks" role="button">Get all trucks</a>
-    <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
+<a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Main page</a>
 
-    </body>
+</body>
 
 </html>

@@ -44,27 +44,14 @@
             <td>Select City:</td>
             <td>
                 <select name="currentCityId">
-                    <option label="---Select city---">
+                    <option selected>${cityService.getCityDtoById(truckToEdit.currentCityId)}</option>
                         <c:forEach items="${cityList}" var="city">
                     <option value=${city.cityId}>${city.cityName}</option>
                     </c:forEach>
-
                 </select>
             </td>
         </tr>
 
-<%--        <tr>--%>
-<%--            <td>Select City:</td>--%>
-<%--            <td>--%>
-<%--                <select name="currentCityId">--%>
-<%--                    <option label="---Select city---">--%>
-<%--                        <c:forEach var="hash" items="${cityMap}">--%>
-<%--                    <option selected="${cityMap.get(truckToEdit.currentCityId)}" value=${hash.key}>${hash.value}</option>--%>
-<%--                    </c:forEach>--%>
-
-<%--                </select>--%>
-<%--            </td>--%>
-<%--        </tr>--%>
 
 
         <p>Registration Number (format AA00000):<input name="regNumber"
@@ -72,19 +59,13 @@
                                                        value=${truckToEdit.regNumber}
                                                                pattern="[A-Z]{2}\d{5}"></p>
 
-<%--        <p>Working Hours:<input type="number"--%>
-<%--                                name="driverWorkingHours"--%>
-<%--                                required minlength="7"--%>
-<%--                                value=${truckToEdit.driverWorkingHours}></p>--%>
 
 
         <p>Capacity:<input type="number"
                            name="capacityTons"
-                           min="10" ;
-                           max="30"
+                           min="5" ;
+                           max="25"
                            value=${truckToEdit.capacityTons }></p>
-
-
 
         <tr>
             <td><input type="submit" value="Submit"/></td>

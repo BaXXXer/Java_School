@@ -29,54 +29,53 @@
 
 
         <p>First Name<input name="driverFirstName"
-                            required minlength="2"
+                            required minlength="1"
                             placeholder="First Name"
-                            width="100"></p>
+                            width="100">
+            <form:errors path="driverFirstName" cssClass="error"/>
+
+        </p>
 
         <p>Surname:<input type = "text"
                                 name="driverSurname"
-                                required minlength="2"
-                                placeholder="Surname"></p>
+                                required minlength="1"
+                                placeholder="Surname">
+            <form:errors path="driverSurname" cssClass="error"/>
+
+        </p>
 
         <p>Personal Number: <input
             name="driverPrivateNum"
             required minlength="8"
             required maxlength="8"
-            placeholder="Private Number" ></p>
+            placeholder="Private Number">
+            <form:errors path="driverPrivateNum" cssClass="error"/>
+
+        </p>
         <p>Worked Hours: <input
                 name="driverWorkedHours"
                 min="0"
                 max="176"
-                placeholder="Worker hours" ></p>
+                placeholder="Worker hours" >
+            <form:errors path="driverWorkedHours" cssClass="error"/>
 
+        </p>
 
-<%--        <tr>--%>
-<%--            <td>Select Status:</td>--%>
-<%--            <td>--%>
-<%--                <select name="driverStatus">--%>
-<%--                    <option label="---Select status---">--%>
-<%--                        <c:forEach items="${enumStatus}" var="status">--%>
-<%--                    <option value=${status}>${status}</option>--%>
-<%--                    </c:forEach>--%>
-
-<%--                </select>--%>
-<%--            </td>--%>
-<%--        </tr>--%>
         <br>
 
 
-        <tr>
-        <td>Select Truck:</td>
-            <td>
-            <select name="driversTruckId">
-                <option label="---Select truck---">
-                <c:forEach items="${truckList}" var="truck">
-                    <option value=${truck.id}>${truck.regNumber}</option>
-                </c:forEach>
+<%--        <tr>--%>
+<%--        <td>Select Truck:</td>--%>
+<%--            <td>--%>
+<%--            <select name="driversTruckId">--%>
+<%--                <option label="---Select truck---">--%>
+<%--                <c:forEach items="${truckList}" var="truck">--%>
+<%--                    <option value=${truck.id}>${truck.regNumber}</option>--%>
+<%--                </c:forEach>--%>
 
-            </select>
-            </td>
-        </tr>
+<%--            </select>--%>
+<%--            </td>--%>
+<%--        </tr>--%>
 
 
         <tr>

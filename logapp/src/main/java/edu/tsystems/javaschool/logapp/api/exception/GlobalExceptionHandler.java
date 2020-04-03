@@ -1,5 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.exception;
 
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,7 @@ import java.sql.SQLException;
 @Component
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({SQLException.class, DataAccessException.class})
+    @ExceptionHandler({SQLException.class, DataAccessException.class, HibernateException.class})
     public ModelAndView handleSQLException(HttpServletRequest request, Exception ex){
         ModelAndView modelAndView = new ModelAndView("exceptions/database_error");
         modelAndView.addObject("exception", ex);
@@ -51,7 +53,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler({NullPointerException.class, ObjectNotFoundException.class})
     public ModelAndView notFoundHandler(HttpServletRequest request, Exception ex) {
         ModelAndView modelAndView = new ModelAndView("exceptions/generic");
         modelAndView.addObject("exception", ex);
