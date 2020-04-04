@@ -190,10 +190,10 @@ public class OrderService {
                     checkCounter++;
                 }
             }
-            if(checkCounter==points.size()){
+            if (checkCounter == points.size()) {
                 readyToGoTrucks.add(t);
             }
-            checkCounter=0;
+            checkCounter = 0;
         }
 
         Set<TruckDTO> set = new HashSet<>(readyToGoTrucks);
@@ -248,13 +248,19 @@ public class OrderService {
         }
 
         int routeDistance = distanceCalculator.getRouteDistance(orderDto.getPoints(), currentCity); //cumulative distance between all the cities over all the waypoints
-        double routeDuration = distanceCalculator.getRouteHoursDuration(routeDistance, 2);
+        double routeDuration;
+        if (orderDto.getDriversOnOrderIds().isEmpty()) {
+            routeDuration = distanceCalculator.getRouteHoursDuration(routeDistance, 1);
+        } else {
+            routeDuration = distanceCalculator.getRouteHoursDuration(routeDistance, orderDto.getDriversOnOrderIds().size() + 1);
+        }
+
         LocalDateTime expectedArrival = LocalDateTime.now().plusHours((long) routeDuration);
         double requiredWorkingHoursTotal = WorkingHoursCalc.getRequiredWorkHoursInCurrentMonth(LocalDateTime.now(),
                 expectedArrival);
         double requiredWorkingHoursPerDriver;
-        if (orderDto.getDriversOnOrderIds().size() > 1) {
-            requiredWorkingHoursPerDriver = requiredWorkingHoursTotal / orderDto.getDriversOnOrderIds().size();
+        if (!orderDto.getDriversOnOrderIds().isEmpty()) {
+            requiredWorkingHoursPerDriver = requiredWorkingHoursTotal / (orderDto.getDriversOnOrderIds().size());
         } else {
             requiredWorkingHoursPerDriver = requiredWorkingHoursTotal;
         }
@@ -271,8 +277,9 @@ public class OrderService {
     @Transactional
     public void assignDriver(DriverDTO driverDTO, OrderDTO orderDTO) {
         Driver driver = driverDao.getDriverById(driverDTO.getDriverId());
-        driver.setUser(userService.findUserById(driver.getUser().getId()));
-        driver.setDriversTruck(truckDao.getTruckById(orderDTO.getTruckId()));
+//        driver.setUser(userService.findUserById(driver.getUser().getId()));
+        Truck truckOnCurrentOrder = truckDao.getTruckById(orderDTO.getTruckId());
+        driver.setDriversTruck(truckOnCurrentOrder);
         Order order = toEntity(orderDTO);
         List<Driver> assignedDrivers = order.getDriversOnOrder(); //get current drivers on this order
         assignedDrivers.add(driver); // add a driver to assign
@@ -281,11 +288,31 @@ public class OrderService {
         assignedDrivers.addAll(set);
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
-        int currentWorkedHours = driverDTO.getDriverWorkedHours();
-        double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
-        currentWorkedHours += requiredWorkingHoursPerDriver;
-        driverDTO.setDriverWorkedHours(currentWorkedHours);
-        driverService.updateDriver(driverService.toEntity(driverDTO));
+        if (orderDTO.getDriversOnOrderIds().isEmpty()) { //if our driver is the only one and we need to charge hours just for him
+            int currentWorkedHours = driverDTO.getDriverWorkedHours();
+            double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
+            currentWorkedHours += requiredWorkingHoursPerDriver;
+            driverDTO.setDriverWorkedHours(currentWorkedHours);
+            driverService.updateDriver(driverService.toEntity(driverDTO));
+        } else { //if we already have assigned driver and need to recalculate working hours for current order
+            int totalWorkHoursPerCurrentOrder = truckOnCurrentOrder.getDriverWorkingHours();
+            for(int id: orderDTO.getDriversOnOrderIds()){ //update working hours for all assigned drivers
+                DriverDTO driverOnOrder = driverService.getDriverById(id);
+                int workingHoursTotal = driverOnOrder.getDriverWorkedHours();
+                double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
+                int workHoursBacked = workingHoursTotal -
+                        totalWorkHoursPerCurrentOrder / orderDTO.getDriversOnOrderIds().size();//rollback
+                int workerHoursUpdated = workHoursBacked+(int)requiredWorkingHoursPerDriver;
+                driverOnOrder.setDriverWorkedHours(workerHoursUpdated);
+                driverService.updateDriver(driverService.toEntity(driverOnOrder));
+            }
+            int currentWorkedHours = driverDTO.getDriverWorkedHours();
+            double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
+            currentWorkedHours += requiredWorkingHoursPerDriver;
+            driverDTO.setDriverWorkedHours(currentWorkedHours);
+            driverService.updateDriver(driverService.toEntity(driverDTO));
+
+        }
         orderDao.updateOrder(order);//update entity
     }
 
@@ -312,23 +339,6 @@ public class OrderService {
                             " status is "
                             + point.getCargo().getCargoStatus() + " and operation is " + point.getOperationType());
                 }
-            }
-        }
-        if (dto.getWayPointsIds() != null) {
-            List<Integer> pointIds = dto.getWayPointsIds();
-            for (Integer id : pointIds) {
-                OrderWaypoint point = pointService.getPointById(id);
-                Cargo.Status cargoStatus = point.getCargo().getCargoStatus();
-                OrderWaypoint.Operation operationType = point.getOperationType();
-                if (operationType == OrderWaypoint.Operation.LOAD && cargoStatus == Cargo.Status.READY ||
-                        operationType == OrderWaypoint.Operation.UNLOAD && cargoStatus == Cargo.Status.DELIVERED) {
-                    point.setOrder(order);
-
-
-                } else
-                    throw new InvalidStateException("Incorrect operation Status is "
-                            + cargoStatus + " and operation is " + operationType);
-
             }
         }
         orderDao.updateOrder(order);
