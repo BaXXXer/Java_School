@@ -4,6 +4,7 @@ import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
+import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
@@ -13,6 +14,7 @@ import edu.tsystems.javaschool.logapp.api.util.EnumConverter;
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +50,6 @@ public class DriverService {
         }
 
         Driver driver = toEntity(driverDTO);
-//        driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
         driverDao.saveDriver(driver);
         User user = createUser(driver);
         userService.createUser(user);
@@ -59,7 +60,8 @@ public class DriverService {
     @Transactional
     User createUser(Driver driver) {
         User user = new User();
-        user.setEmail(driver.getDriverFirstName().toLowerCase() + "." + driver.getDriverSurname().toLowerCase() + "@logapp.com");
+        user.setEmail(driver.getDriverFirstName().toLowerCase().trim() + "." +
+                driver.getDriverSurname().toLowerCase().trim() + "@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
         user.setPasswordMd5("password");
         user.setDriver(driver);
@@ -154,7 +156,6 @@ public class DriverService {
     @Transactional
     public void updateDriver(DriverDTO driver) {
         Driver entity = toEntity(driver);
-//        entity.setDriversTruck(truckDao.getTruckById(driver.getDriversTruckId()));
         driverDao.updateDriver(entity);
     }
 
@@ -248,7 +249,8 @@ public class DriverService {
         if (status.equals("CO_DRIVER") && driversOnOrder.size() > 1) {
             Collections.shuffle(driversOnOrder);
             for (Driver driver : driversOnOrder) {
-                if (!driver.getDriverStatus().equals(Driver.Status.DRIVING) && entity.getDriverId() != driver.getDriverId()) {
+                if (!driver.getDriverStatus().equals(Driver.Status.DRIVING) &&
+                        entity.getDriverId() != driver.getDriverId()) {
                     driver.setDriverStatus(Driver.Status.DRIVING);
                     break;
                 }
@@ -280,5 +282,13 @@ public class DriverService {
     public void setDriverOnShift(DriverUserDTO dto) {
         dto.setDriverStatus(DriverUserDTO.Status.REST_ON_SHIFT);
         updateDriver(fromDUDtoToEntity(dto));
+    }
+
+    public void validateGrants(DriverUserDTO driver, int id) {
+        OrderDTO currentOrder = driver.getAssignedOrder();
+        int assignedOrderId = currentOrder.getOrderId();
+        if(assignedOrderId!=id){
+            throw new AccessDeniedException("Access denied!");
+        }
     }
 }

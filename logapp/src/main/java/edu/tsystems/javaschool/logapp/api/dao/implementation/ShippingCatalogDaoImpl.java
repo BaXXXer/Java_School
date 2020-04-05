@@ -1,27 +1,27 @@
 package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
-import edu.tsystems.javaschool.logapp.api.dao.BusinessConstantsDao;
-import edu.tsystems.javaschool.logapp.api.entity.BusinessLogicConstants;
+import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
+import edu.tsystems.javaschool.logapp.api.entity.ShippingCatalog;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BusinessConstantsDaoImpl implements BusinessConstantsDao {
+public class ShippingCatalogDaoImpl implements ShippingCatalogDao {
 
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public BusinessConstantsDaoImpl(SessionFactory sessionFactory) {
+    public ShippingCatalogDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public BusinessLogicConstants getConstants() {
+    public ShippingCatalog getConstants() {
         Session session = sessionFactory.getCurrentSession();
-        BusinessLogicConstants constants = session.load(BusinessLogicConstants.class, 1);
+        ShippingCatalog constants = session.load(ShippingCatalog.class, 1);
         return constants;
     }
 }

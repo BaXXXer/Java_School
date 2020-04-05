@@ -1,9 +1,9 @@
 package edu.tsystems.javaschool.logapp.api.util;
 
-import edu.tsystems.javaschool.logapp.api.dao.BusinessConstantsDao;
+import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
-import edu.tsystems.javaschool.logapp.api.entity.BusinessLogicConstants;
+import edu.tsystems.javaschool.logapp.api.entity.ShippingCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +18,10 @@ public class DistanceCalculator {
 //        this.appConfig = appConfig;
 //    }
 
-    private final BusinessConstantsDao constantsDao;
+    private final ShippingCatalogDao constantsDao;
 
     @Autowired
-    public DistanceCalculator(BusinessConstantsDao constantsDao) {
+    public DistanceCalculator(ShippingCatalogDao constantsDao) {
         this.constantsDao = constantsDao;
     }
 
@@ -78,7 +78,7 @@ public class DistanceCalculator {
      */
 
     public double getRouteHoursDuration(int routeLength, int numCoDrivers) {
-        BusinessLogicConstants constants = constantsDao.getConstants();
+        ShippingCatalog constants = constantsDao.getConstants();
 
         double distancePerDay = (Math.min(numCoDrivers * constants.getLimitHoursPerDay(), 24) * constants.getTruckAvgSpeed());
         return Math.floor(routeLength / distancePerDay)*24 + (routeLength % distancePerDay) / constants.getTruckAvgSpeed();

@@ -1,8 +1,8 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
-import edu.tsystems.javaschool.logapp.api.dao.BusinessConstantsDao;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
+import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.*;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.OrderMapper;
@@ -33,11 +33,11 @@ public class OrderService {
 
     private final UserService userService;
     private final CargoService cargoService;
-    private final BusinessConstantsDao constantsDao;
+    private final ShippingCatalogDao constantsDao;
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, DriverService driverService, DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService, UserService userService, CargoService cargoService, BusinessConstantsDao constantsDao) {
+    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao, OrderWayPointService pointService, DriverService driverService, DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService, UserService userService, CargoService cargoService, ShippingCatalogDao constantsDao) {
         this.orderDao = orderDao;
         this.mapper = mapper;
         this.driverDao = driverDao;

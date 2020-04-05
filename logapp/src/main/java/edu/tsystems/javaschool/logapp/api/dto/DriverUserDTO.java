@@ -26,5 +26,5 @@ public class DriverUserDTO {
     private Status driverStatus;
     private String truckRegNumber;
     private OrderDTO assignedOrder;
-//    private CargoWaypointDTO waypointDTO;
+
 }

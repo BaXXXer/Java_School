@@ -13,11 +13,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BusinessLogicConstants {
+public class ShippingCatalog {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer cargoId;
+    private Integer id;
 
     @Column(name = "working_hours")
     private final Integer maxWorkingHours = 176;

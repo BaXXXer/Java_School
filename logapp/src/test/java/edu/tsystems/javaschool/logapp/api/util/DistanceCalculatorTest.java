@@ -1,7 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.util;
 
 import edu.tsystems.javaschool.logapp.api.config.WebMvcConfig;
-import edu.tsystems.javaschool.logapp.api.dao.BusinessConstantsDao;
+import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class DistanceCalculatorTest {
     private DistanceCalculator calculator;
 
     @Autowired
-    private BusinessConstantsDao constantsDao;
+    private ShippingCatalogDao constantsDao;
 
     public DistanceCalculatorTest() {
     }

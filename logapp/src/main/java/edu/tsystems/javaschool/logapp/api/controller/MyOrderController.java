@@ -2,7 +2,6 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
-import edu.tsystems.javaschool.logapp.api.exception.BusinessLogicException;
 import edu.tsystems.javaschool.logapp.api.service.CityService;
 import edu.tsystems.javaschool.logapp.api.service.DriverService;
 import edu.tsystems.javaschool.logapp.api.service.OrderService;
@@ -38,7 +37,7 @@ public class MyOrderController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET,RequestMethod.POST})
-    public String list(Model model, Principal principal) throws BusinessLogicException {
+    public String list(Model model, Principal principal){
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
 
         if (driver.getAssignedOrder() != null) {
@@ -63,22 +62,30 @@ public class MyOrderController {
     }
 
     @GetMapping("/editOrder/{id}")
-    public ModelAndView editOrderShow(@PathVariable("id") int id) {
+    public ModelAndView editOrderShow(@PathVariable("id") int id,Principal principal) {
         ModelAndView mav = new ModelAndView("myOrder/editOrder");
         OrderDTO orderDTO = orderService.getOrderById(id);
         mav.addObject("order", orderDTO);
         mav.addObject("waypoints", pointService.getAllWaypoints());
+        DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
+        driverService.validateGrants(driver,id);
         return mav;
     }
 
     @RequestMapping(value = "/setLoaded/{orderId}/{pointId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String setLoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId) {
+    public String setLoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId,Principal principal) {
+        DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
+        driverService.validateGrants(driver,orderId);
+
         orderService.updateCargoStatus(orderId, pointId);
         return "redirect: /myOrder/editOrder/"+orderId;
     }
 
     @RequestMapping(value = "/setUnloaded/{orderId}/{pointId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String setUnoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId) {
+    public String setUnoaded(@PathVariable("orderId") int orderId, @PathVariable("pointId") int pointId,Principal principal) {
+        DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
+        driverService.validateGrants(driver,orderId);
+
         orderService.updateCargoStatus(orderId, pointId);
         orderService.checkIfOrderIsDone(orderId);
         return "redirect: /myOrder/editOrder/"+orderId;

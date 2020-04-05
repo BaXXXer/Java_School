@@ -104,7 +104,9 @@
                 <c:when test="${driverList.size()>1}">
                     <td>
                         <c:forEach items="${driverList}" var="driverId">
+                            <c:if test="${!driverId.equals(driver.driverId)}">
                             ${driverMap.get(driverId)} <br>
+                            </c:if>
                         </c:forEach></td>
                 </c:when>
                 <c:otherwise>
