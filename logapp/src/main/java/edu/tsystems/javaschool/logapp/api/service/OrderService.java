@@ -55,7 +55,7 @@ public class OrderService {
 
 
     @Transactional
-    public int saveOrder(OrderDTO dto) throws InvalidStateException {
+    public int saveOrder(OrderDTO dto) {
         Order order = toEntity(dto);
 
         return orderDao.saveOrder(order);
@@ -288,12 +288,14 @@ public class OrderService {
         assignedDrivers.addAll(set);
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
+
         if (orderDTO.getDriversOnOrderIds().isEmpty()) { //if our driver is the only one and we need to charge hours just for him
             int currentWorkedHours = driverDTO.getDriverWorkedHours();
             double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
             currentWorkedHours += requiredWorkingHoursPerDriver;
             driverDTO.setDriverWorkedHours(currentWorkedHours);
             driverService.updateDriver(driverService.toEntity(driverDTO));
+
         } else { //if we already have assigned driver and need to recalculate working hours for current order
             int totalWorkHoursPerCurrentOrder = truckOnCurrentOrder.getDriverWorkingHours();
             for(int id: orderDTO.getDriversOnOrderIds()){ //update working hours for all assigned drivers
@@ -325,7 +327,12 @@ public class OrderService {
      */
     @Transactional
     public void updateOrder(OrderDTO dto) {
+        checkTypes(dto);
         Order order = toEntity(dto);
+        orderDao.updateOrder(order);
+    }
+
+    private void checkTypes(OrderDTO dto){
         if (dto.getPoints() != null) {
             List<CargoWaypointDTO> points = dto.getPoints();
             for (CargoWaypointDTO point : points) {
@@ -341,8 +348,8 @@ public class OrderService {
                 }
             }
         }
-        orderDao.updateOrder(order);
     }
+
 
     /**
      * Changes the cargo status when a driver had set it

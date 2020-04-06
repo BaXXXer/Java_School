@@ -62,7 +62,7 @@ public class MyOrderController {
     }
 
     @GetMapping("/editOrder/{id}")
-    public ModelAndView editOrderShow(@PathVariable("id") int id,Principal principal) {
+    public ModelAndView editOrderShow(@PathVariable("id") Integer id,Principal principal) {
         ModelAndView mav = new ModelAndView("myOrder/editOrder");
         OrderDTO orderDTO = orderService.getOrderById(id);
         mav.addObject("order", orderDTO);

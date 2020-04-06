@@ -141,9 +141,12 @@
 
         </c:choose>
 
+        <c:if test="${driver.assignedOrder!=null}">
+
         <a class="btn btn-secondary btn-sm" href="/myOrder/editOrder/${driver.assignedOrder.orderId}" role="button">Edit
             order details</a>
         <br>
+        </c:if>
 
         <c:if test="${driver.driverStatus!='REST'}">
             <tr>

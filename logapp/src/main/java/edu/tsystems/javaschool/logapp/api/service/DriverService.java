@@ -7,10 +7,10 @@ import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
+import edu.tsystems.javaschool.logapp.api.entity.Driver.Status;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
-import edu.tsystems.javaschool.logapp.api.util.EnumConverter;
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import static edu.tsystems.javaschool.logapp.api.entity.Driver.Status.convertDriverStatusToEnum;
 
 @Service
 public class DriverService {
@@ -92,7 +94,7 @@ public class DriverService {
             driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
             driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
             if (driverDTO.getDriverStatus() == null) {
-                driver.setDriverStatus(Driver.Status.REST);
+                driver.setDriverStatus(Status.REST);
             } else {
                 driver.setDriverStatus(driverDTO.getDriverStatus());
             }
@@ -183,23 +185,10 @@ public class DriverService {
         DriverUserDTO dto = new DriverUserDTO();
         dto.setDriverId(entity.getDriverId());
         dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-        switch (entity.getDriverStatus()) {
-            case DRIVING:
-                dto.setDriverStatus(DriverUserDTO.Status.DRIVING);
-                break;
-            case REST:
-                dto.setDriverStatus(DriverUserDTO.Status.REST);
-                break;
-            case REST_ON_SHIFT:
-                dto.setDriverStatus(DriverUserDTO.Status.REST_ON_SHIFT);
-                break;
-            case CARGO_HANDLING:
-                dto.setDriverStatus(DriverUserDTO.Status.CARGO_HANDLING);
-                break;
-            case CO_DRIVER:
-                dto.setDriverStatus(DriverUserDTO.Status.CO_DRIVER);
-                break;
-        }
+
+        DriverUserDTO.Status status = Status.switchFromDriverToDtoStatus(entity.getDriverStatus());
+        dto.setDriverStatus(status);
+
         dto.setDriverFirstName(entity.getDriverFirstName());
         dto.setDriverSurname(entity.getDriverSurname());
         if (entity.getOrder() != null) {
@@ -214,23 +203,8 @@ public class DriverService {
     @Transactional
     public Driver fromDUDtoToEntity(DriverUserDTO dto) {
         Driver entity = driverDao.getDriverById(dto.getDriverId());
-        switch (dto.getDriverStatus()) {
-            case DRIVING:
-                entity.setDriverStatus(Driver.Status.DRIVING);
-                break;
-            case REST:
-                entity.setDriverStatus(Driver.Status.REST);
-                break;
-            case CO_DRIVER:
-                entity.setDriverStatus(Driver.Status.CO_DRIVER);
-                break;
-            case CARGO_HANDLING:
-                entity.setDriverStatus(Driver.Status.CARGO_HANDLING);
-                break;
-            case REST_ON_SHIFT:
-                entity.setDriverStatus(Driver.Status.REST_ON_SHIFT);
-                break;
-        }
+        Status status = Status.switchFromDtoToStatus(dto.getDriverStatus());
+        entity.setDriverStatus(status);
         return entity;
 
     }
@@ -245,18 +219,21 @@ public class DriverService {
     @Transactional
     public DriverUserDTO getDUDtoByEmailAndSetStatus(String email, String status) {
         Driver entity = userService.findByEmail(email).getDriver();
-        List<Driver> driversOnOrder = entity.getOrder().getDriversOnOrder();
-        if (status.equals("CO_DRIVER") && driversOnOrder.size() > 1) {
-            Collections.shuffle(driversOnOrder);
-            for (Driver driver : driversOnOrder) {
-                if (!driver.getDriverStatus().equals(Driver.Status.DRIVING) &&
-                        entity.getDriverId() != driver.getDriverId()) {
-                    driver.setDriverStatus(Driver.Status.DRIVING);
-                    break;
+        if(entity.getOrder()!=null){
+            List<Driver> driversOnOrder = entity.getOrder().getDriversOnOrder();
+            if (status.equals("CO_DRIVER") && driversOnOrder.size() > 1) {
+                Collections.shuffle(driversOnOrder);
+                for (Driver driver : driversOnOrder) {
+                    if (!driver.getDriverStatus().equals(Status.DRIVING) &&
+                            entity.getDriverId() != driver.getDriverId()) {
+                        driver.setDriverStatus(Status.DRIVING);
+                        break;
+                    }
                 }
             }
         }
-        entity.setDriverStatus(EnumConverter.convertDriverStatusToEnum(status));
+
+        entity.setDriverStatus(convertDriverStatusToEnum(status));
         return toDUDto(entity);
     }
 

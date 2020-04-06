@@ -1,13 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-<%--
-  Created by IntelliJ IDEA.
-  User: Андрей
-  Date: 01.03.2020
-  Time: 19:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -35,10 +27,7 @@
 
 
     <table>
-            <%--        <tr>--%>
-            <%--            <td><springForm:input path="regNumber" />Registration Number</td>--%>
-            <%--            <td><springForm:errors path="regNumber" cssClass="error" /></td>--%>
-            <%--        </tr>--%>
+
 
         <p>Registration Number (format AA00000):<input name="regNumber"
                                                        required minlength="7"
@@ -75,8 +64,8 @@
 
         <p>Capacity:<input type="number"
                            name="capacityTons"
-<%--                           min="5" --%>
-<%--                           max="25"--%>
+                           min="5"
+                           max="25"
                            placeholder="Capacity">
             <form:errors path="capacityTons" cssClass="error"/>
         </p>

@@ -1,5 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.entity;
 
+import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,7 +47,49 @@ public class Driver {
     private Truck driversTruck;
 
     public enum Status {
-        REST,CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER
+        REST,CARGO_HANDLING, REST_ON_SHIFT,DRIVING,CO_DRIVER;
+
+        public static DriverUserDTO.Status switchFromDriverToDtoStatus(Status statusFrom){
+            switch (statusFrom){
+                case DRIVING:
+                    return DriverUserDTO.Status.DRIVING;
+                case REST:
+                    return DriverUserDTO.Status.REST;
+                case REST_ON_SHIFT:
+                    return  DriverUserDTO.Status.REST_ON_SHIFT;
+                case CARGO_HANDLING:
+                    return DriverUserDTO.Status.CARGO_HANDLING;
+                default:
+                    return DriverUserDTO.Status.CO_DRIVER;
+            }
+        }
+
+        public static Status switchFromDtoToStatus(DriverUserDTO.Status statusFrom){
+            switch (statusFrom){
+                case DRIVING:
+                    return DRIVING;
+                case REST:
+                    return REST;
+                case REST_ON_SHIFT:
+                    return REST_ON_SHIFT ;
+                case CARGO_HANDLING:
+                    return CARGO_HANDLING;
+                default:
+                    return CO_DRIVER;
+            }
+        }
+
+
+        public static Status convertDriverStatusToEnum(String status){
+            Status[] values = values();
+            for(Status st: values){
+                if(st.toString().equals(status)){
+                    return st;
+                }
+            }
+            throw new EntityNotFoundException("Status " + status + " was not found");
+
+        }
     }
 
     @ManyToOne()
