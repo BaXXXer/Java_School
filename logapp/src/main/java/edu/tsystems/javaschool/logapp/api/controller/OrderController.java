@@ -58,7 +58,7 @@ public class OrderController {
         ModelAndView mav = new ModelAndView("orders/notAssignedCargoes");
         mav.addObject("order",orderService.getOrderById(id));
         mav.addObject("cargoes", pointService.getNotAssignedCargoes());
-        mav.addObject("points", pointService.getAllWaypoints());
+        mav.addObject("points", pointService.getNotAssignedWaypoints());
         mav.addObject("cityList",cityService.getAllCitiesDTO());
         return mav;
     }

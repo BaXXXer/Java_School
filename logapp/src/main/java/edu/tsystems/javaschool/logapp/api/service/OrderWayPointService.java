@@ -56,6 +56,24 @@ public class OrderWayPointService {
 
     }
 
+    /**
+     * The new-added waypoint cannot be with types "UNLOAD" or "DELIVERED"
+     * So, we assume that new waypoints, which are not assigned somewhere - are with type "LOAD"
+     *
+     * @return list of not assigned points
+     */
+    @Transactional
+    public List<CargoWaypointDTO> getNotAssignedWaypoints(){
+        List<CargoWaypointDTO> allWaypoints = getAllWaypoints();
+        List<CargoWaypointDTO> notAssignedPoints = new ArrayList();
+        for(CargoWaypointDTO point: allWaypoints){
+            if(point.getOperationType()== OrderWaypoint.Operation.LOAD){
+                notAssignedPoints.add(point);
+            }
+        }
+        return notAssignedPoints;
+    }
+
 
     /**
      * Takes all the cargoes and all the waypoints
