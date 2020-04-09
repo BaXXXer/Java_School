@@ -43,7 +43,6 @@ public class DriverController {
         return model;
     }
 
-    //TODO: make error view + add redirect to success
     @RequestMapping(value = "/addDriver", method = RequestMethod.POST)
     public String submit(@ModelAttribute("driverToAdd") @Valid DriverDTO driverDTO,
                          BindingResult bindingResult){

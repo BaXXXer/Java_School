@@ -10,6 +10,10 @@
 </head>
 <body>
 
+<c:if test="${orders.size()==0}">
+    <h3>There are no orders now</h3>
+</c:if>
+
 <c:forEach items="${orders}" var="order">
 <table class="table table-striped">
     <h3><u>Order #${order.orderId}</u></h3>

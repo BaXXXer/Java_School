@@ -77,7 +77,6 @@ public class TruckService {
     @Transactional
     public TruckDTO getTruckById(int id) {
         Truck entity = truckDao.getTruckById(id);
-//        entity.getCurrentCity().getTruckList().add(entity);// adds truck to the city
         return toDTO(entity);
     }
 

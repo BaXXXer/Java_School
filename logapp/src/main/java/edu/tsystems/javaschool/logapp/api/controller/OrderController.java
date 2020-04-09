@@ -18,18 +18,16 @@ public class OrderController {
     private final TruckService truckService;
     private final OrderWayPointService pointService;
     private final OrderService orderService;
-    private final CargoService cargoService;
     private final CityService cityService;
 
 
     @Autowired
     public OrderController(DriverService driverService, TruckService truckService, OrderWayPointService pointService,
-                           OrderService orderService, CargoService cargoService, CityService cityService) {
+                           OrderService orderService, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.pointService = pointService;
         this.orderService = orderService;
-        this.cargoService = cargoService;
         this.cityService = cityService;
     }
 

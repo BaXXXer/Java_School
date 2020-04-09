@@ -26,56 +26,40 @@ public class CityService {
     }
 
 
-    public List<City> getAllCities(){
+    public List<City> getAllCities() {
         return cityDao.getAllCities();
     }
 
-    public List<CityDTO> getAllCitiesDTO(){
+    public List<CityDTO> getAllCitiesDTO() {
         List<CityDTO> cities = new ArrayList<>();
-        for(City c: getAllCities()){
+        for (City c : getAllCities()) {
             cities.add(toDto(c));
         }
         return cities;
     }
 
 
-
     @Transactional
-    public City getCityById(int id){
+    public City getCityById(int id) {
         return cityDao.getCityById(id);
     }
 
     @Transactional
-    public CityDTO getCityDtoById(int id){
+    public CityDTO getCityDtoById(int id) {
         return toDto(cityDao.getCityById(id));
     }
 
 
-
-    public Map<Integer, String> getCityMap(){
-        Map <Integer, String> cityMap = new HashMap();
-        for(City c: getAllCities()){
-            cityMap.put(c.getCityId(),c.getCityName());
+    public Map<Integer, String> getCityMap() {
+        Map<Integer, String> cityMap = new HashMap();
+        for (City c : getAllCities()) {
+            cityMap.put(c.getCityId(), c.getCityName());
         }
         return cityMap;
     }
 
-//    public Map<CityDTO, String> getCityDTOMap(){
-//        Map <CityDTO, String> cityMap = new HashMap();
-//        for(City c: getAllCities()){
-//            cityMap.put(toDto(c),c.getCityName());
-//        }
-//        return cityMap;
-//    }
-//
-//    public CityDTO getCityDTO(){
-//        CityDTO cityDTO = toDto(getCityById(Integer.parseInt(request.getParameter("destCity"))));
-//        return cityDTO;
-//    }
-
-
     @Transactional
-    public CityDTO toDto(City entity){
+    public CityDTO toDto(City entity) {
         CityDTO dto = new CityDTO();
         dto.setCityId(entity.getCityId());
         dto.setCityName(entity.getCityName());
@@ -86,14 +70,10 @@ public class CityService {
     }
 
     @Transactional
-    public City toEntity(CityDTO dto){
+    public City toEntity(CityDTO dto) {
         City entity;
-//        if(dto.getCityId() != null) {
-//            entity = new City();
-//        }
-//        else{
-            entity=getCityById(dto.getCityId());
-//        }
+
+        entity = getCityById(dto.getCityId());
         entity.setCityName(dto.getCityName());
         entity.setLat(dto.getLat());
         entity.setLng(dto.getLng());

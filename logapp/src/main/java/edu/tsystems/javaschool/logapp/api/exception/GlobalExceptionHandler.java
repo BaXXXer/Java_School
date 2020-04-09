@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
     }
-//    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Incorrect operation type and cargo status")
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Duplicating entity")
     @ExceptionHandler(DuplicateEntityException.class)
     public ModelAndView handleDuplicateEntityException(HttpServletRequest request, Exception ex) {
         LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
-//    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Incorrect operation type and cargo status")
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Incorrect operation type and cargo status")
     @ExceptionHandler(InvalidStateException.class)
     public ModelAndView handleInvalidStateException(HttpServletRequest request, Exception ex){
         LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
@@ -70,7 +70,6 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
-    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Not Found")
     @ExceptionHandler(Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception ex){
         LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));

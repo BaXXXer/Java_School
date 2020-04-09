@@ -2,7 +2,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 
@@ -23,40 +23,42 @@
         font-weight: bold;
     }
 </style>
-<springForm:form action="./addDriver" method = "POST" modelAttribute="driverToAdd" >
+<springForm:form action="./addDriver" method="POST" modelAttribute="driverToAdd">
 
     <table>
 
 
-        <p>First Name<input name="driverFirstName"
-                            required minlength="1"
-                            placeholder="First Name"
-                            width="100">
+        <p>First Name: <input name="driverFirstName"
+                              required minlength="1"
+                              placeholder="First Name"
+                              width="100">
             <form:errors path="driverFirstName" cssClass="error"/>
 
         </p>
 
-        <p>Surname:<input type = "text"
-                                name="driverSurname"
-                                required minlength="1"
-                                placeholder="Surname">
+        <p>Surname: <input type="text"
+                           name="driverSurname"
+                           required minlength="1"
+                           placeholder="Surname">
             <form:errors path="driverSurname" cssClass="error"/>
 
         </p>
 
         <p>Personal Number: <input
-            name="driverPrivateNum"
-            required minlength="8"
-            required maxlength="8"
-            placeholder="Private Number">
+                type="number"
+                name="driverPrivateNum"
+                required minlength="8"
+                required maxlength="8"
+                placeholder="Private Number">
             <form:errors path="driverPrivateNum" cssClass="error"/>
 
         </p>
         <p>Worked Hours: <input
+                type="number"
                 name="driverWorkedHours"
                 min="0"
                 max="176"
-                placeholder="Worker hours" >
+                placeholder="Worker hours">
             <form:errors path="driverWorkedHours" cssClass="error"/>
 
         </p>
@@ -64,18 +66,18 @@
         <br>
 
 
-<%--        <tr>--%>
-<%--        <td>Select Truck:</td>--%>
-<%--            <td>--%>
-<%--            <select name="driversTruckId">--%>
-<%--                <option label="---Select truck---">--%>
-<%--                <c:forEach items="${truckList}" var="truck">--%>
-<%--                    <option value=${truck.id}>${truck.regNumber}</option>--%>
-<%--                </c:forEach>--%>
+            <%--        <tr>--%>
+            <%--        <td>Select Truck:</td>--%>
+            <%--            <td>--%>
+            <%--            <select name="driversTruckId">--%>
+            <%--                <option label="---Select truck---">--%>
+            <%--                <c:forEach items="${truckList}" var="truck">--%>
+            <%--                    <option value=${truck.id}>${truck.regNumber}</option>--%>
+            <%--                </c:forEach>--%>
 
-<%--            </select>--%>
-<%--            </td>--%>
-<%--        </tr>--%>
+            <%--            </select>--%>
+            <%--            </td>--%>
+            <%--        </tr>--%>
 
 
         <tr>
@@ -91,7 +93,7 @@
             </td>
         </tr>
 
-            <td><input type="submit" value="Submit"/></td>
+        <td><input type="submit" value="Submit"/></td>
         </tr>
 
     </table>

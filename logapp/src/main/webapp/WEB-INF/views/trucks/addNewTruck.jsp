@@ -40,9 +40,10 @@
             <td><springForm:label path="condition">Condition</springForm:label></td>
             <td>
 
-                <springForm:select path="condition">
+                <springForm:select path="condition" >
                     <springForm:option value="" label="Choose Type.."/>
                     <springForm:options items="${enumCondition}"/>
+                    <form:errors path="condition" cssClass="error"/>
                 </springForm:select>
 
             </td>
@@ -50,7 +51,7 @@
         <tr>
             <td>Select City:</td>
             <td>
-                <select name="currentCityId">
+                <select name="currentCityId" required>
                     <option label="---Select city---">
                         <c:forEach items="${cityList}" var="city">
                     <option value=${city.cityId}>${city.cityName}</option>

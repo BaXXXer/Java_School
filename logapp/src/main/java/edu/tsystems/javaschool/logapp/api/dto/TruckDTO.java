@@ -24,12 +24,12 @@ public class TruckDTO {
 
     private Integer driverWorkingHours;
 
-
     @NotNull
     @Min(5)
     @Max(25)
     private int capacityTons;
 
+    @NotNull(message = "Choose condition")
     private Truck.Condition condition;
 
     @NotNull(message = "Should not be empty")

@@ -30,7 +30,10 @@ public class DriverDTO {
     private Integer driverPrivateNum;
 
     @NotNull(message = "Should not be empty")
+    @Min(0)
+    @Max(176)
     private Integer driverWorkedHours;
+
 
 
     private Driver.Status driverStatus;

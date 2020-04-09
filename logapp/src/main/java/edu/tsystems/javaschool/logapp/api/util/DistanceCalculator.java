@@ -12,12 +12,6 @@ import java.util.Collection;
 @Service
 public class DistanceCalculator {
 
-//    private final LogappConfig appConfig;
-//
-//    public DistanceCalculator(LogappConfig appConfig) {
-//        this.appConfig = appConfig;
-//    }
-
     private final ShippingCatalogDao constantsDao;
 
     @Autowired
