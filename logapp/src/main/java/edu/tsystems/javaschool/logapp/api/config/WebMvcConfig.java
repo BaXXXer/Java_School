@@ -11,6 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import java.util.Properties;
+
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
@@ -43,6 +49,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
     }
+
+
 
 
 }

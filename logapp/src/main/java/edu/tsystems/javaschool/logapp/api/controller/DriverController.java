@@ -2,6 +2,7 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
+import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import edu.tsystems.javaschool.logapp.api.service.CityService;
 import edu.tsystems.javaschool.logapp.api.service.DriverService;
 import edu.tsystems.javaschool.logapp.api.service.TruckService;
@@ -23,13 +24,15 @@ public class DriverController {
     private final DriverService driverService;
     private final TruckService truckService;
     private final CityService cityService;
+    private final MessageProducer messageProducer;
 
 
     @Autowired
-    public DriverController(DriverService driverService, TruckService truckService, CityService cityService) {
+    public DriverController(DriverService driverService, TruckService truckService, CityService cityService, MessageProducer messageProducer) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.cityService = cityService;
+        this.messageProducer = messageProducer;
     }
 
     @RequestMapping(value = "/addDriver", method = RequestMethod.GET)
@@ -50,6 +53,7 @@ public class DriverController {
             return "drivers/addNewDriver";
         }
         driverService.saveDriver(driverDTO);
+        messageProducer.sendMessage("Driver saved!");
         return "drivers/driverAddedSuccess";
 
     }
