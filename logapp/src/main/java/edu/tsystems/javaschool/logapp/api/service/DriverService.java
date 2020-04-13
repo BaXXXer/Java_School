@@ -1,5 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.tsystems.javaschool.logapp.api.converter.DriverDtoToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
@@ -11,6 +13,7 @@ import edu.tsystems.javaschool.logapp.api.entity.Driver.Status;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
+import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +32,14 @@ public class DriverService {
     private final DriverMapper mapper;
     private TruckDao truckDao;
     private UserService userService;
+
     private static final Logger LOG = Logger.getLogger(DriverService.class);
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private MessageProducer messageProducer;
 
     @Autowired
     public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao, UserService userService) {
@@ -53,6 +60,12 @@ public class DriverService {
 
         Driver driver = toEntity(driverDTO);
         driverDao.saveDriver(driver);
+        try {
+            messageProducer.sendMessage(DriverDtoToJSONConverter.convertToJSON(driverDTO));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON converting troubles");
+        }
+
         User user = createUser(driver);
         userService.createUser(user);
         driver.setUser(userService.findUserById(user.getId()));

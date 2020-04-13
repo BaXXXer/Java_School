@@ -24,15 +24,15 @@ public class DriverController {
     private final DriverService driverService;
     private final TruckService truckService;
     private final CityService cityService;
-    private final MessageProducer messageProducer;
+//    private final MessageProducer messageProducer;
 
 
     @Autowired
-    public DriverController(DriverService driverService, TruckService truckService, CityService cityService, MessageProducer messageProducer) {
+    public DriverController(DriverService driverService, TruckService truckService, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.cityService = cityService;
-        this.messageProducer = messageProducer;
+//        this.messageProducer = messageProducer;
     }
 
     @RequestMapping(value = "/addDriver", method = RequestMethod.GET)
@@ -53,7 +53,7 @@ public class DriverController {
             return "drivers/addNewDriver";
         }
         driverService.saveDriver(driverDTO);
-        messageProducer.sendMessage("Driver saved!");
+//        messageProducer.sendMessage("Driver saved!");
         return "drivers/driverAddedSuccess";
 
     }
