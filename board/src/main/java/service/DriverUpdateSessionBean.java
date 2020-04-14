@@ -7,21 +7,26 @@ import dto.DriverDTO;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.enterprise.context.Dependent;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Remote
-@Stateless
-public class DriverEJB {
 
-    @Inject
+@Stateless
+@Dependent
+public class DriverUpdateSessionBean implements DriverUpdateSessionRemote, Serializable {
+
     BoardKafkaConsumer consumer;
 
+    public DriverUpdateSessionBean() {
+        consumer = new BoardKafkaConsumer();
+    }
+
+    @Override
     public List<DriverDTO> getSavedDriver(){
         List<DriverDTO> driverList = new ArrayList();
         ConsumerRecords<Long, String> consumerRecords = consumer.runConsumerAndGetMsg();

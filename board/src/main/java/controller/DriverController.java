@@ -1,29 +1,49 @@
 package controller;
 
 import dto.DriverDTO;
-import service.DriverEJB;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import service.DriverUpdateSessionBean;
 
-import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import javax.servlet.annotation.WebServlet;
-import java.util.List;
+import java.io.Serializable;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Named(value = "driverController")
-@RequestScoped
-@ManagedBean
-public class DriverController {
+@SessionScoped
+public class DriverController implements Serializable {
+
+
+    private DriverDTO driver = new DriverDTO();
+    private int driverId;
+    private String driverFirstName;
+    private String driverSurname;
+    private Integer driverPrivateNum;
+    private Integer driverWorkedHours;
+    private DriverDTO.Status driverStatus;
+    private Integer driverCityId;
+    private Integer driversTruckId;
+    private Integer userId;
 
     @EJB
-    DriverEJB driverEJB;
+    DriverUpdateSessionBean driverUpdateSessionBean;
 
-    public List<DriverDTO> getSavedDriver(){
-        return driverEJB.getSavedDriver();
-    }
+//    public List<DriverDTO> getSavedDriver(){
+//
+//        return driverUpdateSessionBean.getSavedDriver();
+//    }
 
     public String viewDrivers(){
-        return "home.xhtml";
+        driverUpdateSessionBean.getSavedDriver();
+        return "home.xhtml?faces-redirect=true";
     }
 
 }

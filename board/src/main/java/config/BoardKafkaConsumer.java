@@ -8,12 +8,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.Collections;
 import java.util.Properties;
 
 
-@ApplicationScoped
+
 public class BoardKafkaConsumer {
 
     private final static String TOPIC = "test";
@@ -42,25 +41,38 @@ public class BoardKafkaConsumer {
         final Consumer<Long, String> consumer = createConsumer();
         final int giveUp = 100;
         int noRecordsCount = 0;
-        while (true) {
+
         final ConsumerRecords<Long, String> consumerRecords =
                 consumer.poll(1000);
-            if (consumerRecords.count()==0) {
-                noRecordsCount++;
-                if (noRecordsCount > giveUp) break;
-                else continue;
-            }
+
         consumerRecords.forEach(record -> {
             System.out.printf("Consumer Record:(%s, %d, %d)\n",
                     record.value(),
                     record.partition(), record.offset());
         });
         consumer.commitAsync();
-        return consumerRecords;
-        }
         consumer.close();
-        System.out.println("DONE");
-        return null;
+        return consumerRecords;
+
+//        while (true) {
+//        final ConsumerRecords<Long, String> consumerRecords =
+//                consumer.poll(1000);
+//            if (consumerRecords.count()==0) {
+//                noRecordsCount++;
+//                if (noRecordsCount > giveUp) break;
+//                else continue;
+//            }
+//        consumerRecords.forEach(record -> {
+//            System.out.printf("Consumer Record:(%s, %d, %d)\n",
+//                    record.value(),
+//                    record.partition(), record.offset());
+//        });
+//        consumer.commitAsync();
+//        return consumerRecords;
+//        }
+//        consumer.close();
+//        System.out.println("DONE");
+//        return null;
     }
 
 //
