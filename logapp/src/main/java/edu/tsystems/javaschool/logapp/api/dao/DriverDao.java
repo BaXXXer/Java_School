@@ -11,4 +11,8 @@ public interface DriverDao {
     void removeDriver(int id);
     Driver getDriverById(int id);
     List<Driver> findFreeDriversInCity(int cityId, int maxHours);
+
+    Long getDriversOnRestNumber();
+
+    Long getAllDriversNumber();
 }

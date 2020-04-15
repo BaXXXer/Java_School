@@ -81,29 +81,6 @@
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.7" level="project" />
     <orderEntry type="library" name="Maven: org.jvnet.staxex:stax-ex:1.8" level="project" />
     <orderEntry type="library" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss:jboss-ejb-client:4.0.30.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling:2.0.9.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.marshalling:jboss-marshalling-river:2.0.9.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.7.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.threads:jboss-threads:2.3.3.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-nio:3.7.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.remoting:jboss-remoting:5.0.17.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:2.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.client:wildfly-client-config:1.0.1.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.common:wildfly-common:1.5.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.discovery:wildfly-discovery-client:1.2.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.security:wildfly-elytron:1.11.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.transaction:wildfly-transaction-client:1.1.9.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly:wildfly-naming-client:1.0.12.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.ejb3:jboss-ejb3-ext-api:2.3.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:2.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.3_spec:2.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.wildfly-http-client:wildfly-http-ejb-client:1.0.20.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.undertow:undertow-core:2.0.30.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.wildfly-http-client:wildfly-http-client-common:1.0.20.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.wildfly-http-client:wildfly-http-naming-client:1.0.20.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.wildfly-http-client:wildfly-http-transaction-client:1.0.20.Final" level="project" />
-    <orderEntry type="library" name="Maven: edu.tssystems.javaschool.api:board:ejb:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.kafka:kafka_2.13:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.luben:zstd-jni:1.4.3-1" level="project" />

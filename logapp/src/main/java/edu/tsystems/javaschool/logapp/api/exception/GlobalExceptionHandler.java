@@ -69,15 +69,15 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
     }
-
-    @ExceptionHandler(Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception ex){
-        LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
-        ModelAndView modelAndView = new ModelAndView("exceptions/generic");
-        modelAndView.addObject("exception", ex);
-        modelAndView.addObject("url", request.getRequestURL());
-        return modelAndView;
-    }
+//
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception ex){
+//        LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
+//        ModelAndView modelAndView = new ModelAndView("exceptions/generic");
+//        modelAndView.addObject("exception", ex);
+//        modelAndView.addObject("url", request.getRequestURL());
+//        return modelAndView;
+//    }
 
 
 

@@ -5,6 +5,7 @@ import edu.tsystems.javaschool.logapp.api.converter.DriverDtoToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
+import edu.tsystems.javaschool.logapp.api.dto.DriverStatusDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
@@ -60,11 +61,7 @@ public class DriverService {
 
         Driver driver = toEntity(driverDTO);
         driverDao.saveDriver(driver);
-        try {
-            messageProducer.sendMessage(DriverDtoToJSONConverter.convertToJSON(driverDTO));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON converting troubles");
-        }
+        messageProducer.sendMessage(getDriverStatusJSON());
 
         User user = createUser(driver);
         userService.createUser(user);
@@ -119,6 +116,21 @@ public class DriverService {
         }
     }
 
+    public String getDriverStatusJSON() {
+        DriverStatusDTO status = new DriverStatusDTO();
+        status.setTotalDrivers(getAllDriverNumber());
+        status.setDriversOnRest(getDriversOnRestNumber());
+        return DriverDtoToJSONConverter.convertToJSON(status);
+    }
+
+    private Long getAllDriverNumber(){
+        return driverDao.getAllDriversNumber();
+    }
+
+    private Long getDriversOnRestNumber(){
+        return driverDao.getDriversOnRestNumber();
+    }
+
     public int getLastDriverId(){
         int index = getAllDrivers().size()-1;
         return getAllDrivers().get(index).getDriverId();
@@ -164,8 +176,8 @@ public class DriverService {
 
     @Transactional
     public void removeDriver(int id) {
-
         driverDao.removeDriver(id);
+        messageProducer.sendMessage(getDriverStatusJSON());
     }
 
     @Transactional
@@ -175,8 +187,10 @@ public class DriverService {
     }
 
     @Transactional
-    public void updateDriver(Driver driver) {
+    public void updateDriver(Driver driver){
+
         driverDao.updateDriver(driver);
+        messageProducer.sendMessage(getDriverStatusJSON());
     }
 
     public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours) {
