@@ -1,10 +1,13 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
+import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
+import edu.tsystems.javaschool.logapp.api.dto.TruckStatusDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.TruckMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
+import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ public class TruckService {
     private TruckDao truckDao;
     private CityService cityService;
     private static final Logger LOG  = Logger.getLogger(TruckService.class);
+    @Autowired
+    private MessageProducer messageProducer;
 
 
     private final TruckMapper mapper;
@@ -49,6 +54,7 @@ public class TruckService {
         }
         Truck entity = toEntity(truckDTO);
         truckDao.saveTruck(entity);
+        messageProducer.sendMessage(getTruckStatus());
     }
 
 
@@ -66,11 +72,13 @@ public class TruckService {
     @Transactional
     public void updateTruck(TruckDTO truck) {
         truckDao.updateTruck(toEntity(truck));
+        messageProducer.sendMessage(getTruckStatus());
     }
 
+    @Transactional
     public void removeTruck(int id) {
-
         truckDao.removeTruck(id);
+        messageProducer.sendMessage(getTruckStatus());
     }
 
     //TODO: refactor with working hours dependent on orders
@@ -91,6 +99,15 @@ public class TruckService {
         truckDTO.setCurrentCityId(entity.getCurrentCity().getCityId());
         return truckDTO;
 
+    }
+
+    public String getTruckStatus(){
+        TruckStatusDTO status = new TruckStatusDTO();
+        status.setTotalTrucksNumber(truckDao.getAllTrucksNumber());
+        status.setTotalBrokenNumber(truckDao.getBrokenTrucksNumber());
+        long restTucks = truckDao.getAllTrucksNumber() - truckDao.getTrucksOnOrderNumber();
+        status.setTotalRestNumber(restTucks);
+        return ToJSONConverter.convertTruckStatusToJSON(status);
     }
 
     public Truck toEntity(TruckDTO dto) {

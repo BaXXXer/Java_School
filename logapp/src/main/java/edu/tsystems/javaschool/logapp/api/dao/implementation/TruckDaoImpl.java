@@ -21,6 +21,27 @@ public class TruckDaoImpl implements TruckDao {
     private static final Logger LOG = Logger.getLogger(TruckDaoImpl.class);
 
     @Override
+    public long getAllTrucksNumber() {
+        Session session = this.sessionFactory.getCurrentSession();
+        Long num =  (Long)session.createQuery("select count (*) from Truck").uniqueResult();
+        return num;
+    }
+
+    @Override
+    public long getBrokenTrucksNumber() {
+        Session session = this.sessionFactory.getCurrentSession();
+        Long num =  (Long)session.createQuery("select count (*) from Truck where condition='BROKEN'").uniqueResult();
+        return num;
+    }
+
+    @Override
+    public long getTrucksOnOrderNumber() {
+        Session session = this.sessionFactory.getCurrentSession();
+        Long num =  (Long)session.createQuery("select count (*) from Order where truckOnOrder is not null").uniqueResult();
+        return num;
+    }
+
+    @Override
     @Transactional
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();

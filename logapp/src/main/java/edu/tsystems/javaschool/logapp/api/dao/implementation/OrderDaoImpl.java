@@ -5,6 +5,7 @@ import edu.tsystems.javaschool.logapp.api.entity.Order;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +23,21 @@ public class OrderDaoImpl implements OrderDao {
         this.sessionFactory = sessionFactory;
     }
 
+
+    @Override
+    public List<Order> getLastTenOrders() {
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.createQuery("from Order order by id asc ").list();
+//        Session session = this.sessionFactory.getCurrentSession();
+//        Query query = session.createQuery("from Order order by id desc");
+//        query.setMaxResults(10);
+//        return (List<Order>) query.uniqueResult();
+    }
+
     @Override
     public List<Order> getAllOrders() {
         Session session = this.sessionFactory.getCurrentSession();
-        return session.createQuery("from Order").list();
+        return session.createQuery("from Order order by id asc ").list();
 
     }
 
@@ -56,6 +68,7 @@ public class OrderDaoImpl implements OrderDao {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(order);
         LOG.info("Order id#" + order.getOrderId() + " updated" );
+
     }
 
 }

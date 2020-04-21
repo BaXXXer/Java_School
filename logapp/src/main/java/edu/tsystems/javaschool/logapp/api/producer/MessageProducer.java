@@ -15,15 +15,12 @@ public class MessageProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    private final DriverService driverService;
-
     @Value(value = "${test.topic.name}")
     private String topicName;
 
     @Autowired
-    public MessageProducer(KafkaTemplate<String, String> kafkaTemplate, DriverService driverService) {
+    public MessageProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.driverService = driverService;
     }
 
     public void sendMessage(String message){

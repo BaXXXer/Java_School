@@ -1,7 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.tsystems.javaschool.logapp.api.converter.DriverDtoToJSONConverter;
+import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
@@ -120,7 +119,7 @@ public class DriverService {
         DriverStatusDTO status = new DriverStatusDTO();
         status.setTotalDrivers(getAllDriverNumber());
         status.setDriversOnRest(getDriversOnRestNumber());
-        return DriverDtoToJSONConverter.convertToJSON(status);
+        return ToJSONConverter.convertDriverStatusToJSON(status);
     }
 
     private Long getAllDriverNumber(){

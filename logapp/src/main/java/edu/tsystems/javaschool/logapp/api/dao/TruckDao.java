@@ -12,4 +12,10 @@ public interface TruckDao {
     void removeTruck(int id);
     Truck getTruckById(int id);
     List<Truck> getReadyToGoTrucks();
+
+    long getAllTrucksNumber();
+
+    long getBrokenTrucksNumber();
+
+    long getTrucksOnOrderNumber();
 }

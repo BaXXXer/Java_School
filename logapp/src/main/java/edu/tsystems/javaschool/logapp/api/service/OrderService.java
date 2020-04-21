@@ -1,5 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
+import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
 import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
@@ -8,6 +9,7 @@ import edu.tsystems.javaschool.logapp.api.dto.*;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.OrderMapper;
 import edu.tsystems.javaschool.logapp.api.entity.*;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
+import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import edu.tsystems.javaschool.logapp.api.util.DistanceCalculator;
 import edu.tsystems.javaschool.logapp.api.util.WorkingHoursCalc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class OrderService {
     private final CargoService cargoService;
     private final ShippingCatalogDao constantsDao;
 
+    @Autowired
+    private MessageProducer messageProducer;
+
 
     @Autowired
     public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao,
@@ -59,8 +64,58 @@ public class OrderService {
     @Transactional
     public int saveOrder(OrderDTO dto) {
         Order order = toEntity(dto);
+        int i = orderDao.saveOrder(order);
+        sendLastOrdersStatus();
+        return i;
+    }
 
-        return orderDao.saveOrder(order);
+
+    public List<OrderDTO> getLastTenOrders() {
+        List<OrderDTO> dtos = new ArrayList();
+
+        for (Order d : orderDao.getLastTenOrders()) {
+            dtos.add(toDto(d));
+        }
+        return dtos;
+    }
+
+    @Transactional
+    public void sendLastOrdersStatus() {
+        List<OrderDTO> lastTenOrders = getLastTenOrders();
+        List<BoardOrderStatusDTO> statusList = new ArrayList<>();
+        for (OrderDTO order : lastTenOrders) {
+            BoardOrderStatusDTO status = new BoardOrderStatusDTO();
+            status.setOrderId(order.getOrderId());
+            status.setCompleted(order.isOrderIsDone());
+            List<String> drivers = new ArrayList<>();
+            if (order.getDriversOnOrderIds() != null) {
+
+                for (Integer id : order.getDriversOnOrderIds()) {
+                    drivers.add(driverService.getDriverById(id).getDriverSurname());
+                }
+
+            }
+            status.setDrivers(drivers);
+            if (order.getTruckId() != null) {
+                status.setTruck(truckService.getTruckById(order.getTruckId()).getRegNumber());
+            }
+            int completedPoints = 0;
+            if (order.getPoints() != null) {
+                status.setNumOfPointsTotal(order.getPoints().size());
+                for (CargoWaypointDTO point : order.getPoints()) {
+                    if (point.isCompleted()) {
+                        completedPoints++;
+                    }
+                }
+            }else{
+                status.setNumOfPointsTotal(0);
+            }
+            status.setNumOfCompletedPoints(completedPoints);
+            statusList.add(status);
+            messageProducer.sendMessage(ToJSONConverter.convertListOfOrderStatusToJSON(statusList));
+        }
+
+
     }
 
     public Order toEntity(OrderDTO dto) {
@@ -262,7 +317,7 @@ public class OrderService {
                 expectedArrival);
         double requiredWorkingHoursPerDriver;
         if (!orderDto.getDriversOnOrderIds().isEmpty()) {
-            requiredWorkingHoursPerDriver = requiredWorkingHoursTotal / (orderDto.getDriversOnOrderIds().size()+1);
+            requiredWorkingHoursPerDriver = requiredWorkingHoursTotal / (orderDto.getDriversOnOrderIds().size() + 1);
         } else {
             requiredWorkingHoursPerDriver = requiredWorkingHoursTotal;
         }
@@ -289,13 +344,13 @@ public class OrderService {
 
         } else { //if we already have assigned driver and need to recalculate working hours for current order
             int totalWorkHoursPerCurrentOrder = truckOnCurrentOrder.getDriverWorkingHours();
-            for(int id: orderDTO.getDriversOnOrderIds()){ //update working hours for all assigned drivers
+            for (int id : orderDTO.getDriversOnOrderIds()) { //update working hours for all assigned drivers
                 DriverDTO driverOnOrder = driverService.getDriverById(id);
                 int workingHoursTotal = driverOnOrder.getDriverWorkedHours();
                 double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
                 int workHoursBacked = workingHoursTotal -
                         totalWorkHoursPerCurrentOrder / orderDTO.getDriversOnOrderIds().size();//rollback
-                int workerHoursUpdated = workHoursBacked+(int)Math.round(requiredWorkingHoursPerDriver);
+                int workerHoursUpdated = workHoursBacked + (int) Math.round(requiredWorkingHoursPerDriver);
                 driverOnOrder.setDriverWorkedHours(workerHoursUpdated);
                 driverService.updateDriver(driverService.toEntity(driverOnOrder));
             }
@@ -333,9 +388,11 @@ public class OrderService {
         checkTypes(dto);
         Order order = toEntity(dto);
         orderDao.updateOrder(order);
+        sendLastOrdersStatus();
+//        messageProducer.sendMessage(ToJSONConverter.convertOrderToJSON(dto));
     }
 
-    private void checkTypes(OrderDTO dto){
+    private void checkTypes(OrderDTO dto) {
         if (dto.getPoints() != null) {
             List<CargoWaypointDTO> points = dto.getPoints();
             for (CargoWaypointDTO point : points) {
