@@ -15,7 +15,7 @@ public class FrontPageController {
     public void commonFrontPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (request.isUserInRole(User.UserRole.ROLE_MANAGER.toString())) {
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/trucks"));
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/orders/allOrders"));
         }
         else if (request.isUserInRole(User.UserRole.ROLE_DRIVER.toString())) {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/myOrder"));

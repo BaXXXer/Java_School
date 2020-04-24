@@ -29,10 +29,10 @@ public class TruckController {
     }
 
 
-    @GetMapping
-    public String startPage() {
-        return "index";
-    }
+//    @GetMapping
+//    public String startPage() {
+//        return "orders/OrdersIndexPage";
+//    }
 
 
     @RequestMapping(value = "/addTruck", method = RequestMethod.GET)

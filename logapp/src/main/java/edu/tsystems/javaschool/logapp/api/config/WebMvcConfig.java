@@ -35,7 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
-//        registry.addResourceHandler("/orders/**").addResourceLocations("/orders/**");
+        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
     }
 
     @Bean

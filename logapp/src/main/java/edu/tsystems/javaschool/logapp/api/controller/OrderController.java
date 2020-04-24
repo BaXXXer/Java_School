@@ -40,6 +40,11 @@ public class OrderController {
         return "redirect: /orders/allOrders";
     }
 
+    @GetMapping
+    public String startPage() {
+        return "orders/OrdersIndexPage";
+    }
+
     @RequestMapping(value = "/allOrders", method = RequestMethod.GET)
     public String getAllOrders(Model model) {
         model.addAttribute("orders", orderService.getAllOrders());
@@ -48,7 +53,7 @@ public class OrderController {
         model.addAttribute("truckMap",truckService.getTruckMap());
         model.addAttribute("truckService",truckService);
         model.addAttribute("cityService",cityService);
-        return "orders/allOrdersTables";
+        return "orders/OrdersIndexPage";
     }
 
     @RequestMapping(value = "/notAssignedCargoes/{id}", method = RequestMethod.GET)
