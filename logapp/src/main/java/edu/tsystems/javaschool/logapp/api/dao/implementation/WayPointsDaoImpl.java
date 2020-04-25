@@ -39,7 +39,7 @@ public class WayPointsDaoImpl implements WayPointsDao {
     @Override
     public List<OrderWaypoint> getAllWaypoints() {
         Session session = this.sessionFactory.getCurrentSession();
-        return session.createQuery("from OrderWaypoint ").list();
+        return session.createQuery("from OrderWaypoint order by id asc").list();
 
     }
 }

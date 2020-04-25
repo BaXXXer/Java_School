@@ -44,7 +44,7 @@ public class DriverDaoImpl implements DriverDao {
     @Override
     public List<Driver> getAllDrivers() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Driver> driverList = session.createQuery("from Driver").list();
+        List<Driver> driverList = session.createQuery("from Driver order by driverId asc").list();
         return driverList;
     }
 

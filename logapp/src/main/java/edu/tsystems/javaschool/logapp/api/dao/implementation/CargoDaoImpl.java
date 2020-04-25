@@ -44,7 +44,7 @@ public class CargoDaoImpl implements CargoDao {
     @Override
     public List<Cargo> getAllCargoes() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Cargo> cargoList = session.createQuery("from Cargo").list();
+        List<Cargo> cargoList = session.createQuery("from Cargo order by cargoId asc").list();
         return cargoList;
     }
 

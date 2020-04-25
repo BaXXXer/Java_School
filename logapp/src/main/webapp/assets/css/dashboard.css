@@ -74,7 +74,6 @@ li {
 
 .dropDownWord:hover {
     text-decoration: none;
-!important;
     font-weight: bold;
     color: black;
 }
@@ -124,21 +123,64 @@ li {
 }
 
 #addNewOrderButton {
-    left:-200px;
-    background-color: #4CAF50; /* Green */
+    left:200px;
+    background-color: darkblue;
     border: none;
     color: white;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    border-radius: 7%;
+    /*display: inline-block;*/
     font-size: 16px;
 }
 
+.dropDownMenu{
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    /*border: 1px solid #ced4da;*/
+    border-top-color: rgb(206, 212, 218);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(206, 212, 218);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(206, 212, 218);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(206, 212, 218);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
 #contentPanel {
-    width: 900px;
-    height: 900px;
+    padding-left:10px;
+    width: auto;
+    height: auto;
     margin: 48px 0px 24px 0px;
+}
+
+#deleteTruckImg:hover{
+    color:darkred;
+}
+#deleteTruckImg{
+    font-size:24px;
+    color: red
 }
 
 .navbar-brand {

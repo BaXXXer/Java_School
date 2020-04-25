@@ -87,7 +87,7 @@ public class TruckDaoImpl implements TruckDao {
 
     public List<Truck> getAllTrucks() {
         Session session = this.sessionFactory.getCurrentSession();
-        return session.createQuery("from Truck").list();
+        return session.createQuery("from Truck order by id asc").list();
 
     }
 

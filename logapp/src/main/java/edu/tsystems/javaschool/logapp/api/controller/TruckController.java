@@ -37,7 +37,7 @@ public class TruckController {
 
     @RequestMapping(value = "/addTruck", method = RequestMethod.GET)
     public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("trucks/addNewTruck");
+        ModelAndView model = new ModelAndView("trucks/AddNewTruckPage");
         model.addObject("truckToAdd", new TruckDTO());
         model.addObject("enumCondition", Truck.Condition.values());
         model.addObject("cityList", cityService.getAllCities());
@@ -53,7 +53,7 @@ public class TruckController {
                          BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()){
-            return "trucks/addNewTruck";
+            return "trucks/AddNewTruckPage";
         }
 
         truckService.saveTruck(truck);
@@ -63,7 +63,7 @@ public class TruckController {
 
     @RequestMapping(value = "/allTrucks", method = RequestMethod.GET)
     public ModelAndView getAllTrucks(Model model) {
-        ModelAndView mav = new ModelAndView("trucks/allTrucks");
+        ModelAndView mav = new ModelAndView("trucks/TrucksIndexPage");
         mav.addObject("trucks",truckService.getAllTrucks());
         mav.addObject("cityMap", cityService.getCityMap());
 
@@ -78,7 +78,7 @@ public class TruckController {
 
     @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.GET)
     public ModelAndView editShowForm(@PathVariable("id") int id) {
-        ModelAndView mav = new ModelAndView("trucks/editTruck");
+        ModelAndView mav = new ModelAndView("trucks/EditTruckPage");//was:editTruck.jsp
         mav.addObject("truckToEdit", truckService.getTruckById(id));
         mav.addObject("enumCondition", Truck.Condition.values());
         mav.addObject("cityService",cityService);
