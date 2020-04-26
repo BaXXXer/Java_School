@@ -51,7 +51,7 @@ public class MyOrderController {
         model.addAttribute("cityMap", cityService.getCityMap());
         model.addAttribute("driverMap", driverService.getDriverMap());
         model.addAttribute("statusEnum", DriverUserDTO.Status.values());
-        return "myOrder/myAccount";
+        return "myOrder/MyOrderPage";
     }
 
     @RequestMapping(value = "/setNewStatus", method = {RequestMethod.POST})
@@ -63,7 +63,7 @@ public class MyOrderController {
 
     @GetMapping("/editOrder/{id}")
     public ModelAndView editOrderShow(@PathVariable("id") Integer id,Principal principal) {
-        ModelAndView mav = new ModelAndView("myOrder/editOrder");
+        ModelAndView mav = new ModelAndView("myOrder/EditOrderPage");
         OrderDTO orderDTO = orderService.getOrderById(id);
         mav.addObject("order", orderDTO);
         mav.addObject("waypoints", pointService.getAllWaypoints());

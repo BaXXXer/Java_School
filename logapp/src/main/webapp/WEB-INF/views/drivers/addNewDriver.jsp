@@ -98,11 +98,6 @@
 
     </table>
 </springForm:form>
-<springForm:form method="POST" modelAttribute="driverToAdd">
-    <table>
-
-    </table>
-</springForm:form>
 
 <a class="btn btn-primary" href="
     ${pageContext.request.contextPath}./allDrivers" role="button">Get all drivers</a>

@@ -72,7 +72,7 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                        <span data-feather="home" class="dropDownWord">Orders</span>
+                            <span data-feather="home" class="dropDownWord">Orders</span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
@@ -93,7 +93,7 @@
                     <div id="drivers" class="menu">
 
                         <li class="nav-item">
-                            <a href="#">
+                            <a href="/drivers/allDrivers">
                                 <p id="driverDropDown" class="dropDownWord">Drivers</p>
                             </a>
                             <%--                            <div class="dropMenu">--%>
@@ -112,15 +112,17 @@
 </div>
 
 <div id="content-wrapper" class="d-flex flex-column">
-    <div class = "container-fluid">
+    <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
             <h1>
                 Orders Dashboard
-                <i class='fas fa-copy' style='font-size:42px; margin-left: 24px; color:green; text-shadow:2px 2px 4px #000000' ></i>
-<%--                <i class="fa fa-file" style="font-size:60px;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>--%>
-<%--                <img src="/assets/img/orders.png" width="50" height="50" style="text-shadow:2px 2px 4px #000000"/>--%>
+                <i class='fas fa-copy'
+                   style='font-size:42px; margin-left: 24px; color:green; text-shadow:2px 2px 4px #000000'></i>
+                <%--                <i class="fa fa-file" style="font-size:60px;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>--%>
+                <%--                <img src="/assets/img/orders.png" width="50" height="50" style="text-shadow:2px 2px 4px #000000"/>--%>
 
-                <form action="${pageContext.request.contextPath}/orders/addOrder" method="post" style="width:200px;height:48px;margin:0px">
+                <form action="${pageContext.request.contextPath}/orders/addOrder" method="post"
+                      style="width:200px;height:48px;margin:0px">
 
                     <input type="submit" value="Add Empty Order" id="addNewOrderButton"/>
                 </form>
@@ -131,9 +133,10 @@
             </c:if>
 
             <c:forEach items="${orders}" var="order">
-            <table class="table table-hover" style="background-color:lightgrey" >
+            <table class="table table-hover" style="background-color:lightgrey">
                 <h3 style="text-align: center"><u>Order #${order.orderId}</u></h3>
-                <p><i class="fa fa-check-square-o" style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i>
+                <p><i class="fa fa-check-square-o"
+                      style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i>
                     <b>Order status:</b>
                     <c:choose>
                         <c:when test="${order.orderIsDone==true}">
@@ -153,7 +156,7 @@
                         ${driverService.getDriverById(driverId).driverSurname}
                         <br>
                     </c:forEach></p>
-                <p><i class="as fa-shipping-fast" style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i>
+                <p><i class="fa fa-truck" style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i></i>
                     <b>Assigned truck:</b>
                     <c:choose>
                         <c:when test="${order.truckId!=0}">
@@ -165,7 +168,8 @@
                     </c:choose>
                 </p>
 
-                <p><i class='fas fa-map-marker-alt' style='font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000'></i>
+                <p><i class='fas fa-map-marker-alt'
+                      style='font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000'></i>
                     <b>Current city:</b>
                     <c:choose>
                         <c:when test="${order.truckId!=null}">
@@ -186,27 +190,37 @@
                     <th scope="col">Cargo status</th>
 
                     <c:if test="${order.truckId==null}">
-                    <a class="btn btn-secondary btn-sm" href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get ready trucks <i class="fa fa-truck" style="font-size:18px;color:white;"></i></a><emsp>
-                    </c:if>
-                    <c:if test="${order.truckId!=null}">
-                    <a class="btn btn-secondary btn-sm" href="<c:url value='./readyForTripDrivers/${order.orderId}' />">Get ready drivers<i class="fa fa-vcard-o" style="font-size:18px;color:white;margin-left:4px"></i></a><emsp>
-                    </c:if>
-                    <a class="btn btn-secondary btn-sm" href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign<i class='fas fa-luggage-cart' style="font-size:18px;color:white;margin-left:2px"></i></a><emsp>
+                    <a class="btn btn-secondary btn-sm" href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get
+                        ready trucks <i class="fa fa-truck" style="font-size:18px;color:white;"></i></a>
+                    <emsp>
+                        </c:if>
+                        <c:if test="${order.truckId!=null}">
+                        <a class="btn btn-secondary btn-sm" data-target="#myModal"
+                           href="<c:url value='./readyForTripDrivers/${order.orderId}' />">
+                            Get ready drivers<i class="fa fa-vcard-o"
+                                                style="font-size:18px;color:white;margin-left:4px"></i></a>
+                        <emsp>
 
-                    <br>
+                            </c:if>
+                            <a class="btn btn-secondary btn-sm"
+                               href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign<i
+                                    class='fas fa-luggage-cart' style="font-size:18px;color:white;margin-left:2px"></i></a>
+                            <emsp>
 
-                    <c:forEach items="${order.points}" var="point">
-                    <tr>
-                        <td>${point.cargo.cargoName}</td>
-                        <td>${point.cargo.title}</td>
-                        <td>${point.cargo.cargoWeightKilos}</td>
-                        <td>${point.cargo.currentCity.cityName}</td>
-                        <td>${point.destCity.cityName}</td>
-                        <td>${point.cargo.cargoStatus}</td>
-                    </tr>
+                                <br>
+
+                                <c:forEach items="${order.points}" var="point">
+                                <tr>
+                                    <td>${point.cargo.cargoName}</td>
+                                    <td>${point.cargo.title}</td>
+                                    <td>${point.cargo.cargoWeightKilos}</td>
+                                    <td>${point.cargo.currentCity.cityName}</td>
+                                    <td>${point.destCity.cityName}</td>
+                                    <td>${point.cargo.cargoStatus}</td>
+                                </tr>
 
 
-                    </c:forEach>
+                                </c:forEach>
                 </table>
                 </c:forEach>
         </div>

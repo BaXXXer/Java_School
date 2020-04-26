@@ -107,7 +107,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h3>Enter the truck details below:</h3>
+            <h3>Enter the driver details below:</h3>
             <style>
                 .error {
                     color: #ff0000;
@@ -115,96 +115,68 @@
                     font-weight: bold;
                 }
             </style>
-            <springForm:form action="./addTruck" method="POST" modelAttribute="truckToAdd">
-
+            <springForm:form action="./addDriver" method="POST" modelAttribute="driverToAdd">
 
                 <table>
 
 
-                    <p style="text-align: center;font-style: italic">Registration Number (format AA00000):<input
-                            class="form-control" name="regNumber"
-                            required minlength="7"
-                            placeholder="Registration Number"
-                            pattern="[A-Z]{2}\d{5}">
-                        <form:errors path="regNumber" cssClass="error"/>
+                    <p style="text-align: center;font-style: italic">First Name: <input class="form-control"
+                                                                                        name="driverFirstName"
+                                                                                        required minlength="1"
+                                                                                        placeholder="First Name"
+                                                                                        width="100">
+                        <form:errors path="driverFirstName" cssClass="error"/>
+
                     </p>
 
-                        <%--                    <tr>--%>
-                        <%--                        <td><springForm:label path="condition">Condition</springForm:label></td>--%>
-                        <%--                        <td>--%>
+                    <p style="text-align: center;font-style: italic">Surname: <input class="form-control" type="text"
+                                                                                     name="driverSurname"
+                                                                                     required minlength="1"
+                                                                                     placeholder="Surname">
+                        <form:errors path="driverSurname" cssClass="error"/>
 
-                        <%--                            <springForm:select path="condition">--%>
-                        <%--                                <springForm:option value="" label="Choose Type.."/>--%>
-                        <%--                                <springForm:options items="${enumCondition}"/>--%>
-                        <%--                                <form:errors path="condition" cssClass="error"/>--%>
-                        <%--                            </springForm:select>--%>
-
-                        <%--                        </td>--%>
-
-                        <%--                    <tr>--%>
-
-                    <p style="text-align: center;font-style: italic">Capacity:<input class="form-control" type="number"
-                                                                                     name="capacityTons"
-                                                                                     min="5"
-                                                                                     max="25"
-                                                                                     placeholder="Capacity">
-                        <form:errors path="capacityTons" cssClass="error"/>
                     </p>
 
-                    <p style="text-align: center;font-style: italic; margin:0px">Select City:</p>
+                    <p style="text-align: center;font-style: italic">Personal Number: <input class="form-control"
+                                                                                             type="number"
+                                                                                             name="driverPrivateNum"
+                                                                                             required minlength="8"
+                                                                                             required maxlength="8"
+                                                                                             placeholder="Private Number">
+                        <form:errors path="driverPrivateNum" cssClass="error"/>
+
+                    </p>
+                    <p style="text-align: center;font-style: italic">Worked Hours: <input class="form-control"
+                                                                                          type="number"
+                                                                                          name="driverWorkedHours"
+                                                                                          min="0"
+                                                                                          max="176"
+                                                                                          placeholder="Worker hours">
+                        <form:errors path="driverWorkedHours" cssClass="error"/>
+
+                    </p>
+
+                    <br>
+
+
                     <tr>
-
-                        <select class="dropDownMenu" name="currentCityId" required>
+                        <p style="text-align: center;font-style: italic; margin:0px">Select City:</p>
+                    <tr>
+                        <select class="dropDownMenu" name="driverCityId">
                             <option label="---Select city---">
                                 <c:forEach items="${cityList}" var="city">
                             <option value=${city.cityId}>${city.cityName}</option>
                             </c:forEach>
-                            <form:errors path="currentCityId" cssClass="error"/>
 
                         </select>
                     </tr>
 
-                    <p style="text-align: center;font-style: italic">
-                        Condition
-                        <springForm:select class="dropDownMenu" cssStyle="width: 370px; border-radius: .25 rem"
-                                           path="condition">
-                            <springForm:option value="" label="Choose Type.."/>
-                            <springForm:options items="${enumCondition}"/>
-                        </springForm:select>
-                    </p>
-
-                    <tr>
-                        <td>
-                            <button type="submit" class="btn btn-success"
-                                    style="width: 100px;height: 40px;margin-top: 10px"
-                                    value="Submit"/>
-                            Submit
-                        </td>
-                        <script>
-                            $('form').on('submit',function(){
-                                alert('submitted');
-                            });
-                        </script>
-                    </tr>
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
-                        aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Modal Header
-                                </div>
-                                <div class="modal-body">
-                                    Confirm
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Cancel
-                                    </button>
-                                    <a class="btn btn-danger btn-ok"/>">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <td>
+                        <button type="submit" class="btn btn-success"
+                                style="width: 100px;height: 40px;margin-top: 10px"
+                                value="Submit"/>
+                        Submit
+                    </td>
 
 
                 </table>

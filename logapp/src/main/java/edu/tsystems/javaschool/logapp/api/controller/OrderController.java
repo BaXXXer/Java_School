@@ -48,6 +48,7 @@ public class OrderController {
     @RequestMapping(value = "/allOrders", method = RequestMethod.GET)
     public String getAllOrders(Model model) {
         model.addAttribute("orders", orderService.getAllOrders());
+        model.addAttribute("orderService", orderService);
         model.addAttribute("pointMap", orderService.getPointMap());
         model.addAttribute("driverService", driverService);
         model.addAttribute("truckMap",truckService.getTruckMap());
@@ -58,7 +59,7 @@ public class OrderController {
 
     @RequestMapping(value = "/notAssignedCargoes/{id}", method = RequestMethod.GET)
     public ModelAndView getNotAssignedCargoes(@PathVariable(name = "id") int id ) {
-        ModelAndView mav = new ModelAndView("orders/notAssignedCargoes");
+        ModelAndView mav = new ModelAndView("orders/NotAssignedCargoPage");
         mav.addObject("order",orderService.getOrderById(id));
         mav.addObject("cargoes", pointService.getNotAssignedCargoes());
         mav.addObject("points", pointService.getNotAssignedWaypoints());
@@ -77,7 +78,7 @@ public class OrderController {
     }
     @RequestMapping(value = "/readyToGoTrucks/{id}", method = RequestMethod.GET)
     public ModelAndView getReadyToGoTrucks(@PathVariable("id") int id, Model model) {
-        ModelAndView mav = new ModelAndView("orders/readyToGoTrucks");
+        ModelAndView mav = new ModelAndView("orders/ReadyTrucksPage");
         mav.addObject("truckList", orderService.getReadyToGoTrucks(orderService.getOrderById(id)));
         mav.addObject("order", orderService.getOrderById(id));
         mav.addObject("cityMap", cityService.getCityMap());
@@ -94,7 +95,7 @@ public class OrderController {
 
     @RequestMapping(value = "/readyForTripDrivers/{id}", method = RequestMethod.GET)
     public ModelAndView getReadyForTripDrivers(@PathVariable("id") int id, Model model) {
-        ModelAndView mav = new ModelAndView("orders/readyForTripDrivers");
+        ModelAndView mav = new ModelAndView("orders/ReadyDriversPage");
         mav.addObject("drivers", orderService.findDriversForTrip(orderService.getOrderById(id)));
         mav.addObject("cityMap", cityService.getCityMap());
         mav.addObject("truckMap", truckService.getTruckMap());

@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -84,6 +83,12 @@
                             <a href="/trucks/allTrucks">
                                 <p id="truckDropDown" class="dropDownWord">Trucks</p>
                             </a>
+                            <%--                            <div class="dropMenu">--%>
+                            <%--                                <ul class="subnav">--%>
+                            <%--                                    <li><a href="/trucks/addTruck" class="subnav-link">Create new truck</a></li>--%>
+                            <%--                                    <li><a href="/trucks/allTrucks" class="subnav-link">Get truck summary</a></li>--%>
+                            <%--                                </ul>--%>
+                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -93,6 +98,12 @@
                             <a href="/drivers/allDrivers">
                                 <p id="driverDropDown" class="dropDownWord">Drivers</p>
                             </a>
+                            <%--                            <div class="dropMenu">--%>
+                            <%--                                <ul class="subnav">--%>
+                            <%--                                    <li><a href="/drivers/addDriver" class="subnav-link">Create new driver</a></li>--%>
+                            <%--                                    <li><a href="/drivers/allDrivers" class="subnav-link">Get driver summary</a></li>--%>
+                            <%--                                </ul>--%>
+                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -105,87 +116,76 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <springForm:form action="../editTruck/{id}" method="POST" modelAttribute="truckToEdit">
-                <table>
-                    <tr>
-
-                        <td>
-                            <form:label cssStyle="display: none" path="id">
-                                <spring:message text="ID"/>
-                            </form:label>
-                        </td>
-                        <td>
-                            <form:input cssStyle="display: none" path="id" readonly="true" size="8" disabled="true"/>
-                            <form:hidden path="id"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-
-                            <springForm:select class="dropDownMenu" cssStyle="width: 280px; border-radius: .25 rem"
-                                               path="condition">
-                                <springForm:option value="" label="Choose Type.."/>
-                                <springForm:options items="${enumCondition}"/>
-                            </springForm:select>
-
-                        </td>
-                    </tr>
-                    </tr>
 
 
-                    <p style="text-align: center;font-style: italic">Registration Number (format AA00000):<input
-                            class="form-control"
-                            name="regNumber"
-                            required minlength="7"
-                            value=${truckToEdit.regNumber}
-                                    pattern="[A-Z]{2}\d{5}">
-                    </p>
+            <c:choose>
+                <c:when test="${!empty drivers}">
+                    <h1>Driver List</h1>
+                    <table class="table table-striped">
+                        <tr>
+                            <thead>
+
+                            <th scope="col">Id</th>
+
+                            <th scope="col">First Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Private Number</th>
+                            <th scope="col">Worked hours</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Current truck</th>
+                            <th scope="col">Current city</th>
+                            <th scope="col">Assign</th>
+
+                            </thead>
+                        </tr>
+                        <c:forEach items="${drivers}" var="driver">
+
+                            <tr>
+
+                                <td>${driver.driverId}</td>
 
 
-                    <p style="text-align: center;font-style: italic">Capacity:<input class="form-control" type="number"
-                                                                                     name="capacityTons"
-                                                                                     min="5" ;
-                                                                                     max="25"
-                                                                                     value=${truckToEdit.capacityTons }>
-                    </p>
+                                <td>${driver.driverFirstName}</td>
+                                <td>${driver.driverSurname}</td>
+                                <td>${driver.driverPrivateNum}</td>
+                                <td>${driver.driverWorkedHours}</td>
+                                <td>${driver.driverStatus}</td>
+                                    <%--                    <td>${driver.driversTruckId}</td>--%>
+                                <td>
+                                    <c:forEach var="hash" items="${truckMap}">
+                                        <c:if test="${hash.key == driver.driversTruckId}">
+                                            ${hash.value}
 
-                    <p style="text-align: center;font-style: italic">Current city:</p>
-                    <tr>
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
 
+                                <td>
+                                    <c:forEach var="hash" items="${cityMap}">
+                                        <c:if test="${hash.key == driver.driverCityId}">
+                                            ${hash.value}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
 
-                        <select class="dropDownMenu" name="currentCityId">
-                                <%--                    <option selected>${cityService.getCityDtoById(truckToEdit.currentCityId)}</option>--%>
-                            <c:forEach items="${cityList}" var="city">
-                                <option value=${city.cityId}>${city.cityName}</option>
-                            </c:forEach>
-                        </select>
-                    </tr>
+<%--                                <td><a href="<c:url value='${order.orderId}/${driver.driverId}' />">Assign for this--%>
+<%--                                    order</a></td>--%>
 
-                    <tr>
+                                <td>
+                                    <a href="<c:url value='${order.orderId}/${driver.driverId}' />" class="btn btn-success"
+                                            style="width: 100px;height: 30px;font-size: 12px"/>
+                                    Assign
+                                </td>
 
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <h1 style="text-align: center">There are no suitable drivers for this order at the moment!</h1>
+                </c:otherwise>
 
-                        <p style="text-align: center;font-style: italic">
-                            <springForm:label cssStyle="margin: 0px" path="condition">
-                                Condition
-                            </springForm:label>
-                        </p>
-                    </tr>
-
-
-                </table>
-
-                <tr>
-                    <td>
-                        <button type="submit" class="btn btn-success"
-                                style="width: 100px;height: 40px;margin-top: 10px"
-                                value="Submit"/>
-                        Submit
-                    </td>
-                </tr>
-
-
-            </springForm:form>
-
+            </c:choose>
 
         </div>
     </div>

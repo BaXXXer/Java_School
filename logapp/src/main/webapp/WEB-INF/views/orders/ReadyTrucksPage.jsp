@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -47,18 +49,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-    <script src="/assets/js/currentURLScript.js" type="text/javascript"></script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
-
-
 </head>
 <body>
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -93,7 +83,12 @@
                             <a href="/trucks/allTrucks">
                                 <p id="truckDropDown" class="dropDownWord">Trucks</p>
                             </a>
-
+                            <%--                            <div class="dropMenu">--%>
+                            <%--                                <ul class="subnav">--%>
+                            <%--                                    <li><a href="/trucks/addTruck" class="subnav-link">Create new truck</a></li>--%>
+                            <%--                                    <li><a href="/trucks/allTrucks" class="subnav-link">Get truck summary</a></li>--%>
+                            <%--                                </ul>--%>
+                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -103,6 +98,12 @@
                             <a href="/drivers/allDrivers">
                                 <p id="driverDropDown" class="dropDownWord">Drivers</p>
                             </a>
+                            <%--                            <div class="dropMenu">--%>
+                            <%--                                <ul class="subnav">--%>
+                            <%--                                    <li><a href="/drivers/addDriver" class="subnav-link">Create new driver</a></li>--%>
+                            <%--                                    <li><a href="/drivers/allDrivers" class="subnav-link">Get driver summary</a></li>--%>
+                            <%--                                </ul>--%>
+                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -115,12 +116,12 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h1>Truck List
-                <a class="btn btn-primary" style="text-align: right;margin-left: 600px; background-color:green"
-                   href="/trucks/addTruck" role="button">Add truck</a>
-            </h1>
 
-            <c:if test="${!empty trucks}">
+<c:choose>
+    <c:when test="${!empty truckList}">
+
+            <h1>Truck List</h1>
+
                 <table class="table table-striped">
                     <tr>
                         <thead>
@@ -129,21 +130,20 @@
 
                         <th scope="col">Truck Registration Number</th>
                         <th scope="col">Driver Working Hours</th>
-                        <th scope="col">Truck capacity</th>
+                        <th scope="col">Truck capacity (Kg)</th>
                         <th scope="col">Condition</th>
                         <th scope="col">Current city</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
-
+                        <th scope="col">Assign</th>
                         </thead>
+
                     </tr>
-                    <c:forEach items="${trucks}" var="truck">
+                    <c:forEach items="${truckList}" var="truck">
                         <tr>
 
                             <td>${truck.id}</td>
                             <td>${truck.regNumber}</td>
                             <td>${truck.driverWorkingHours}</td>
-                            <td>${truck.capacityTons}</td>
+                            <td>${truck.capacityTons*1000}</td>
                             <td>${truck.condition}</td>
 
                             <td>
@@ -155,35 +155,38 @@
                             </td>
 
                             <td>
-                                <a href="<c:url value='./editTruck/${truck.id}' />"><i class='far fa-edit'
-                                                                                       style='font-size:24px'></i></a>
-
+                                <a href="<c:url value='${order.orderId}/${truck.id}'/>" class="btn btn-success"
+                                   style="width: 100px;height: 30px;font-size: 12px"/>
+                                Assign
                             </td>
-                            <td>
-                                <a href="<c:url value='./removeTruck/${truck.id}' /> "
-                                   onclick="return confirm('Are you sure you want to delete this item?');">
-                                    <i class='fas fa-times' id='deleteTruckImg'>
-                                    </i>
-                                </a>
-
-                            </td>
-                            <script>
-
-                                $(document).ready(function () {
-
-                                });
-                            </script>
-
-
                         </tr>
+
                     </c:forEach>
+
+
+                    </thead>
+                    </tr>
                 </table>
-            </c:if>
+            </c:when>
+    <c:otherwise>
+        <h1 style="text-align: center">There are no suitable trucks for this order at the moment!</h1>
+    </c:otherwise>
+</c:choose>
+
 
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+<script src="/assets/js/currentURLScript.js" type="text/javascript"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 </body>
 

@@ -115,77 +115,77 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h1>Truck List
-                <a class="btn btn-primary" style="text-align: right;margin-left: 600px; background-color:green"
-                   href="/trucks/addTruck" role="button">Add truck</a>
-            </h1>
 
-            <c:if test="${!empty trucks}">
-                <table class="table table-striped">
-                    <tr>
-                        <thead>
+            <div class="container">
 
-                        <th scope="col">Truck Id</th>
-
-                        <th scope="col">Truck Registration Number</th>
-                        <th scope="col">Driver Working Hours</th>
-                        <th scope="col">Truck capacity</th>
-                        <th scope="col">Condition</th>
-                        <th scope="col">Current city</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
-
-                        </thead>
-                    </tr>
-                    <c:forEach items="${trucks}" var="truck">
+                <h1>Driver List
+                    <a class="btn btn-primary" style="text-align: right;margin-left: 700px;background-color:green"
+                       href="/drivers/addDriver" role="button">Add driver</a>
+                </h1>
+                <c:if test="${!empty drivers}">
+                    <table class="table table-striped">
                         <tr>
+                            <thead>
 
-                            <td>${truck.id}</td>
-                            <td>${truck.regNumber}</td>
-                            <td>${truck.driverWorkingHours}</td>
-                            <td>${truck.capacityTons}</td>
-                            <td>${truck.condition}</td>
+                            <th scope="col">Id</th>
 
-                            <td>
-                                <c:forEach var="hash" items="${cityMap}">
-                                    <c:if test="${hash.key == truck.currentCityId}">
-                                        ${hash.value}
-                                    </c:if>
-                                </c:forEach>
-                            </td>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Surname</th>
+                            <th scope="col">Private Number</th>
+                            <th scope="col">Worked hours</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Current truck</th>
+                            <th scope="col">Current city</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
 
-                            <td>
-                                <a href="<c:url value='./editTruck/${truck.id}' />"><i class='far fa-edit'
-                                                                                       style='font-size:24px'></i></a>
-
-                            </td>
-                            <td>
-                                <a href="<c:url value='./removeTruck/${truck.id}' /> "
-                                   onclick="return confirm('Are you sure you want to delete this item?');">
-                                    <i class='fas fa-times' id='deleteTruckImg'>
-                                    </i>
-                                </a>
-
-                            </td>
-                            <script>
-
-                                $(document).ready(function () {
-
-                                });
-                            </script>
-
-
+                            </thead>
                         </tr>
-                    </c:forEach>
-                </table>
-            </c:if>
+                        <c:forEach items="${drivers}" var="driver">
+                            <tr>
 
+                                <td>${driver.driverId}</td>
+
+
+                                <td>${driver.driverFirstName}</td>
+                                <td>${driver.driverSurname}</td>
+                                <td>${driver.driverPrivateNum}</td>
+                                <td>${driver.driverWorkedHours}</td>
+                                <td>${driver.driverStatus}</td>
+                                    <%--                    <td>${driver.driversTruckId}</td>--%>
+                                <td>
+                                    <c:forEach var="hash" items="${truckMap}">
+                                        <c:if test="${hash.key == driver.driversTruckId}">
+                                            ${hash.value}
+
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+
+                                <td>
+                                    <c:forEach var="hash" items="${cityMap}">
+                                        <c:if test="${hash.key == driver.driverCityId}">
+                                            ${hash.value}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+
+                                <td><a href="<c:url value='./editDriver/${driver.driverId}' />"><i class='far fa-edit'
+                                                                                                   style='font-size:24px'></i></a></td>
+                                <td><a href="<c:url value='./removeDriver/${driver.driverId}' />"
+                                       onclick="return confirm('Are you sure you want to delete this item?');">
+                                    <i class='fas fa-times' id='deleteTruckImg'></i></a></td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </c:if>
+
+
+            </div>
         </div>
     </div>
 </div>
 
-
-</body>
 
 </body>
 </html>

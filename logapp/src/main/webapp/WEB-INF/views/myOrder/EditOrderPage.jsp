@@ -53,8 +53,8 @@
 </head>
 <body>
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
-    <img src="/assets/img/truck1.png" width="50" height="30">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Driver</a>
+    <img src="/assets/img/acc.jpg" width="30" height="30">
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
@@ -74,28 +74,19 @@
                 <ul class="nav flex-column">
                     <li>
 
-                        <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                        <a href="/myOrder/">
+                            <span data-feather="home" class="dropDownWord">My account</span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
-                            <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                            <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">
+                                <p id="truckDropDown" class="dropDownWord">My order</p>
                             </a>
+
                         </li>
                     </div>
-
-                    <div id="drivers" class="menu">
-
-                        <li class="nav-item">
-                            <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
-                            </a>
-                        </li>
-                    </div>
-
                 </ul>
             </div>
         </nav>
@@ -105,87 +96,81 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <springForm:form action="../editTruck/{id}" method="POST" modelAttribute="truckToEdit">
-                <table>
+
+
+            <table class="table table-striped">
+                <h3>Order #${order.orderId}</h3><br>
+
+                <th scope="col">Point Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Operation type</th>
+                <th scope="col">City</th>
+                <th scope="col">Cargo title</th>
+                <th scope="col">Cargo weight</th>
+                <th scope="col">Cargo status</th>
+                <th scope="col">Edit</th>
+
+
+                <c:forEach items="${order.points}" var="point">
+
                     <tr>
+
+                        <td>${point.id}</td>
 
                         <td>
-                            <form:label cssStyle="display: none" path="id">
-                                <spring:message text="ID"/>
-                            </form:label>
+                                ${point.name}
                         </td>
                         <td>
-                            <form:input cssStyle="display: none" path="id" readonly="true" size="8" disabled="true"/>
-                            <form:hidden path="id"/>
+                                ${point.operationType}
                         </td>
-                    </tr>
-                    <tr>
                         <td>
-
-                            <springForm:select class="dropDownMenu" cssStyle="width: 280px; border-radius: .25 rem"
-                                               path="condition">
-                                <springForm:option value="" label="Choose Type.."/>
-                                <springForm:options items="${enumCondition}"/>
-                            </springForm:select>
-
+                                ${point.destCity.cityName}
                         </td>
+
+                        <td>
+                                ${point.cargo.title}
+                        </td>
+
+
+                        <td>
+                                ${point.cargo.cargoWeightKilos}
+                        </td>
+
+                        <td>
+                                ${point.cargo.cargoStatus}
+                        </td>
+
+                        <c:choose>
+
+
+                            <c:when test="${point.operationType.toString() == 'LOAD'}">
+                                <td>
+                                    <form action="/myOrder/setLoaded/${order.orderId}/${point.id}" method="post">
+                                        <input type="submit" value="Set loaded"/>
+                                    </form>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <c:choose>
+                                    <c:when test="${point.cargo.cargoStatus!='DELIVERED'}">
+                                        <td>
+                                            <form action="/myOrder/setUnloaded/${order.orderId}/${point.id}" method="post">
+                                                <input type="submit" value="Set delivered"/>
+                                            </form>
+                                        </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>Point is completed</td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+
+
                     </tr>
-                    </tr>
+                </c:forEach>
 
-
-                    <p style="text-align: center;font-style: italic">Registration Number (format AA00000):<input
-                            class="form-control"
-                            name="regNumber"
-                            required minlength="7"
-                            value=${truckToEdit.regNumber}
-                                    pattern="[A-Z]{2}\d{5}">
-                    </p>
-
-
-                    <p style="text-align: center;font-style: italic">Capacity:<input class="form-control" type="number"
-                                                                                     name="capacityTons"
-                                                                                     min="5" ;
-                                                                                     max="25"
-                                                                                     value=${truckToEdit.capacityTons }>
-                    </p>
-
-                    <p style="text-align: center;font-style: italic">Current city:</p>
-                    <tr>
-
-
-                        <select class="dropDownMenu" name="currentCityId">
-                                <%--                    <option selected>${cityService.getCityDtoById(truckToEdit.currentCityId)}</option>--%>
-                            <c:forEach items="${cityList}" var="city">
-                                <option value=${city.cityId}>${city.cityName}</option>
-                            </c:forEach>
-                        </select>
-                    </tr>
-
-                    <tr>
-
-
-                        <p style="text-align: center;font-style: italic">
-                            <springForm:label cssStyle="margin: 0px" path="condition">
-                                Condition
-                            </springForm:label>
-                        </p>
-                    </tr>
-
-
-                </table>
-
-                <tr>
-                    <td>
-                        <button type="submit" class="btn btn-success"
-                                style="width: 100px;height: 40px;margin-top: 10px"
-                                value="Submit"/>
-                        Submit
-                    </td>
-                </tr>
-
-
-            </springForm:form>
-
+            </table>
 
         </div>
     </div>

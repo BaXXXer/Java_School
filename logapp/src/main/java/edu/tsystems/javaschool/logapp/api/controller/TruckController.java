@@ -57,7 +57,7 @@ public class TruckController {
         }
 
         truckService.saveTruck(truck);
-        return "trucks/truckAddedSuccess";
+        return "redirect: ./allTrucks";
     }
 
 

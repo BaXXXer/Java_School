@@ -37,7 +37,7 @@ public class DriverController {
 
     @RequestMapping(value = "/addDriver", method = RequestMethod.GET)
     public ModelAndView showForm() {
-        ModelAndView model = new ModelAndView("drivers/addNewDriver");
+        ModelAndView model = new ModelAndView("drivers/AddNewDriverPage");
         model.addObject("driverToAdd", new DriverDTO());
         model.addObject("enumStatus", Driver.Status.values());
         model.addObject("truckList", truckService.getAllTrucks());
@@ -50,17 +50,17 @@ public class DriverController {
     public String submit(@ModelAttribute("driverToAdd") @Valid DriverDTO driverDTO,
                          BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "drivers/addNewDriver";
+            return "drivers/AddNewDriverPage";
         }
         driverService.saveDriver(driverDTO);
 //        messageProducer.sendMessage("Driver saved!");
-        return "drivers/driverAddedSuccess";
+        return "redirect: ./allDrivers";
 
     }
 
     @RequestMapping(value = "/allDrivers", method = RequestMethod.GET)
     public ModelAndView getAllDrivers() {
-        ModelAndView mav = new ModelAndView("drivers/allDrivers");
+        ModelAndView mav = new ModelAndView("drivers/DriverIndexPage");
         mav.addObject("drivers", driverService.getAllDrivers());
         mav.addObject("truckMap", truckService.getTruckMap());
         mav.addObject("cityMap", cityService.getCityMap());
@@ -75,7 +75,7 @@ public class DriverController {
 
     @RequestMapping(value = "/editDriver/{id}", method = RequestMethod.GET)
     public ModelAndView editShowForm(@PathVariable("id") int id) {
-        ModelAndView mav = new ModelAndView("drivers/editDriver");
+        ModelAndView mav = new ModelAndView("drivers/EditDriverPage");
         mav.addObject("driverToEdit", driverService.getDriverById(id));
         mav.addObject("enumStatus", Driver.Status.values());
         mav.addObject("cityList",cityService.getAllCitiesDTO());

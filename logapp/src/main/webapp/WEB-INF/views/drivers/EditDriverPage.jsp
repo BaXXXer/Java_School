@@ -84,7 +84,6 @@
                             <a href="/trucks/allTrucks">
                                 <p id="truckDropDown" class="dropDownWord">Trucks</p>
                             </a>
-
                         </li>
                     </div>
 
@@ -94,7 +93,6 @@
                             <a href="/drivers/allDrivers">
                                 <p id="driverDropDown" class="dropDownWord">Drivers</p>
                             </a>
-
                         </li>
                     </div>
 
@@ -107,108 +105,86 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h3>Enter the truck details below:</h3>
-            <style>
-                .error {
-                    color: #ff0000;
-                    font-style: italic;
-                    font-weight: bold;
-                }
-            </style>
-            <springForm:form action="./addTruck" method="POST" modelAttribute="truckToAdd">
-
-
+            <springForm:form action="../editDriver/{id}" method="POST" modelAttribute="driverToEdit">
                 <table>
-
-
-                    <p style="text-align: center;font-style: italic">Registration Number (format AA00000):<input
-                            class="form-control" name="regNumber"
-                            required minlength="7"
-                            placeholder="Registration Number"
-                            pattern="[A-Z]{2}\d{5}">
-                        <form:errors path="regNumber" cssClass="error"/>
-                    </p>
-
-                        <%--                    <tr>--%>
-                        <%--                        <td><springForm:label path="condition">Condition</springForm:label></td>--%>
-                        <%--                        <td>--%>
-
-                        <%--                            <springForm:select path="condition">--%>
-                        <%--                                <springForm:option value="" label="Choose Type.."/>--%>
-                        <%--                                <springForm:options items="${enumCondition}"/>--%>
-                        <%--                                <form:errors path="condition" cssClass="error"/>--%>
-                        <%--                            </springForm:select>--%>
-
-                        <%--                        </td>--%>
-
-                        <%--                    <tr>--%>
-
-                    <p style="text-align: center;font-style: italic">Capacity:<input class="form-control" type="number"
-                                                                                     name="capacityTons"
-                                                                                     min="5"
-                                                                                     max="25"
-                                                                                     placeholder="Capacity">
-                        <form:errors path="capacityTons" cssClass="error"/>
-                    </p>
-
-                    <p style="text-align: center;font-style: italic; margin:0px">Select City:</p>
                     <tr>
 
-                        <select class="dropDownMenu" name="currentCityId" required>
-                            <option label="---Select city---">
-                                <c:forEach items="${cityList}" var="city">
-                            <option value=${city.cityId}>${city.cityName}</option>
-                            </c:forEach>
-                            <form:errors path="currentCityId" cssClass="error"/>
-
-                        </select>
-                    </tr>
-
-                    <p style="text-align: center;font-style: italic">
-                        Condition
-                        <springForm:select class="dropDownMenu" cssStyle="width: 370px; border-radius: .25 rem"
-                                           path="condition">
-                            <springForm:option value="" label="Choose Type.."/>
-                            <springForm:options items="${enumCondition}"/>
-                        </springForm:select>
-                    </p>
-
-                    <tr>
                         <td>
-                            <button type="submit" class="btn btn-success"
-                                    style="width: 100px;height: 40px;margin-top: 10px"
-                                    value="Submit"/>
-                            Submit
+                            <form:label cssStyle="display: none" path="driverId">
+                                <spring:message text="ID"/>
+                            </form:label>
                         </td>
-                        <script>
-                            $('form').on('submit',function(){
-                                alert('submitted');
-                            });
-                        </script>
+                        <td>
+                            <form:input cssStyle="display: none" path="driverId" readonly="true" size="8"
+                                        disabled="true"/>
+                            <form:hidden path="driverId"/>
+                        </td>
                     </tr>
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
-                        aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Modal Header
-                                </div>
-                                <div class="modal-body">
-                                    Confirm
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Cancel
-                                    </button>
-                                    <a class="btn btn-danger btn-ok"/>">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
+                    <p style="text-align: center;font-style: italic">First Name<input input
+                                                                                      class="form-control"
+                                                                                      name="driverFirstName"
+                                                                                      required minlength="2"
+                                                                                      placeholder="First Name"
+                                                                                      width="100"
+                                                                                      value=${driverToEdit.driverFirstName}>
+                    </p>
 
+                    <p style="text-align: center;font-style: italic">Surname:<input input
+                                                                                    class="form-control" type="text"
+                                                                                    name="driverSurname"
+                                                                                    required minlength="2"
+                                                                                    placeholder="Surname"
+                                                                                    value=${driverToEdit.driverSurname}>
+                    </p>
+
+                    <p style="text-align: center;font-style: italic">Personal Number (8 digits): <input input
+                                                                                                        class="form-control"
+                                                                                                        name="driverPrivateNum"
+                                                                                                        required
+                                                                                                        minlength="8"
+                                                                                                        required
+                                                                                                        maxlength="8"
+                                                                                                        placeholder="Private Number"
+                                                                                                        value=${driverToEdit.driverPrivateNum}>
+                    </p>
+                    <p style="text-align: center;font-style: italic">Worked Hours: <input input
+                                                                                          class="form-control"
+                                                                                          name="driverWorkedHours"
+                                                                                          min="0"
+                                                                                          max="176"
+                                                                                          placeholder="Worked hours"
+                                                                                          value="${driverToEdit.driverWorkedHours}">
+                    </p>
+
+                    <tr>
+                        <p style="text-align: center;font-style: italic; margin-bottom: 0px">Select City:</p>
+                            <select class="dropDownMenu" name="driverCityId">
+
+                                <c:forEach items="${cityList}" var="city">
+                                    <option value=${city.cityId}>${city.cityName}</option>
+                                </c:forEach>
+
+                            </select>
+                    </tr>
+
+                    <tr>
+                        <p style="text-align: center;font-style: italic; margin-bottom: 0px">Status:</p>
+                            <springForm:select class="dropDownMenu" cssStyle="width: 280px; border-radius: .25 rem" path="driverStatus">
+                                <springForm:option value="" label="Choose Type.."/>
+                                <springForm:options items="${enumStatus}"/>
+                            </springForm:select>
+                    </tr>
+
+                    <tr>
+                        <button type="submit" class="btn btn-success"
+                                style="width: 100px;height: 40px;margin-top: 10px"
+                                value="Submit"/>
+                        Submit
+                    </tr>
                 </table>
             </springForm:form>
+
 
         </div>
     </div>
