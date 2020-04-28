@@ -10,30 +10,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="generator" content="Jekyll v3.8.6">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<%--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"--%>
+<%--          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">--%>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/dashboard/">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
 
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
+<%--    <style>--%>
+<%--        .bd-placeholder-img {--%>
+<%--            font-size: 1.125rem;--%>
+<%--            text-anchor: middle;--%>
+<%--            -webkit-user-select: none;--%>
+<%--            -moz-user-select: none;--%>
+<%--            -ms-user-select: none;--%>
+<%--            user-select: none;--%>
+<%--        }--%>
 
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
+<%--        @media (min-width: 500px) {--%>
+<%--            .bd-placeholder-img-lg {--%>
+<%--                font-size: 3.5rem;--%>
+<%--            }--%>
+<%--        }--%>
+<%--    </style>--%>
 
     <link href="/assets/css/dashboard.css" rel="stylesheet">
 
@@ -44,10 +44,12 @@
     <link rel="manifest" href="/docs/4.4/assets/img/favicons/manifest.json">
     <link rel="mask-icon" href="/docs/4.4/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
     <link rel="icon" href="/docs/4.4/assets/img/favicons/favicon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<%--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">--%>
     <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDBKByqyWkhK4TSbqwOOXzFtWnXHwYrhfw"
+            type="text/javascript"></script>
 
 
 </head>
@@ -165,19 +167,45 @@
                                 </c:choose>
                             </c:otherwise>
                         </c:choose>
-
-
                     </tr>
+
                 </c:forEach>
 
             </table>
+            <div id="googleMapAPI" style="width: auto; height: 300px;"></div>
+
+            <script type="text/javascript">
+
+                var cityList = ${cityJsonList};
+
+                var map = new google.maps.Map(document.getElementById('googleMapAPI'), {
+                    zoom: 6,
+                    center: new google.maps.LatLng(cityList[0].lat, cityList[0].lng),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+
+                var marker, i;
+
+                for (i = 0; i < cityList.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(cityList[i].lat, cityList[i].lng),
+                        map: map
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            </script>
 
         </div>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-<script src="/assets/js/currentURLScript.js" type="text/javascript"></script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"

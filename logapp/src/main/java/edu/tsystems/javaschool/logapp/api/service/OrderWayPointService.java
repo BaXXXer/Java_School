@@ -3,6 +3,7 @@ package edu.tsystems.javaschool.logapp.api.service;
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.dto.CargoDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
+import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
 import edu.tsystems.javaschool.logapp.api.dto.mapper.CityMapper;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
@@ -67,11 +68,21 @@ public class OrderWayPointService {
         List<CargoWaypointDTO> allWaypoints = getAllWaypoints();
         List<CargoWaypointDTO> notAssignedPoints = new ArrayList();
         for(CargoWaypointDTO point: allWaypoints){
-            if(point.getOperationType()== OrderWaypoint.Operation.LOAD){
+            if(point.getOperationType()== OrderWaypoint.Operation.LOAD && !point.isCompleted()){
                 notAssignedPoints.add(point);
             }
         }
         return notAssignedPoints;
+    }
+
+    @Transactional
+    public List<CityDTO> getCityCoordinates(List<Integer> pointIds){
+        List<CityDTO> cityList = new ArrayList();
+        for(Integer id: pointIds){
+            CityDTO city = cityService.toDto(getPointById(id).getCity());
+            cityList.add(city);
+        }
+        return cityList;
     }
 
 

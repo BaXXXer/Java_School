@@ -374,6 +374,7 @@ public class OrderService {
         driver.setOrder(order);
 
         orderDao.updateOrder(order);//update entity
+        sendLastOrdersStatus();
     }
 
 
@@ -389,7 +390,6 @@ public class OrderService {
         Order order = toEntity(dto);
         orderDao.updateOrder(order);
         sendLastOrdersStatus();
-//        messageProducer.sendMessage(ToJSONConverter.convertOrderToJSON(dto));
     }
 
     private void checkTypes(OrderDTO dto) {
@@ -434,6 +434,7 @@ public class OrderService {
         }
         order.setWayPoints(pointEntities);
         orderDao.updateOrder(order);
+        sendLastOrdersStatus();
     }
 
 
@@ -456,6 +457,7 @@ public class OrderService {
         if (points.size() == i) {
             orderDTO.setOrderIsDone(true);
             orderDao.updateOrder(toEntity(orderDTO));
+            sendLastOrdersStatus();
         }
     }
 
@@ -490,6 +492,7 @@ public class OrderService {
             points.add(CWPdto);
             order.setPoints(points);
             updateOrder(order);
+
         }
     }
 
@@ -524,5 +527,6 @@ public class OrderService {
                             * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
         }
         truckService.updateTruck(truckDTO);
+        sendLastOrdersStatus();
     }
 }

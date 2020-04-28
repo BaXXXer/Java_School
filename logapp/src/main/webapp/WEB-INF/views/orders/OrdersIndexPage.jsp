@@ -113,11 +113,9 @@
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
-        <div id="contentPanel" style="position:absolute; left:225px;">
+        <div id="contentPanel" style="position:relative;">
             <h1>
                 Orders Dashboard
-                <i class='fas fa-copy'
-                   style='font-size:42px; margin-left: 24px; color:green; text-shadow:2px 2px 4px #000000'></i>
                 <%--                <i class="fa fa-file" style="font-size:60px;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>--%>
                 <%--                <img src="/assets/img/orders.png" width="50" height="50" style="text-shadow:2px 2px 4px #000000"/>--%>
 

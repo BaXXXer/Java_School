@@ -1,5 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
 import edu.tsystems.javaschool.logapp.api.service.CityService;
@@ -26,6 +28,7 @@ public class MyOrderController {
     private final CityService cityService;
     private final OrderWayPointService pointService;
     private final HttpServletRequest request;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public MyOrderController(DriverService driverService, OrderService orderService, CityService cityService, OrderWayPointService pointService, HttpServletRequest request) {
@@ -37,7 +40,7 @@ public class MyOrderController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET,RequestMethod.POST})
-    public String list(Model model, Principal principal){
+    public String list(Model model, Principal principal) {
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
 
         if (driver.getAssignedOrder() != null) {
@@ -62,9 +65,12 @@ public class MyOrderController {
     }
 
     @GetMapping("/editOrder/{id}")
-    public ModelAndView editOrderShow(@PathVariable("id") Integer id,Principal principal) {
+    public ModelAndView editOrderShow(@PathVariable("id") Integer id,Principal principal) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("myOrder/EditOrderPage");
         OrderDTO orderDTO = orderService.getOrderById(id);
+        List<Integer> wayPointsIds = orderDTO.getWayPointsIds();
+        mav.addObject("cityJsonList",
+                objectMapper.writeValueAsString(pointService.getCityCoordinates(wayPointsIds)));
         mav.addObject("order", orderDTO);
         mav.addObject("waypoints", pointService.getAllWaypoints());
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
