@@ -19,7 +19,7 @@ public class DriverDaoImpl implements DriverDao {
     @Override
     public Long getAllDriversNumber() {
         Session session = this.sessionFactory.openSession();
-        Long num =  (Long)session.createQuery("select count (*) from Driver").uniqueResult();
+        Long num = (Long) session.createQuery("select count (*) from Driver").uniqueResult();
         session.close();
         return num;
     }
@@ -27,7 +27,7 @@ public class DriverDaoImpl implements DriverDao {
     @Override
     public Long getDriversOnRestNumber() {
         Session session = this.sessionFactory.openSession();
-        Long num = (Long)session.createQuery("select count (*) from Driver where driverStatus='REST'").uniqueResult();
+        Long num = (Long) session.createQuery("select count (*) from Driver where driverStatus='REST'").uniqueResult();
         session.close();
         return num;
     }
@@ -52,7 +52,7 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     @Transactional
-    public void saveDriver(Driver driver){
+    public void saveDriver(Driver driver) {
         Session session = this.sessionFactory.getCurrentSession();
         session.save(driver);
 
@@ -80,12 +80,7 @@ public class DriverDaoImpl implements DriverDao {
     @Transactional
     public Driver getDriverById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        try {
-            Driver driver = session.load(Driver.class, id);
-        } catch (ObjectNotFoundException ex) {
-            LOG.error("Driver Entity with id#" + id + " does not exist");
-            throw new EntityNotFoundException();
-        }
+        Driver driver = session.load(Driver.class, id);
         return session.load(Driver.class, id);
     }
 
@@ -95,7 +90,7 @@ public class DriverDaoImpl implements DriverDao {
         List<Driver> driverList = session.createQuery("from Driver d where driverCityId =: cityId " +
                 "and driverStatus='REST' and driverWorkedHours< :maxHours and order is null and not exists (from Order o join o.driversOnOrder od " +
                 "where od = d and o.orderIsDone = false)")
-                .setParameter("cityId",cityId).setParameter("maxHours",maxHours)
+                .setParameter("cityId", cityId).setParameter("maxHours", maxHours)
                 .list();
         return driverList;
     }

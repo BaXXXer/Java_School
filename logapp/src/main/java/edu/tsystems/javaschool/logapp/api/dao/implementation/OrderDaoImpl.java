@@ -54,12 +54,7 @@ public class OrderDaoImpl implements OrderDao {
     @Transactional
     public Order getOrderById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        try {
-
-            session.load(Order.class, id);
-        } catch (NullPointerException ex) {
-            LOG.error("Order not found. Id: " + id + ex.getStackTrace());
-        }
+        session.load(Order.class, id);
         return session.load(Order.class, id);
     }
 
@@ -67,7 +62,7 @@ public class OrderDaoImpl implements OrderDao {
     public void updateOrder(Order order) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(order);
-        LOG.info("Order id#" + order.getOrderId() + " updated" );
+        LOG.info("Order id#" + order.getOrderId() + " updated");
 
     }
 

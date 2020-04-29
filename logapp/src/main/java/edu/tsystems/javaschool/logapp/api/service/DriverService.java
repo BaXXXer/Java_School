@@ -61,19 +61,19 @@ public class DriverService {
         driverDao.saveDriver(driver);
         messageProducer.sendMessage("drivers changed");
 
-        User user = createUser(driver);
+        User user = createUser(driver,driverDTO.getPassword());
         userService.createUser(user);
         driver.setUser(userService.findUserById(user.getId()));
         driverDao.updateDriver(driver);
     }
 
     @Transactional
-    User createUser(Driver driver) {
+    User createUser(Driver driver,String password) {
         User user = new User();
         user.setEmail(driver.getDriverFirstName().toLowerCase().trim() + "." +
                 driver.getDriverSurname().toLowerCase().trim() + "@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
-        user.setPasswordMd5("password");
+        user.setPasswordMd5(password);
         user.setDriver(driver);
         return user;
 

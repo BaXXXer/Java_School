@@ -25,15 +25,9 @@ public class WayPointsDaoImpl implements WayPointsDao {
     @Override
     public OrderWaypoint getWaypointById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        try {
-           session.get(OrderWaypoint.class, id);
-        }catch(NullPointerException ex){
-            LOG.error("WayPoint not found. Id: " + id + ex.getStackTrace());
-            throw new EntityNotFoundException();
-        }
+        session.get(OrderWaypoint.class, id);
         session.flush();
         return session.get(OrderWaypoint.class, id);
-
     }
 
     @Override

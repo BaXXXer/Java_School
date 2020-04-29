@@ -1,6 +1,8 @@
 package edu.tsystems.javaschool.logapp.api.producer;
 
+import edu.tsystems.javaschool.logapp.api.exception.GlobalExceptionHandler;
 import edu.tsystems.javaschool.logapp.api.service.DriverService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -14,6 +16,8 @@ public class MessageProducer {
 
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+
+    private static final Logger LOG = Logger.getLogger(MessageProducer.class);
 
     @Value(value = "${test.topic.name}")
     private String topicName;
@@ -32,12 +36,12 @@ public class MessageProducer {
 
             @Override
             public void onSuccess(SendResult<String, String> result) {
-                System.out.println("Sent message=[" + message +
+                LOG.info("Sent message=[" + message +
                         "] with offset=[" + result.getRecordMetadata().offset() + "]");
             }
             @Override
             public void onFailure(Throwable ex) {
-                System.out.println("Unable to send message=["
+                LOG.info("Unable to send message=["
                         + message + "] due to : " + ex.getMessage());
             }
         });

@@ -25,6 +25,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     public AuthenticationHandler(DriverService driverService) {
+
         this.driverService = driverService;
     }
 

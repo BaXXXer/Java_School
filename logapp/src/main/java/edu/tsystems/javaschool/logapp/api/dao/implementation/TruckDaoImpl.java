@@ -23,7 +23,7 @@ public class TruckDaoImpl implements TruckDao {
     @Override
     public long getAllTrucksNumber() {
         Session session = this.sessionFactory.openSession();
-        Long num =  (Long)session.createQuery("select count (*) from Truck").uniqueResult();
+        Long num = (Long) session.createQuery("select count (*) from Truck").uniqueResult();
         session.close();
         return num;
     }
@@ -31,7 +31,7 @@ public class TruckDaoImpl implements TruckDao {
     @Override
     public long getBrokenTrucksNumber() {
         Session session = this.sessionFactory.openSession();
-        Long num =  (Long)session.createQuery("select count (*) from Truck where condition='BROKEN'").uniqueResult();
+        Long num = (Long) session.createQuery("select count (*) from Truck where condition='BROKEN'").uniqueResult();
         session.close();
         return num;
     }
@@ -39,7 +39,7 @@ public class TruckDaoImpl implements TruckDao {
     @Override
     public long getTrucksOnOrderNumber() {
         Session session = this.sessionFactory.openSession();
-        Long num =  (Long)session.createQuery("select count (*) from Order where truckOnOrder is not null").uniqueResult();
+        Long num = (Long) session.createQuery("select count (*) from Order where truckOnOrder is not null").uniqueResult();
         session.close();
         return num;
     }
@@ -48,12 +48,7 @@ public class TruckDaoImpl implements TruckDao {
     @Transactional
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        try {
-            Truck truck = session.load(Truck.class, id);
-        } catch (ObjectNotFoundException ex) {
-            LOG.error("Truck Entity with id#" + id + " does not exist");
-            throw new EntityNotFoundException();
-        }
+        Truck truck = session.load(Truck.class, id);
         return session.load(Truck.class, id);
 
     }

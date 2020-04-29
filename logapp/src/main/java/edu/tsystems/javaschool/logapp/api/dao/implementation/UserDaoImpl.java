@@ -64,12 +64,7 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public User findUserById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        try{
-            session.load(User.class, id);
-        }catch(NullPointerException ex){
-            LOG.error("User not found. Id:" + id + ex.getStackTrace());
-            throw new EntityNotFoundException();
-        }
+        session.load(User.class, id);
         return session.load(User.class, id);
     }
 }

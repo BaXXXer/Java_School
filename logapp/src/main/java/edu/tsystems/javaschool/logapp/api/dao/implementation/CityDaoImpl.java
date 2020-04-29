@@ -35,13 +35,7 @@ public class CityDaoImpl implements CityDao {
     @Transactional
     public City getCityById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        try{
-
-            session.load(City.class, id);
-        }catch(NullPointerException ex){
-            LOG.error("City not found. Id: " + id + ex.getStackTrace());
-            throw new EntityNotFoundException();
-        }
+        session.load(City.class, id);
         return session.load(City.class, id);
     }
 }

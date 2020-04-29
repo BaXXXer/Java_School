@@ -23,12 +23,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(userDetails)
-                .and()
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password("password")
-                .authorities("ROLE_MANAGER");
+        auth.userDetailsService(userDetails);
+//                .and()
+//                .inMemoryAuthentication()
+//                .withUser("admin")
+//                .password("password")
+//                .authorities("ROLE_MANAGER");
     }
 
 

@@ -23,7 +23,6 @@ import java.util.*;
 public class OrderService {
 
     private OrderDao orderDao;
-    private OrderMapper mapper;
     private DriverDao driverDao;
     private TruckDao truckDao;
     private OrderWayPointService pointService;
@@ -31,7 +30,6 @@ public class OrderService {
     private final DistanceCalculator distanceCalculator;
     private final CityService cityService;
     private final TruckService truckService;
-    private final UserService userService;
     private final CargoService cargoService;
     private final ShippingCatalogDao constantsDao;
 
@@ -40,12 +38,11 @@ public class OrderService {
 
 
     @Autowired
-    public OrderService(OrderDao orderDao, OrderMapper mapper, DriverDao driverDao, TruckDao truckDao,
+    public OrderService(OrderDao orderDao, DriverDao driverDao, TruckDao truckDao,
                         OrderWayPointService pointService, DriverService driverService,
                         DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService,
-                        UserService userService, CargoService cargoService, ShippingCatalogDao constantsDao) {
+                        CargoService cargoService, ShippingCatalogDao constantsDao) {
         this.orderDao = orderDao;
-        this.mapper = mapper;
         this.driverDao = driverDao;
         this.truckDao = truckDao;
         this.pointService = pointService;
@@ -53,8 +50,6 @@ public class OrderService {
         this.distanceCalculator = distanceCalculator;
         this.cityService = cityService;
         this.truckService = truckService;
-
-        this.userService = userService;
         this.cargoService = cargoService;
         this.constantsDao = constantsDao;
     }

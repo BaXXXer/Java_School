@@ -34,7 +34,8 @@ public class DriverDTO {
     @Max(176)
     private Integer driverWorkedHours;
 
-
+    @NotNull(message = "Should not be empty")
+    private String password;
 
     private Driver.Status driverStatus;
 

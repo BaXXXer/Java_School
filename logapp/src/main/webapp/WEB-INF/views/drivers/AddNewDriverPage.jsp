@@ -156,6 +156,14 @@
 
                     </p>
 
+                    <p style="text-align: center;font-style: italic">User password: <input class="form-control" type="text"
+                                                                                     name="password"
+                                                                                     required minlength="1"
+                                                                                     placeholder="User password">
+                        <form:errors path="driverSurname" cssClass="error"/>
+
+                    </p>
+
                     <br>
 
 

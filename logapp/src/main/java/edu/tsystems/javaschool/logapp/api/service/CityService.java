@@ -17,12 +17,10 @@ import java.util.Map;
 public class CityService {
 
     private CityDao cityDao;
-    private final HttpServletRequest request;
 
     @Autowired
-    public CityService(CityDao cityDao, HttpServletRequest request) {
+    public CityService(CityDao cityDao) {
         this.cityDao = cityDao;
-        this.request = request;
     }
 
 
@@ -72,7 +70,6 @@ public class CityService {
     @Transactional
     public City toEntity(CityDTO dto) {
         City entity;
-
         entity = getCityById(dto.getCityId());
         entity.setCityName(dto.getCityName());
         entity.setLat(dto.getLat());

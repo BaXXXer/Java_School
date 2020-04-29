@@ -3,7 +3,6 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 import edu.tsystems.javaschool.logapp.api.dao.CargoDao;
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
-import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,13 +30,7 @@ public class CargoDaoImpl implements CargoDao {
     @Transactional
     public Cargo findCargoById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        try{
-
-            Cargo cargo= session.load(Cargo.class, id);
-        }catch(NullPointerException ex){
-            LOG.error("Cargo not found" + ex.getStackTrace());
-            throw new EntityNotFoundException();
-        }
+        Cargo cargo = session.load(Cargo.class, id);
         return session.load(Cargo.class, id);
     }
 
