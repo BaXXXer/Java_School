@@ -1,6 +1,5 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
-import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
@@ -60,7 +59,7 @@ public class DriverService {
 
         Driver driver = toEntity(driverDTO);
         driverDao.saveDriver(driver);
-        messageProducer.sendMessage(getDriverStatusJSON());
+        messageProducer.sendMessage(getDriverStatus().toString());
 
         User user = createUser(driver);
         userService.createUser(user);
@@ -115,11 +114,11 @@ public class DriverService {
         }
     }
 
-    public String getDriverStatusJSON() {
+    public DriverStatusDTO getDriverStatus() {
         DriverStatusDTO status = new DriverStatusDTO();
         status.setTotalDrivers(getAllDriverNumber());
         status.setDriversOnRest(getDriversOnRestNumber());
-        return ToJSONConverter.convertDriverStatusToJSON(status);
+        return status;
     }
 
     private Long getAllDriverNumber(){
@@ -176,7 +175,7 @@ public class DriverService {
     @Transactional
     public void removeDriver(int id) {
         driverDao.removeDriver(id);
-        messageProducer.sendMessage(getDriverStatusJSON());
+        messageProducer.sendMessage(getDriverStatus().toString());
     }
 
     @Transactional
@@ -189,7 +188,7 @@ public class DriverService {
     public void updateDriver(Driver driver){
 
         driverDao.updateDriver(driver);
-        messageProducer.sendMessage(getDriverStatusJSON());
+        messageProducer.sendMessage(getDriverStatus().toString());
     }
 
     public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours) {
