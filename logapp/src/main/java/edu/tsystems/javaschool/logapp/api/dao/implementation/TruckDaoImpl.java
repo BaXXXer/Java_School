@@ -22,22 +22,25 @@ public class TruckDaoImpl implements TruckDao {
 
     @Override
     public long getAllTrucksNumber() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         Long num =  (Long)session.createQuery("select count (*) from Truck").uniqueResult();
+        session.close();
         return num;
     }
 
     @Override
     public long getBrokenTrucksNumber() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         Long num =  (Long)session.createQuery("select count (*) from Truck where condition='BROKEN'").uniqueResult();
+        session.close();
         return num;
     }
 
     @Override
     public long getTrucksOnOrderNumber() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         Long num =  (Long)session.createQuery("select count (*) from Order where truckOnOrder is not null").uniqueResult();
+        session.close();
         return num;
     }
 

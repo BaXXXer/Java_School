@@ -24,7 +24,6 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"edu.tsystems.javaschool.logapp.api"})
-//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean

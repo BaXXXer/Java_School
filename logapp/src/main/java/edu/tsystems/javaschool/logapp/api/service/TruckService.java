@@ -1,6 +1,5 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
-import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.dto.TruckStatusDTO;
@@ -54,7 +53,7 @@ public class TruckService {
         }
         Truck entity = toEntity(truckDTO);
         truckDao.saveTruck(entity);
-        messageProducer.sendMessage(getTruckStatus());
+        messageProducer.sendMessage("trucks changed");
     }
 
 
@@ -72,16 +71,15 @@ public class TruckService {
     @Transactional
     public void updateTruck(TruckDTO truck) {
         truckDao.updateTruck(toEntity(truck));
-        messageProducer.sendMessage(getTruckStatus());
+        messageProducer.sendMessage("trucks changed");
     }
 
     @Transactional
     public void removeTruck(int id) {
         truckDao.removeTruck(id);
-        messageProducer.sendMessage(getTruckStatus());
+        messageProducer.sendMessage("trucks changed");
     }
 
-    //TODO: refactor with working hours dependent on orders
     @Transactional
     public TruckDTO getTruckById(int id) {
         Truck entity = truckDao.getTruckById(id);
@@ -101,13 +99,13 @@ public class TruckService {
 
     }
 
-    public String getTruckStatus(){
+    public TruckStatusDTO getTruckStatus(){
         TruckStatusDTO status = new TruckStatusDTO();
         status.setTotalTrucksNumber(truckDao.getAllTrucksNumber());
         status.setTotalBrokenNumber(truckDao.getBrokenTrucksNumber());
         long restTucks = truckDao.getAllTrucksNumber() - truckDao.getTrucksOnOrderNumber();
         status.setTotalRestNumber(restTucks);
-        return ToJSONConverter.convertTruckStatusToJSON(status);
+        return status;
     }
 
     public Truck toEntity(TruckDTO dto) {

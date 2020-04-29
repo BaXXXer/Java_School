@@ -12,15 +12,15 @@ import javax.servlet.ServletException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    @Override
-    public void onStartup(ServletContext servletContext){
-        AnnotationConfigWebApplicationContext context
-                = new AnnotationConfigWebApplicationContext();
-
-        servletContext.addListener(new ContextLoaderListener(context));
-        servletContext.setInitParameter(
-                "contextConfigLocation", "edu.tsystems.javaschool.logapp.api");
-    }
+//    @Override
+//    public void onStartup(ServletContext servletContext){
+//        AnnotationConfigWebApplicationContext context
+//                = new AnnotationConfigWebApplicationContext();
+//
+//        servletContext.addListener(new ContextLoaderListener(context));
+//        servletContext.setInitParameter(
+//                "contextConfigLocation", "edu.tsystems.javaschool.logapp.api");
+//    }
 
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {PersistenceConfig.class, WebMvcConfig.class};

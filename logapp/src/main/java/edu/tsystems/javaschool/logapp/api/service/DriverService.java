@@ -59,7 +59,7 @@ public class DriverService {
 
         Driver driver = toEntity(driverDTO);
         driverDao.saveDriver(driver);
-        messageProducer.sendMessage(getDriverStatus().toString());
+        messageProducer.sendMessage("drivers changed");
 
         User user = createUser(driver);
         userService.createUser(user);
@@ -121,7 +121,7 @@ public class DriverService {
         return status;
     }
 
-    private Long getAllDriverNumber(){
+    private Long    getAllDriverNumber(){
         return driverDao.getAllDriversNumber();
     }
 
@@ -175,7 +175,7 @@ public class DriverService {
     @Transactional
     public void removeDriver(int id) {
         driverDao.removeDriver(id);
-        messageProducer.sendMessage(getDriverStatus().toString());
+        messageProducer.sendMessage("drivers changed");
     }
 
     @Transactional
@@ -188,7 +188,7 @@ public class DriverService {
     public void updateDriver(Driver driver){
 
         driverDao.updateDriver(driver);
-        messageProducer.sendMessage(getDriverStatus().toString());
+        messageProducer.sendMessage("drivers changed");
     }
 
     public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours) {

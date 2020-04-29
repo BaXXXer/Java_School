@@ -18,15 +18,17 @@ public class DriverDaoImpl implements DriverDao {
 
     @Override
     public Long getAllDriversNumber() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         Long num =  (Long)session.createQuery("select count (*) from Driver").uniqueResult();
+        session.close();
         return num;
     }
 
     @Override
     public Long getDriversOnRestNumber() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.openSession();
         Long num = (Long)session.createQuery("select count (*) from Driver where driverStatus='REST'").uniqueResult();
+        session.close();
         return num;
     }
 

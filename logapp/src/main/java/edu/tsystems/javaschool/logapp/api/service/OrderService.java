@@ -1,6 +1,5 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
-import edu.tsystems.javaschool.logapp.api.converter.ToJSONConverter;
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
 import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
 import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
@@ -65,7 +64,7 @@ public class OrderService {
     public int saveOrder(OrderDTO dto) {
         Order order = toEntity(dto);
         int i = orderDao.saveOrder(order);
-        sendLastOrdersStatus();
+        messageProducer.sendMessage("orders changed");
         return i;
     }
 
@@ -80,7 +79,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void sendLastOrdersStatus() {
+    public List<BoardOrderStatusDTO> getLastOrdersStatus() {
         List<OrderDTO> lastTenOrders = getLastTenOrders();
         List<BoardOrderStatusDTO> statusList = new ArrayList<>();
         for (OrderDTO order : lastTenOrders) {
@@ -112,10 +111,11 @@ public class OrderService {
             }
             status.setNumOfCompletedPoints(completedPoints);
             statusList.add(status);
-            messageProducer.sendMessage(ToJSONConverter.convertListOfOrderStatusToJSON(statusList));
+//            messageProducer.sendMessage(ToJSONConverter.convertListOfOrderStatusToJSON(statusList));
         }
 
 
+        return statusList;
     }
 
     public Order toEntity(OrderDTO dto) {
@@ -374,7 +374,8 @@ public class OrderService {
         driver.setOrder(order);
 
         orderDao.updateOrder(order);//update entity
-        sendLastOrdersStatus();
+
+        messageProducer.sendMessage("orders changed");
     }
 
 
@@ -389,7 +390,8 @@ public class OrderService {
         checkTypes(dto);
         Order order = toEntity(dto);
         orderDao.updateOrder(order);
-        sendLastOrdersStatus();
+
+        messageProducer.sendMessage("orders changed");
     }
 
     private void checkTypes(OrderDTO dto) {
@@ -434,7 +436,8 @@ public class OrderService {
         }
         order.setWayPoints(pointEntities);
         orderDao.updateOrder(order);
-        sendLastOrdersStatus();
+        messageProducer.sendMessage("orders changed");
+
     }
 
 
@@ -457,7 +460,7 @@ public class OrderService {
         if (points.size() == i) {
             orderDTO.setOrderIsDone(true);
             orderDao.updateOrder(toEntity(orderDTO));
-            sendLastOrdersStatus();
+            messageProducer.sendMessage("orders changed");
         }
     }
 
@@ -527,6 +530,6 @@ public class OrderService {
                             * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
         }
         truckService.updateTruck(truckDTO);
-        sendLastOrdersStatus();
+        messageProducer.sendMessage("orders changed");
     }
 }
