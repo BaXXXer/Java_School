@@ -55,10 +55,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -75,16 +78,17 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                                <span data-feather="home" class="dropDownWord"><spring:message
+                                        code="ordersNavLink"/></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message
+                                        code="trucksNavLink"/></p>
                             </a>
-
                         </li>
                     </div>
 
@@ -92,7 +96,8 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink"/></p>
                             </a>
 
                         </li>
@@ -107,7 +112,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h3>Enter the driver details below:</h3>
+            <h3><spring:message code="enterDriverDetails"/></h3>
             <style>
                 .error {
                     color: #ff0000;
@@ -120,38 +125,38 @@
                 <table>
 
 
-                    <p style="text-align: center;font-style: italic">First Name: <input class="form-control"
+                    <p style="text-align: center;font-style: italic"><spring:message code="firstName"/>: <input class="form-control"
                                                                                         name="driverFirstName"
                                                                                         required minlength="1"
-                                                                                        placeholder="First Name"
+<%--                                                                                        placeholder="First Name"--%>
                                                                                         width="100">
                         <form:errors path="driverFirstName" cssClass="error"/>
 
                     </p>
 
-                    <p style="text-align: center;font-style: italic">Surname: <input class="form-control" type="text"
+                    <p style="text-align: center;font-style: italic"><spring:message code="lastName"/>: <input class="form-control" type="text"
                                                                                      name="driverSurname"
                                                                                      required minlength="1"
-                                                                                     placeholder="Surname">
+<%--                                                                                     placeholder="Surname">--%>
                         <form:errors path="driverSurname" cssClass="error"/>
 
                     </p>
 
-                    <p style="text-align: center;font-style: italic">Personal Number: <input class="form-control"
+                    <p style="text-align: center;font-style: italic"><spring:message code="privateNumber"/>: <input class="form-control"
                                                                                              type="number"
                                                                                              name="driverPrivateNum"
                                                                                              required minlength="8"
                                                                                              required maxlength="8"
-                                                                                             placeholder="Private Number">
+<%--                                                                                             placeholder="Private Number">--%>
                         <form:errors path="driverPrivateNum" cssClass="error"/>
 
                     </p>
-                    <p style="text-align: center;font-style: italic">Worked Hours: <input class="form-control"
+                    <p style="text-align: center;font-style: italic"><spring:message code="workedHours"/>: <input class="form-control"
                                                                                           type="number"
                                                                                           name="driverWorkedHours"
                                                                                           min="0"
                                                                                           max="176"
-                                                                                          placeholder="Worker hours">
+<%--                                                                                          placeholder="Worker hours">--%>
                         <form:errors path="driverWorkedHours" cssClass="error"/>
 
                     </p>
@@ -159,7 +164,7 @@
                     <p style="text-align: center;font-style: italic">User password: <input class="form-control" type="text"
                                                                                      name="password"
                                                                                      required minlength="1"
-                                                                                     placeholder="User password">
+<%--                                                                                     placeholder="User password">--%>
                         <form:errors path="driverSurname" cssClass="error"/>
 
                     </p>
@@ -168,10 +173,10 @@
 
 
                     <tr>
-                        <p style="text-align: center;font-style: italic; margin:0px">Select City:</p>
+                        <p style="text-align: center;font-style: italic; margin:0px"><spring:message code="selectCity"/>:</p>
                     <tr>
                         <select class="dropDownMenu" name="driverCityId">
-                            <option label="---Select city---">
+                            <option label="------">
                                 <c:forEach items="${cityList}" var="city">
                             <option value=${city.cityId}>${city.cityName}</option>
                             </c:forEach>

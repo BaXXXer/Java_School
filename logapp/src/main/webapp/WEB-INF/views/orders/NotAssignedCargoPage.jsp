@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -54,10 +55,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
+
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link"><spring:message code="logout" /></a>
         </li>
     </ul>
 </nav>
@@ -74,21 +78,16 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                            <span data-feather="home" class="dropDownWord">
+                                <spring:message code="ordersNavLink" /></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message code="trucksNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/trucks/addTruck" class="subnav-link">Create new truck</a></li>--%>
-                            <%--                                    <li><a href="/trucks/allTrucks" class="subnav-link">Get truck summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -96,14 +95,9 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord"><spring:message code="driverNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/drivers/addDriver" class="subnav-link">Create new driver</a></li>--%>
-                            <%--                                    <li><a href="/drivers/allDrivers" class="subnav-link">Get driver summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
+
                         </li>
                     </div>
 
@@ -116,7 +110,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h3>Not assigned cargoes</h3>
+            <h3><spring:message code="notAssignedCargoes" /></h3>
 
             <c:if test="${!empty cargoes}">
                 <table class="table table-striped">
@@ -126,18 +120,19 @@
                         <th scope="col">Id</th>
 
                         <th scope="col">Code</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Weight (kg)</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Current city</th>
-                        <th scope="col">Where to go</th>
-                        <th scope="col">Add to current order</th>
+                        <th scope="col"><spring:message code="cargoTitle" /></th>
+                        <th scope="col"><spring:message code="cargoWeight" /></th>
+                        <th scope="col"><spring:message code="cargoStatus" /></th>
+                        <th scope="col"><spring:message code="cargoCity" /></th>
+                        <th scope="col"><spring:message code="cargoDestCity" /></th>
+                        <th scope="col"><spring:message code="addToOrderTitle" /></th>
 
                         </thead>
                     </tr>
 
                     <c:forEach items="${cargoes}" var="cargo">
-                    <springForm:form action="../notAssignedCargoes/${order.orderId}/${cargo.cargoId}" method="POST">
+                    <springForm:form action="../notAssignedCargoes/${order.orderId}/${cargo.cargoId}"
+                                     method="POST">
 
                     <tr>
 
@@ -167,7 +162,7 @@
                             <button type="submit" class="btn btn-success"
                                     style="width: 100px;height: 30px;font-size: 12px"
                                     value="Submit"/>
-                            Add
+                            <spring:message code="add" />
                         </td>
                         </springForm:form>
                         </c:forEach>

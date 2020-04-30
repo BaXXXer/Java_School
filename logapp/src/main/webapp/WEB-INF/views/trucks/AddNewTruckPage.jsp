@@ -55,10 +55,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -75,16 +78,17 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                                <span data-feather="home" class="dropDownWord"><spring:message
+                                        code="ordersNavLink"/></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message
+                                        code="trucksNavLink"/></p>
                             </a>
-
                         </li>
                     </div>
 
@@ -92,7 +96,8 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink"/></p>
                             </a>
 
                         </li>
@@ -107,7 +112,7 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h3>Enter the truck details below:</h3>
+            <h3><spring:message code="enterTruckDetails"/></h3>
             <style>
                 .error {
                     color: #ff0000;
@@ -121,41 +126,26 @@
                 <table>
 
 
-                    <p style="text-align: center;font-style: italic">Registration Number (format AA00000):<input
+                    <p style="text-align: center;font-style: italic"><spring:message code="truckNumber"/> (format AA00000):<input
                             class="form-control" name="regNumber"
                             required minlength="7"
-                            placeholder="Registration Number"
                             pattern="[A-Z]{2}\d{5}">
                         <form:errors path="regNumber" cssClass="error"/>
                     </p>
 
-                        <%--                    <tr>--%>
-                        <%--                        <td><springForm:label path="condition">Condition</springForm:label></td>--%>
-                        <%--                        <td>--%>
 
-                        <%--                            <springForm:select path="condition">--%>
-                        <%--                                <springForm:option value="" label="Choose Type.."/>--%>
-                        <%--                                <springForm:options items="${enumCondition}"/>--%>
-                        <%--                                <form:errors path="condition" cssClass="error"/>--%>
-                        <%--                            </springForm:select>--%>
-
-                        <%--                        </td>--%>
-
-                        <%--                    <tr>--%>
-
-                    <p style="text-align: center;font-style: italic">Capacity:<input class="form-control" type="number"
+                    <p style="text-align: center;font-style: italic"><spring:message code="capacity"/>:<input class="form-control" type="number"
                                                                                      name="capacityTons"
                                                                                      min="5"
-                                                                                     max="25"
-                                                                                     placeholder="Capacity">
+                                                                                     max="25">
                         <form:errors path="capacityTons" cssClass="error"/>
                     </p>
 
-                    <p style="text-align: center;font-style: italic; margin:0px">Select City:</p>
+                    <p style="text-align: center;font-style: italic; margin:0px"><spring:message code="selectCity"/>:</p>
                     <tr>
 
                         <select class="dropDownMenu" name="currentCityId" required>
-                            <option label="---Select city---">
+                            <option label="-------">
                                 <c:forEach items="${cityList}" var="city">
                             <option value=${city.cityId}>${city.cityName}</option>
                             </c:forEach>
@@ -165,10 +155,10 @@
                     </tr>
 
                     <p style="text-align: center;font-style: italic">
-                        Condition
+                        <spring:message code="condition"/>
                         <springForm:select class="dropDownMenu" cssStyle="width: 370px; border-radius: .25 rem"
                                            path="condition">
-                            <springForm:option value="" label="Choose Type.."/>
+                            <springForm:option value="" label="-------"/>
                             <springForm:options items="${enumCondition}"/>
                         </springForm:select>
                     </p>
@@ -186,25 +176,25 @@
                             });
                         </script>
                     </tr>
-                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
-                        aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Modal Header
-                                </div>
-                                <div class="modal-body">
-                                    Confirm
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Cancel
-                                    </button>
-                                    <a class="btn btn-danger btn-ok"/>">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<%--                    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"--%>
+<%--                        aria-labelledby="myModalLabel" aria-hidden="true">--%>
+<%--                        <div class="modal-dialog">--%>
+<%--                            <div class="modal-content">--%>
+<%--                                <div class="modal-header">--%>
+<%--                                    Modal Header--%>
+<%--                                </div>--%>
+<%--                                <div class="modal-body">--%>
+<%--                                    Confirm--%>
+<%--                                </div>--%>
+<%--                                <div class="modal-footer">--%>
+<%--                                    <button type="button" class="btn btn-default" data-dismiss="modal">--%>
+<%--                                        Cancel--%>
+<%--                                    </button>--%>
+<%--                                    <a class="btn btn-danger btn-ok"/>">Delete</a>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
 
 
                 </table>

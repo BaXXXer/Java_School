@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -64,10 +65,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -84,16 +88,17 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                                <span data-feather="home" class="dropDownWord"><spring:message
+                                        code="ordersNavLink"/></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message
+                                        code="trucksNavLink"/></p>
                             </a>
-
                         </li>
                     </div>
 
@@ -101,8 +106,10 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink"/></p>
                             </a>
+
                         </li>
                     </div>
 
@@ -118,9 +125,11 @@
 
             <div class="container">
 
-                <h1>Driver List
+                <h1><spring:message
+                        code="driverList"/>
                     <a class="btn btn-primary" style="text-align: right;margin-left: 700px;background-color:green"
-                       href="/drivers/addDriver" role="button">Add driver</a>
+                       href="/drivers/addDriver" role="button"><spring:message
+                            code="addDriver"/></a>
                 </h1>
                 <c:if test="${!empty drivers}">
                     <table class="table table-striped">
@@ -129,15 +138,24 @@
 
                             <th scope="col">Id</th>
 
-                            <th scope="col">First Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Private Number</th>
-                            <th scope="col">Worked hours</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Current truck</th>
-                            <th scope="col">Current city</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
+                            <th scope="col"><spring:message
+                                    code="firstName"/></th>
+                            <th scope="col"><spring:message
+                                    code="lastName"/></th>
+                            <th scope="col"><spring:message
+                                    code="privateNumber"/></th>
+                            <th scope="col"><spring:message
+                                    code="workedHours"/></th>
+                            <th scope="col"><spring:message
+                                    code="status"/></th>
+                            <th scope="col"><spring:message
+                                    code="currentTruck"/></th>
+                            <th scope="col"><spring:message
+                                    code="currentCity"/></th>
+                            <th scope="col"><spring:message
+                                    code="edit"/></th>
+                            <th scope="col"><spring:message
+                                    code="delete"/></th>
 
                             </thead>
                         </tr>

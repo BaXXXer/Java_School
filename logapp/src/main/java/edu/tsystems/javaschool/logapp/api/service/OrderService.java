@@ -138,26 +138,6 @@ public class OrderService {
         return getAllOrders().get(index).getOrderId();
     }
 
-//    @Transactional
-//    public List<OrderStatusDTO> getOrderStatus() {
-//        List<Order> allOrders = orderDao.getAllOrders();
-//        List<OrderStatusDTO> status = new ArrayList<>();
-//
-//        for (Order entity : allOrders) {
-//            OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
-//            orderStatusDTO.setOrderId(entity.getOrderId());
-//            List<OrderWaypoint> points = (List<OrderWaypoint>) entity.getWayPoints();
-//            List<Cargo> cargoes = new ArrayList<>();
-//            for (OrderWaypoint point : points) {
-//                cargoes.add(point.getCargo());
-//            }
-//            orderStatusDTO.setOrderIsDone(entity.isOrderIsDone());
-//            orderStatusDTO.setCargoes(cargoes);
-//            status.add(orderStatusDTO);
-//        }
-//        return status;
-//    }
-
     @Transactional
     public OrderDTO getOrderById(int id) {
         Order entity = orderDao.getOrderById(id);
@@ -452,7 +432,8 @@ public class OrderService {
         order.setTruckOnOrder(truck);
         orderDao.updateOrder(order);
         int currentWorkingHours = 0;
-        CityDTO currentTruckCity = cityDtoConverter.convertToDto(cityService.getCityById(truckDTO.getCurrentCityId()));
+        CityDTO currentTruckCity = cityDtoConverter.convertToDto
+                (cityService.getCityById(truckDTO.getCurrentCityId()));
         if (truckDTO.getDriverWorkingHours() != null) {
             currentWorkingHours = truckDTO.getDriverWorkingHours();
         }

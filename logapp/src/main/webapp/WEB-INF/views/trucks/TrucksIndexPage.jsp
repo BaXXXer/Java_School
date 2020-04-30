@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -64,10 +65,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -84,16 +88,17 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                                <span data-feather="home" class="dropDownWord"><spring:message
+                                        code="ordersNavLink"/></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message
+                                        code="trucksNavLink"/></p>
                             </a>
-
                         </li>
                     </div>
 
@@ -101,8 +106,10 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink"/></p>
                             </a>
+
                         </li>
                     </div>
 
@@ -115,9 +122,11 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
         <div id="contentPanel" style="position:absolute; left:225px;">
-            <h1>Truck List
+            <h1><spring:message
+                    code="truckList"/>
                 <a class="btn btn-primary" style="text-align: right;margin-left: 600px; background-color:green"
-                   href="/trucks/addTruck" role="button">Add truck</a>
+                   href="/trucks/addTruck" role="button"><spring:message
+                    code="addTruck"/></a>
             </h1>
 
             <c:if test="${!empty trucks}">
@@ -125,15 +134,15 @@
                     <tr>
                         <thead>
 
-                        <th scope="col">Truck Id</th>
+                        <th scope="col">Id</th>
 
-                        <th scope="col">Truck Registration Number</th>
-                        <th scope="col">Driver Working Hours</th>
-                        <th scope="col">Truck capacity</th>
-                        <th scope="col">Condition</th>
-                        <th scope="col">Current city</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col"><spring:message code="truckNumber"/></th>
+                        <th scope="col"><spring:message code="shiftSize"/></th>
+                        <th scope="col"><spring:message code="capacity"/></th>
+                        <th scope="col"><spring:message code="condition"/></th>
+                        <th scope="col"><spring:message code="currentCity"/></th>
+                        <th scope="col"><spring:message code="edit"/></th>
+                        <th scope="col"><spring:message code="delete"/></th>
 
                         </thead>
                     </tr>

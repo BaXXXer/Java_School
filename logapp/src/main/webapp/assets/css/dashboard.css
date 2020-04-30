@@ -39,6 +39,13 @@
     top: 10px;
 }
 
+.flagimg{
+    border-radius: 50%;
+    position: relative;
+    left: 100px;
+    top: 10px;
+}
+
 .dropMenu {
     display: none;
 }

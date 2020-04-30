@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="springForm" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -54,10 +55,12 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link"><spring:message code="logout" /></a>
         </li>
     </ul>
 </nav>
@@ -74,21 +77,15 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                            <span data-feather="home" class="dropDownWord"><spring:message code="ordersNavLink" /></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message code="trucksNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/trucks/addTruck" class="subnav-link">Create new truck</a></li>--%>
-                            <%--                                    <li><a href="/trucks/allTrucks" class="subnav-link">Get truck summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
                         </li>
                     </div>
 
@@ -96,14 +93,10 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/drivers/addDriver" class="subnav-link">Create new driver</a></li>--%>
-                            <%--                                    <li><a href="/drivers/allDrivers" class="subnav-link">Get driver summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
+
                         </li>
                     </div>
 
@@ -120,21 +113,21 @@
 
             <c:choose>
                 <c:when test="${!empty drivers}">
-                    <h1>Driver List</h1>
+                    <h1><spring:message code="driverList" /></h1>
                     <table class="table table-striped">
                         <tr>
                             <thead>
 
                             <th scope="col">Id</th>
 
-                            <th scope="col">First Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Private Number</th>
-                            <th scope="col">Worked hours</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Current truck</th>
-                            <th scope="col">Current city</th>
-                            <th scope="col">Assign</th>
+                            <th scope="col"><spring:message code="firstName" /></th>
+                            <th scope="col"><spring:message code="lastName" /></th>
+                            <th scope="col"><spring:message code="privateNumber" /></th>
+                            <th scope="col"><spring:message code="workedHours" /></th>
+                            <th scope="col"><spring:message code="status" /></th>
+                            <th scope="col"><spring:message code="currentTruck" /></th>
+                            <th scope="col"><spring:message code="currentCity" /></th>
+                            <th scope="col"><spring:message code="assign" /></th>
 
                             </thead>
                         </tr>
@@ -174,7 +167,7 @@
                                 <td>
                                     <a href="<c:url value='${order.orderId}/${driver.driverId}' />" class="btn btn-success"
                                             style="width: 100px;height: 30px;font-size: 12px"/>
-                                    Assign
+                                    <spring:message code="assign" />
                                 </td>
 
                             </tr>
@@ -182,7 +175,7 @@
                     </table>
                 </c:when>
                 <c:otherwise>
-                    <h1 style="text-align: center">There are no suitable drivers for this order at the moment!</h1>
+                    <h1 style="text-align: center"><spring:message code="noDrivers" /></h1>
                 </c:otherwise>
 
             </c:choose>

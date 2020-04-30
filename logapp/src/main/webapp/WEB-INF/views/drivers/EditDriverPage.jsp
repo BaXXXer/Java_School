@@ -55,10 +55,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -75,14 +78,16 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                                <span data-feather="home" class="dropDownWord"><spring:message
+                                        code="ordersNavLink"/></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message
+                                        code="trucksNavLink"/></p>
                             </a>
                         </li>
                     </div>
@@ -91,8 +96,10 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord">
+                                    <spring:message code="driverNavLink"/></p>
                             </a>
+
                         </li>
                     </div>
 
@@ -121,44 +128,45 @@
                         </td>
                     </tr>
 
-                    <p style="text-align: center;font-style: italic">First Name<input input
+                    <p style="text-align: center;font-style: italic"><spring:message
+                            code="firstName"/>:<input input
                                                                                       class="form-control"
                                                                                       name="driverFirstName"
                                                                                       required minlength="2"
-                                                                                      placeholder="First Name"
                                                                                       width="100"
                                                                                       value=${driverToEdit.driverFirstName}>
                     </p>
 
-                    <p style="text-align: center;font-style: italic">Surname:<input input
+                    <p style="text-align: center;font-style: italic"><spring:message
+                            code="lastName"/>:<input input
                                                                                     class="form-control" type="text"
                                                                                     name="driverSurname"
                                                                                     required minlength="2"
-                                                                                    placeholder="Surname"
                                                                                     value=${driverToEdit.driverSurname}>
                     </p>
 
-                    <p style="text-align: center;font-style: italic">Personal Number (8 digits): <input input
+                    <p style="text-align: center;font-style: italic"><spring:message
+                            code="privateNumber"/>: <input input
                                                                                                         class="form-control"
                                                                                                         name="driverPrivateNum"
                                                                                                         required
                                                                                                         minlength="8"
                                                                                                         required
                                                                                                         maxlength="8"
-                                                                                                        placeholder="Private Number"
                                                                                                         value=${driverToEdit.driverPrivateNum}>
                     </p>
-                    <p style="text-align: center;font-style: italic">Worked Hours: <input input
+                    <p style="text-align: center;font-style: italic"><spring:message
+                            code="workedHours"/>:<input input
                                                                                           class="form-control"
                                                                                           name="driverWorkedHours"
                                                                                           min="0"
                                                                                           max="176"
-                                                                                          placeholder="Worked hours"
                                                                                           value="${driverToEdit.driverWorkedHours}">
                     </p>
 
                     <tr>
-                        <p style="text-align: center;font-style: italic; margin-bottom: 0px">Select City:</p>
+                        <p style="text-align: center;font-style: italic; margin-bottom: 0px"><spring:message
+                                code="selectCity"/>:</p>
                             <select class="dropDownMenu" name="driverCityId">
 
                                 <c:forEach items="${cityList}" var="city">
@@ -169,7 +177,8 @@
                     </tr>
 
                     <tr>
-                        <p style="text-align: center;font-style: italic; margin-bottom: 0px">Status:</p>
+                        <p style="text-align: center;font-style: italic; margin-bottom: 0px"><spring:message
+                                code="status"/>:</p>
                             <springForm:select class="dropDownMenu" cssStyle="width: 280px; border-radius: .25 rem" path="driverStatus">
                                 <springForm:option value="" label="Choose Type.."/>
                                 <springForm:options items="${enumStatus}"/>

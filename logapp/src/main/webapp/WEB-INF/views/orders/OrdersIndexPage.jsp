@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -52,10 +53,12 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <a href="/?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="/?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link"><spring:message code="logout" /></a>
         </li>
     </ul>
 </nav>
@@ -72,21 +75,16 @@
                     <li>
 
                         <a href="${pageContext.request.contextPath}/orders/allOrders">
-                            <span data-feather="home" class="dropDownWord">Orders</span>
+                            <span data-feather="home" class="dropDownWord"><spring:message code="ordersNavLink" /></span>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/trucks/allTrucks">
-                                <p id="truckDropDown" class="dropDownWord">Trucks</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message code="trucksNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/trucks/addTruck" class="subnav-link">Create new truck</a></li>--%>
-                            <%--                                    <li><a href="/trucks/allTrucks" class="subnav-link">Get truck summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
+
                         </li>
                     </div>
 
@@ -94,14 +92,9 @@
 
                         <li class="nav-item">
                             <a href="/drivers/allDrivers">
-                                <p id="driverDropDown" class="dropDownWord">Drivers</p>
+                                <p id="driverDropDown" class="dropDownWord"><spring:message code="driverNavLink" /></p>
                             </a>
-                            <%--                            <div class="dropMenu">--%>
-                            <%--                                <ul class="subnav">--%>
-                            <%--                                    <li><a href="/drivers/addDriver" class="subnav-link">Create new driver</a></li>--%>
-                            <%--                                    <li><a href="/drivers/allDrivers" class="subnav-link">Get driver summary</a></li>--%>
-                            <%--                                </ul>--%>
-                            <%--                            </div>--%>
+
                         </li>
                     </div>
 
@@ -115,93 +108,91 @@
     <div class="container-fluid">
         <div id="contentPanel" style="position:relative;">
             <h1>
-                Orders Dashboard
-                <%--                <i class="fa fa-file" style="font-size:60px;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>--%>
-                <%--                <img src="/assets/img/orders.png" width="50" height="50" style="text-shadow:2px 2px 4px #000000"/>--%>
+                <spring:message code="ordersDashboard" />
 
                 <form action="${pageContext.request.contextPath}/orders/addOrder" method="post"
                       style="width:200px;height:48px;margin:0px">
 
-                    <input type="submit" value="Add Empty Order" id="addNewOrderButton"/>
+                    <input type="submit" value="<spring:message code="addEmptyOrder" />" id="addNewOrderButton"/>
                 </form>
             </h1>
             <br>
             <c:if test="${orders.size()==0}">
-                <h3>There are no orders now</h3>
+                <h3><spring:message code="noOrders" /></h3>
             </c:if>
 
             <c:forEach items="${orders}" var="order">
             <table class="table table-hover" style="background-color:lightgrey">
-                <h3 style="text-align: center"><u>Order #${order.orderId}</u></h3>
+                <h3 style="text-align: center"><u><spring:message code="order" /> #${order.orderId}</u></h3>
                 <p><i class="fa fa-check-square-o"
                       style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i>
-                    <b>Order status:</b>
+                    <b><spring:message code="orderStatus" /></b>
                     <c:choose>
                         <c:when test="${order.orderIsDone==true}">
-                            <b style="color: green; font-style: italic"> Completed </b>
+                            <b style="color: green; font-style: italic"> <spring:message code="completed" /> </b>
                         </c:when>
                         <c:otherwise>
-                            <b style="color: red; font-style: italic">Not completed</b>
+                            <b style="color: red; font-style: italic"><spring:message code="notCompleted" /></b>
                         </c:otherwise>
                     </c:choose>
                 </p>
                 <p><i class="fa fa-vcard-o" style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i>
-                    <b>Assigned drivers:</b>
+                    <b><spring:message code="assignedDrivers" /></b>
                     <c:forEach items="${order.driversOnOrderIds}" var="driverId">
-
                         ${driverService.getDriverById(driverId).driverPrivateNum}:
                         ${driverService.getDriverById(driverId).driverFirstName}
                         ${driverService.getDriverById(driverId).driverSurname}
                         <br>
                     </c:forEach></p>
                 <p><i class="fa fa-truck" style="font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000"></i></i>
-                    <b>Assigned truck:</b>
+                    <b><spring:message code="assignedTruck" /></b>
                     <c:choose>
                         <c:when test="${order.truckId!=0}">
                             ${truckMap.get(order.truckId)}
                         </c:when>
                         <c:otherwise>
-                            No truck is assigned yet
+                            <spring:message code="noAssignedTruck" />
                         </c:otherwise>
                     </c:choose>
                 </p>
 
                 <p><i class='fas fa-map-marker-alt'
                       style='font-size:24px;color:royalblue;text-shadow:2px 2px 4px #000000'></i>
-                    <b>Current city:</b>
+                    <b><spring:message code="currentCity" /></b>
                     <c:choose>
                         <c:when test="${order.truckId!=null}">
                             ${cityService.getCityDtoById(truckService.getTruckById(order.truckId).currentCityId).cityName}
                         </c:when>
                         <c:otherwise>
-                            No truck is assigned yet
+                            <spring:message code="noAssignedTruck" />
                         </c:otherwise>
                     </c:choose>
                 </p>
 
                 <table class="table table-hover">
-                    <th scope="col">Cargo code</th>
-                    <th scope="col">Cargo title</th>
-                    <th scope="col">Cargo weight kilos</th>
-                    <th scope="col">Cargo current city</th>
-                    <th scope="col">Cargo destination city</th>
-                    <th scope="col">Cargo status</th>
+                    <th scope="col"><spring:message code="cargoCode" /></th>
+                    <th scope="col"><spring:message code="cargoTitle" /></th>
+                    <th scope="col"><spring:message code="cargoWeight" /></th>
+                    <th scope="col"><spring:message code="cargoCity" /></th>
+                    <th scope="col"><spring:message code="cargoDestCity" /></th>
+                    <th scope="col"><spring:message code="cargoStatus" /></th>
 
                     <c:if test="${order.truckId==null}">
-                    <a class="btn btn-secondary btn-sm" href="<c:url value='./readyToGoTrucks/${order.orderId}' />">Get
-                        ready trucks <i class="fa fa-truck" style="font-size:18px;color:white;"></i></a>
+                    <a class="btn btn-secondary btn-sm" href="<c:url value='./readyToGoTrucks/${order.orderId}' />">
+                        <spring:message code="getReadyTrucksButton" /> <i class="fa fa-truck" style="font-size:18px;color:white;"></i></a>
                     <emsp>
                         </c:if>
                         <c:if test="${order.truckId!=null}">
                         <a class="btn btn-secondary btn-sm" data-target="#myModal"
                            href="<c:url value='./readyForTripDrivers/${order.orderId}' />">
-                            Get ready drivers<i class="fa fa-vcard-o"
+                            <spring:message code="getReadyDriversButton" /><i class="fa fa-vcard-o"
                                                 style="font-size:18px;color:white;margin-left:4px"></i></a>
                         <emsp>
 
                             </c:if>
                             <a class="btn btn-secondary btn-sm"
-                               href="<c:url value='./notAssignedCargoes/${order.orderId}' />">Get Cargoes to assign<i
+                               href="<c:url value='./notAssignedCargoes/${order.orderId}' />">
+                                <spring:message code="getCargoes" /><i
                                     class='fas fa-luggage-cart' style="font-size:18px;color:white;margin-left:2px"></i></a>
                             <emsp>
 
