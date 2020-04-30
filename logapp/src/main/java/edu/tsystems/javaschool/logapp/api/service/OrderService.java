@@ -5,7 +5,10 @@ import edu.tsystems.javaschool.logapp.api.dao.OrderDao;
 import edu.tsystems.javaschool.logapp.api.dao.ShippingCatalogDao;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.*;
-import edu.tsystems.javaschool.logapp.api.dto.mapper.OrderMapper;
+import edu.tsystems.javaschool.logapp.api.dto.converter.CargoWaypointDtoConverter;
+import edu.tsystems.javaschool.logapp.api.dto.converter.CityDtoConverter;
+import edu.tsystems.javaschool.logapp.api.dto.converter.DriverDtoConverter;
+import edu.tsystems.javaschool.logapp.api.dto.converter.OrderDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.*;
 import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
 import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
@@ -22,16 +25,20 @@ import java.util.*;
 @Service
 public class OrderService {
 
-    private OrderDao orderDao;
-    private DriverDao driverDao;
-    private TruckDao truckDao;
-    private OrderWayPointService pointService;
+    private final OrderDao orderDao;
+    private final DriverDao driverDao;
+    private final TruckDao truckDao;
+    private final OrderWayPointService pointService;
     private final DriverService driverService;
     private final DistanceCalculator distanceCalculator;
     private final CityService cityService;
     private final TruckService truckService;
     private final CargoService cargoService;
     private final ShippingCatalogDao constantsDao;
+    private final OrderDtoConverter orderConverter;
+    private final CityDtoConverter cityDtoConverter;
+    private final CargoWaypointDtoConverter pointConverter;
+    private final DriverDtoConverter driverDtoConverter;
 
     @Autowired
     private MessageProducer messageProducer;
@@ -41,7 +48,7 @@ public class OrderService {
     public OrderService(OrderDao orderDao, DriverDao driverDao, TruckDao truckDao,
                         OrderWayPointService pointService, DriverService driverService,
                         DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService,
-                        CargoService cargoService, ShippingCatalogDao constantsDao) {
+                        CargoService cargoService, ShippingCatalogDao constantsDao, OrderDtoConverter orderConverter, CityDtoConverter cityDtoConverter, CargoWaypointDtoConverter pointConverter, DriverDtoConverter driverDtoConverter) {
         this.orderDao = orderDao;
         this.driverDao = driverDao;
         this.truckDao = truckDao;
@@ -52,12 +59,16 @@ public class OrderService {
         this.truckService = truckService;
         this.cargoService = cargoService;
         this.constantsDao = constantsDao;
+        this.orderConverter = orderConverter;
+        this.cityDtoConverter = cityDtoConverter;
+        this.pointConverter = pointConverter;
+        this.driverDtoConverter = driverDtoConverter;
     }
 
 
     @Transactional
     public int saveOrder(OrderDTO dto) {
-        Order order = toEntity(dto);
+        Order order = orderConverter.convertToEntity(dto);
         int i = orderDao.saveOrder(order);
         messageProducer.sendMessage("orders changed");
         return i;
@@ -68,7 +79,7 @@ public class OrderService {
         List<OrderDTO> dtos = new ArrayList();
 
         for (Order d : orderDao.getLastTenOrders()) {
-            dtos.add(toDto(d));
+            dtos.add(orderConverter.convertToDTO(d));
         }
         return dtos;
     }
@@ -106,80 +117,10 @@ public class OrderService {
             }
             status.setNumOfCompletedPoints(completedPoints);
             statusList.add(status);
-//            messageProducer.sendMessage(ToJSONConverter.convertListOfOrderStatusToJSON(statusList));
         }
 
 
         return statusList;
-    }
-
-    public Order toEntity(OrderDTO dto) {
-        Order order;
-        if (dto.getOrderId() != null) {
-            order = orderDao.getOrderById(dto.getOrderId());
-        } else {
-            order = new Order();
-        }
-        order.setOrderIsDone(dto.isOrderIsDone());
-        if (dto.getDriversOnOrderIds() != null) {
-            List<Integer> driverIds = dto.getDriversOnOrderIds();
-            List<Driver> drivers = new ArrayList();
-            for (Integer id : driverIds) {
-                drivers.add(driverDao.getDriverById(id));
-            }
-            order.setDriversOnOrder(drivers);
-        }
-        if (dto.getTruckId() != null) {
-
-            order.setTruckOnOrder(truckDao.getTruckById(dto.getTruckId()));
-        }
-        if (dto.getPoints() != null) {
-            List<OrderWaypoint> points = new ArrayList();
-            for (CargoWaypointDTO cdto : dto.getPoints()) {
-                OrderWaypoint orderWaypoint = pointService.toEntity(cdto);
-                orderWaypoint.setOrder(order);
-                points.add(orderWaypoint);
-            }
-            Set<OrderWaypoint> set = new HashSet<>(points);
-            points.clear();
-            points.addAll(set);//remove duplicates if any
-
-            order.setWayPoints(points);
-        }
-        return order;
-    }
-
-    @Transactional
-    public OrderDTO toDto(Order order) {
-        OrderDTO dto = new OrderDTO();
-        dto.setOrderId(order.getOrderId());
-        dto.setOrderIsDone(order.isOrderIsDone());
-        if (order.getTruckOnOrder() != null) {
-
-            dto.setTruckId(order.getTruckOnOrder().getId());
-        }
-
-        if (order.getDriversOnOrder() != null) {
-            List<Integer> driverIds = new ArrayList<>();
-            List<Driver> drivers = order.getDriversOnOrder();
-            for (Driver d : drivers) {
-                driverIds.add(d.getDriverId());
-            }
-            dto.setDriversOnOrderIds(driverIds);
-
-        }
-        if (order.getWayPoints() != null) {
-            List<Integer> pointIds = new ArrayList<>();
-            List<CargoWaypointDTO> pointDtos = new ArrayList<>();
-            Collection<OrderWaypoint> points = order.getWayPoints();
-            for (OrderWaypoint p : points) {
-                pointIds.add(p.getId());
-                pointDtos.add(pointService.toDto(p));
-            }
-            dto.setWayPointsIds(pointIds);
-            dto.setPoints(pointDtos);
-        }
-        return dto;
     }
 
     @Transactional
@@ -187,7 +128,7 @@ public class OrderService {
         List<OrderDTO> dtos = new ArrayList();
 
         for (Order d : orderDao.getAllOrders()) {
-            dtos.add(toDto(d));
+            dtos.add(orderConverter.convertToDTO(d));
         }
         return dtos;
     }
@@ -197,35 +138,35 @@ public class OrderService {
         return getAllOrders().get(index).getOrderId();
     }
 
-    @Transactional
-    public List<OrderStatusDTO> getOrderStatus() {
-        List<Order> allOrders = orderDao.getAllOrders();
-        List<OrderStatusDTO> status = new ArrayList<>();
-
-        for (Order entity : allOrders) {
-            OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
-            orderStatusDTO.setOrderId(entity.getOrderId());
-            List<OrderWaypoint> points = (List<OrderWaypoint>) entity.getWayPoints();
-            List<Cargo> cargoes = new ArrayList<>();
-            for (OrderWaypoint point : points) {
-                cargoes.add(point.getCargo());
-            }
-            orderStatusDTO.setOrderIsDone(entity.isOrderIsDone());
-            orderStatusDTO.setCargoes(cargoes);
-            status.add(orderStatusDTO);
-        }
-        return status;
-    }
+//    @Transactional
+//    public List<OrderStatusDTO> getOrderStatus() {
+//        List<Order> allOrders = orderDao.getAllOrders();
+//        List<OrderStatusDTO> status = new ArrayList<>();
+//
+//        for (Order entity : allOrders) {
+//            OrderStatusDTO orderStatusDTO = new OrderStatusDTO();
+//            orderStatusDTO.setOrderId(entity.getOrderId());
+//            List<OrderWaypoint> points = (List<OrderWaypoint>) entity.getWayPoints();
+//            List<Cargo> cargoes = new ArrayList<>();
+//            for (OrderWaypoint point : points) {
+//                cargoes.add(point.getCargo());
+//            }
+//            orderStatusDTO.setOrderIsDone(entity.isOrderIsDone());
+//            orderStatusDTO.setCargoes(cargoes);
+//            status.add(orderStatusDTO);
+//        }
+//        return status;
+//    }
 
     @Transactional
     public OrderDTO getOrderById(int id) {
         Order entity = orderDao.getOrderById(id);
-        return toDto(entity);
+        return orderConverter.convertToDTO(entity);
     }
 
     @Transactional
     public List<TruckDTO> getReadyToGoTrucks(OrderDTO orderDto) {
-        Order order = toEntity(orderDto);
+        Order order = orderConverter.convertToEntity(orderDto);
         List<TruckDTO> readyTrucks = truckService.getReadyToGoTrucks();
         List<TruckDTO> readyToGoTrucks = new ArrayList<>();
         for (OrderDTO o : getAllOrders()) {
@@ -295,7 +236,7 @@ public class OrderService {
     @Transactional
     double getRequiredWorkingHoursPerDriver(OrderDTO orderDto, CityDTO currentCity) {
         if (currentCity == null) {
-            currentCity = cityService.toDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId())
+            currentCity = cityDtoConverter.convertToDto(cityService.getCityById(truckService.getTruckById(orderDto.getTruckId())
                     .getCurrentCityId()));
         }
 
@@ -335,7 +276,7 @@ public class OrderService {
             double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
             currentWorkedHours += requiredWorkingHoursPerDriver;
             driverDTO.setDriverWorkedHours(currentWorkedHours);
-            driverService.updateDriver(driverService.toEntity(driverDTO));
+            driverService.updateDriver(driverDtoConverter.convertToEntity(driverDTO));
 
         } else { //if we already have assigned driver and need to recalculate working hours for current order
             int totalWorkHoursPerCurrentOrder = truckOnCurrentOrder.getDriverWorkingHours();
@@ -347,19 +288,19 @@ public class OrderService {
                         totalWorkHoursPerCurrentOrder / orderDTO.getDriversOnOrderIds().size();//rollback
                 int workerHoursUpdated = workHoursBacked + (int) Math.round(requiredWorkingHoursPerDriver);
                 driverOnOrder.setDriverWorkedHours(workerHoursUpdated);
-                driverService.updateDriver(driverService.toEntity(driverOnOrder));
+                driverService.updateDriver(driverDtoConverter.convertToEntity(driverOnOrder));
             }
 
             int currentWorkedHours = driverDTO.getDriverWorkedHours();
             double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDTO, null);
             currentWorkedHours += requiredWorkingHoursPerDriver;
             driverDTO.setDriverWorkedHours(currentWorkedHours);
-            driverService.updateDriver(driverService.toEntity(driverDTO));
+            driverService.updateDriver(driverDtoConverter.convertToEntity(driverDTO));
 
         }
         Driver driver = driverDao.getDriverById(driverDTO.getDriverId());
         driver.setDriversTruck(truckOnCurrentOrder);
-        Order order = toEntity(orderDTO);
+        Order order = orderConverter.convertToEntity(orderDTO);
         List<Driver> assignedDrivers = order.getDriversOnOrder(); //get current drivers on this order
         assignedDrivers.add(driver); // add a driver to assign
         Set<Driver> set = new HashSet<>(assignedDrivers); //remove duplicates
@@ -383,7 +324,7 @@ public class OrderService {
     @Transactional
     public void updateOrder(OrderDTO dto) {
         checkTypes(dto);
-        Order order = toEntity(dto);
+        Order order = orderConverter.convertToEntity(dto);
         orderDao.updateOrder(order);
 
         messageProducer.sendMessage("orders changed");
@@ -424,7 +365,7 @@ public class OrderService {
                 pointService.setLoadedById(points, pointId);
         List<OrderWaypoint> pointEntities = new ArrayList();//returned an array with updated cargo status
         for (CargoWaypointDTO dto : waypointDTOSUpdated) {
-            pointEntities.add(pointService.toEntity(dto));
+            pointEntities.add(pointConverter.convertToEntity(dto));
         }
         for (OrderWaypoint owpoint : pointEntities) {
             owpoint.setOrder(order);
@@ -454,7 +395,7 @@ public class OrderService {
         }
         if (points.size() == i) {
             orderDTO.setOrderIsDone(true);
-            orderDao.updateOrder(toEntity(orderDTO));
+            orderDao.updateOrder(orderConverter.convertToEntity(orderDTO));
             messageProducer.sendMessage("orders changed");
         }
     }
@@ -507,11 +448,11 @@ public class OrderService {
     @Transactional
     public void assignTruck(TruckDTO truckDTO, OrderDTO orderDTO) {
         Truck truck = truckDao.getTruckById(truckDTO.getId());
-        Order order = toEntity(orderDTO);
+        Order order = orderConverter.convertToEntity(orderDTO);
         order.setTruckOnOrder(truck);
         orderDao.updateOrder(order);
         int currentWorkingHours = 0;
-        CityDTO currentTruckCity = cityService.toDto(cityService.getCityById(truckDTO.getCurrentCityId()));
+        CityDTO currentTruckCity = cityDtoConverter.convertToDto(cityService.getCityById(truckDTO.getCurrentCityId()));
         if (truckDTO.getDriverWorkingHours() != null) {
             currentWorkingHours = truckDTO.getDriverWorkingHours();
         }

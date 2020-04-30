@@ -1,6 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.config;
 
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
+import edu.tsystems.javaschool.logapp.api.dto.converter.DriverDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
 import edu.tsystems.javaschool.logapp.api.model.DriverUserModel;
@@ -22,11 +23,13 @@ import java.io.IOException;
 public class AuthenticationHandler implements AuthenticationSuccessHandler {
 
     private final DriverService driverService;
+    private final DriverDtoConverter driverDtoConverter;
 
     @Autowired
-    public AuthenticationHandler(DriverService driverService) {
+    public AuthenticationHandler(DriverService driverService, DriverDtoConverter driverDtoConverter) {
 
         this.driverService = driverService;
+        this.driverDtoConverter = driverDtoConverter;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
             UserModel principal = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principal instanceof DriverUserModel) {
                 DriverDTO dto = driverService.getDriverById(((DriverUserModel) principal).getDriverId());
-                Driver driver = driverService.toEntity(dto);
+                Driver driver = driverDtoConverter.convertToEntity(dto);
                 userTitle = driver.getDriverFirstName() + " " + driver.getDriverSurname();
                 userStatus = driver.getDriverStatus().toString();
                 personalCode = driver.getDriverPrivateNum().toString();

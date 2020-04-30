@@ -1,12 +1,12 @@
 package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.dao.DriverDao;
-import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverStatusDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverUserDTO;
 import edu.tsystems.javaschool.logapp.api.dto.OrderDTO;
-import edu.tsystems.javaschool.logapp.api.dto.mapper.DriverMapper;
+import edu.tsystems.javaschool.logapp.api.dto.converter.DriverDtoConverter;
+import edu.tsystems.javaschool.logapp.api.dto.converter.DriverUserDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.Driver.Status;
 import edu.tsystems.javaschool.logapp.api.entity.User;
@@ -14,7 +14,6 @@ import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
 import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import org.apache.log4j.Logger;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -27,25 +26,22 @@ import static edu.tsystems.javaschool.logapp.api.entity.Driver.Status.convertDri
 @Service
 public class DriverService {
 
-    private DriverDao driverDao;
-    private final DriverMapper mapper;
-    private TruckDao truckDao;
-    private UserService userService;
-
+    private final DriverDao driverDao;
+    private final UserService userService;
+    private final DriverDtoConverter driverDtoConverter;
+    private final DriverUserDtoConverter driverUserDtoConverter;
     private static final Logger LOG = Logger.getLogger(DriverService.class);
 
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private MessageProducer messageProducer;
 
     @Autowired
-    public DriverService(DriverDao driverDao, DriverMapper mapper, TruckDao truckDao, UserService userService) {
+    public DriverService(DriverDao driverDao, UserService userService, DriverDtoConverter driverDtoConverter, DriverUserDtoConverter driverUserDtoConverter) {
         this.driverDao = driverDao;
-        this.mapper = mapper;
-        this.truckDao = truckDao;
         this.userService = userService;
+        this.driverDtoConverter = driverDtoConverter;
+        this.driverUserDtoConverter = driverUserDtoConverter;
     }
 
     @Transactional
@@ -57,7 +53,7 @@ public class DriverService {
             }
         }
 
-        Driver driver = toEntity(driverDTO);
+        Driver driver = driverDtoConverter.convertToEntity(driverDTO);
         driverDao.saveDriver(driver);
         messageProducer.sendMessage("drivers changed");
 
@@ -77,41 +73,6 @@ public class DriverService {
         user.setDriver(driver);
         return user;
 
-    }
-
-    public Driver toEntity(DriverDTO driverDTO) {
-        try {
-            Driver driver = driverDao.getDriverById(driverDTO.getDriverId());
-            driver.setDriverSurname(driverDTO.getDriverSurname());
-            driver.setDriverFirstName(driverDTO.getDriverFirstName());
-            driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
-            driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
-            driver.setDriverStatus(driverDTO.getDriverStatus());
-            driver.setDriverCityId(driverDTO.getDriverCityId());
-            if(driverDTO.getDriversTruckId() != null){
-                driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-            }
-            return driver;
-
-
-        } catch (ObjectNotFoundException ex) {
-            LOG.info("driver was not found! id: " +driverDTO.getDriverId());
-            Driver driver = new Driver();
-            driver.setDriverSurname(driverDTO.getDriverSurname());
-            driver.setDriverFirstName(driverDTO.getDriverFirstName());
-            driver.setDriverPrivateNum(driverDTO.getDriverPrivateNum());
-            driver.setDriverWorkedHours(driverDTO.getDriverWorkedHours());
-            if (driverDTO.getDriverStatus() == null) {
-                driver.setDriverStatus(Status.REST);
-            } else {
-                driver.setDriverStatus(driverDTO.getDriverStatus());
-            }
-            driver.setDriverCityId(driverDTO.getDriverCityId());
-            if(driverDTO.getDriversTruckId() != null){
-                driver.setDriversTruck(truckDao.getTruckById(driverDTO.getDriversTruckId()));
-            }
-            return driver;
-        }
     }
 
     public DriverStatusDTO getDriverStatus() {
@@ -134,34 +95,13 @@ public class DriverService {
         return getAllDrivers().get(index).getDriverId();
     }
 
-    public DriverDTO toDto(Driver entity) {
-            DriverDTO dto = new DriverDTO();
-
-            if (entity.getDriversTruck() != null) {
-                dto.setDriversTruckId(entity.getDriversTruck().getId());
-            }
-
-            if(entity.getUser()!=null){
-                dto.setUserId(entity.getUser().getId());
-            }
-
-            dto.setDriverId(entity.getDriverId());
-            dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-            dto.setDriverStatus(entity.getDriverStatus());
-            dto.setDriverCityId(entity.getDriverCityId());
-            dto.setDriverFirstName(entity.getDriverFirstName());
-            dto.setDriverSurname(entity.getDriverSurname());
-            dto.setDriverWorkedHours(entity.getDriverWorkedHours());
-            return dto;
-    }
-
 
     @Transactional
     public List<DriverDTO> getAllDrivers() {
         List<DriverDTO> dtos = new ArrayList();
 
         for (Driver d : driverDao.getAllDrivers()) {
-            dtos.add(toDto(d));
+            dtos.add(driverDtoConverter.convertToDTO(d));
         }
         return dtos;
     }
@@ -169,7 +109,7 @@ public class DriverService {
     @Transactional
     public DriverDTO getDriverById(int id) {
         Driver dao = driverDao.getDriverById(id);
-        return toDto(dao);
+        return driverDtoConverter.convertToDTO(dao);
     }
 
     @Transactional
@@ -180,7 +120,7 @@ public class DriverService {
 
     @Transactional
     public void updateDriver(DriverDTO driver) {
-        Driver entity = toEntity(driver);
+        Driver entity = driverDtoConverter.convertToEntity(driver);
         driverDao.updateDriver(entity);
     }
 
@@ -194,51 +134,16 @@ public class DriverService {
     public List<DriverDTO> findFreeDriversInCity(int cityId, int maxHours) {
         List<DriverDTO> dtos = new ArrayList();
         for (Driver d : driverDao.findFreeDriversInCity(cityId, maxHours)) {
-            dtos.add(toDto(d));
+            dtos.add(driverDtoConverter.convertToDTO(d));
         }
 
         return dtos;
     }
 
-    /**
-     * Converts Driver entity to DriverUserDTO
-     *
-     * @param entity
-     * @return DriverUserDTO
-     */
-    public DriverUserDTO toDUDto(Driver entity) {
-        DriverUserDTO dto = new DriverUserDTO();
-        dto.setDriverId(entity.getDriverId());
-        dto.setDriverPrivateNum(entity.getDriverPrivateNum());
-
-        DriverUserDTO.Status status = Status.switchFromDriverToDtoStatus(entity.getDriverStatus());
-        dto.setDriverStatus(status);
-
-        dto.setDriverFirstName(entity.getDriverFirstName());
-        dto.setDriverSurname(entity.getDriverSurname());
-        if (entity.getOrder() != null) {
-            dto.setAssignedOrder(orderService.toDto(entity.getOrder()));
-        }
-        if (entity.getDriversTruck() != null) {
-            dto.setTruckRegNumber(entity.getDriversTruck().getRegNumber());
-        }
-        return dto;
-    }
-
-    @Transactional
-    public Driver fromDUDtoToEntity(DriverUserDTO dto) {
-        Driver entity = driverDao.getDriverById(dto.getDriverId());
-        Status status = Status.switchFromDtoToStatus(dto.getDriverStatus());
-        entity.setDriverStatus(status);
-        return entity;
-
-    }
-
-
     @Transactional
     public DriverUserDTO getDUDtoByEmail(String email) {
         Driver entity = userService.findByEmail(email).getDriver();
-        return toDUDto(entity);
+        return driverUserDtoConverter.convertToDTO(entity);
     }
 
     @Transactional
@@ -259,7 +164,7 @@ public class DriverService {
         }
 
         entity.setDriverStatus(convertDriverStatusToEnum(status));
-        return toDUDto(entity);
+        return driverUserDtoConverter.convertToDTO(entity);
     }
 
 
@@ -276,14 +181,14 @@ public class DriverService {
     @Transactional
     public void setDriverOnRest(DriverUserDTO dto) {
         dto.setDriverStatus(DriverUserDTO.Status.REST);
-        updateDriver(fromDUDtoToEntity(dto));
+        updateDriver(driverUserDtoConverter.convertToEntity(dto));
     }
 
 
     @Transactional
     public void setDriverOnShift(DriverUserDTO dto) {
         dto.setDriverStatus(DriverUserDTO.Status.REST_ON_SHIFT);
-        updateDriver(fromDUDtoToEntity(dto));
+        updateDriver(driverUserDtoConverter.convertToEntity(dto));
     }
 
     public void validateGrants(DriverUserDTO driver, int id) {

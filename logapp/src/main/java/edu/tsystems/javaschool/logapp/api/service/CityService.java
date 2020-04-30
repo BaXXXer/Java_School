@@ -2,12 +2,12 @@ package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.dao.CityDao;
 import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
+import edu.tsystems.javaschool.logapp.api.dto.converter.CityDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +16,13 @@ import java.util.Map;
 @Service
 public class CityService {
 
-    private CityDao cityDao;
+    private final CityDao cityDao;
+    private final CityDtoConverter converter;
 
     @Autowired
-    public CityService(CityDao cityDao) {
+    public CityService(CityDao cityDao, CityDtoConverter converter) {
         this.cityDao = cityDao;
+        this.converter = converter;
     }
 
 
@@ -31,7 +33,7 @@ public class CityService {
     public List<CityDTO> getAllCitiesDTO() {
         List<CityDTO> cities = new ArrayList<>();
         for (City c : getAllCities()) {
-            cities.add(toDto(c));
+            cities.add(converter.convertToDto(c));
         }
         return cities;
     }
@@ -44,7 +46,8 @@ public class CityService {
 
     @Transactional
     public CityDTO getCityDtoById(int id) {
-        return toDto(cityDao.getCityById(id));
+
+        return converter.convertToDto(cityDao.getCityById(id));
     }
 
 
@@ -56,24 +59,14 @@ public class CityService {
         return cityMap;
     }
 
-    @Transactional
-    public CityDTO toDto(City entity) {
-        CityDTO dto = new CityDTO();
-        dto.setCityId(entity.getCityId());
-        dto.setCityName(entity.getCityName());
-        dto.setLat(entity.getLat());
-        dto.setLng(entity.getLng());
-        return dto;
-
-    }
-
-    @Transactional
-    public City toEntity(CityDTO dto) {
-        City entity;
-        entity = getCityById(dto.getCityId());
-        entity.setCityName(dto.getCityName());
-        entity.setLat(dto.getLat());
-        entity.setLng(dto.getLng());
-        return entity;
-    }
+//    @Transactional
+//    public CityDTO toDto(City entity) {
+//
+//
+//    }
+//
+//    @Transactional
+//    public City toEntity(CityDTO dto) {
+//
+//    }
 }

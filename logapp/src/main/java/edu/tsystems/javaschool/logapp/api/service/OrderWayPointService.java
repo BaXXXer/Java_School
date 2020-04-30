@@ -4,7 +4,8 @@ import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.dto.CargoDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CargoWaypointDTO;
 import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
-import edu.tsystems.javaschool.logapp.api.dto.mapper.CityMapper;
+import edu.tsystems.javaschool.logapp.api.dto.converter.CargoWaypointDtoConverter;
+import edu.tsystems.javaschool.logapp.api.dto.converter.CityDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +18,17 @@ import java.util.List;
 @Service
 public class OrderWayPointService {
 
-    private WayPointsDao dao;
-    private CargoService cargoService;
-    private CityService cityService;
-    private CityMapper cityMapper;
-    private TruckService truckService;
+    private final WayPointsDao dao;
+    private final CargoService cargoService;
+    private final CityDtoConverter cityConverter;
+    private final CargoWaypointDtoConverter pointConverter;
 
     @Autowired
-    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityService cityService, CityMapper cityMapper, TruckService truckService) {
+    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityDtoConverter cityConverter, CargoWaypointDtoConverter pointConverter) {
         this.dao = dao;
         this.cargoService = cargoService;
-        this.cityService = cityService;
-        this.cityMapper = cityMapper;
-        this.truckService = truckService;
+        this.cityConverter = cityConverter;
+        this.pointConverter = pointConverter;
     }
 
 
@@ -41,7 +40,7 @@ public class OrderWayPointService {
 
     @Transactional
     public CargoWaypointDTO getPointDtoById(int id){
-        return toDto(dao.getWaypointById(id));
+        return pointConverter.convertToDTO(dao.getWaypointById(id));
     }
 
 
@@ -51,7 +50,7 @@ public class OrderWayPointService {
         List<OrderWaypoint> waypoints = dao.getAllWaypoints();
         List<CargoWaypointDTO> WPdtos = new ArrayList<>();
         for(OrderWaypoint p: waypoints){
-            WPdtos.add(toDto(p));
+            WPdtos.add(pointConverter.convertToDTO(p));
         }
         return WPdtos;
 
@@ -79,7 +78,7 @@ public class OrderWayPointService {
     public List<CityDTO> getCityCoordinates(List<Integer> pointIds){
         List<CityDTO> cityList = new ArrayList();
         for(Integer id: pointIds){
-            CityDTO city = cityService.toDto(getPointById(id).getCity());
+            CityDTO city = cityConverter.convertToDto(getPointById(id).getCity());
             cityList.add(city);
         }
         return cityList;
@@ -111,28 +110,6 @@ public class OrderWayPointService {
 
     }
 
-    public CargoWaypointDTO toDto(OrderWaypoint entity){
-        CargoWaypointDTO dto = new CargoWaypointDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getPointName());
-        if(entity.getOrder()!=null){
-            if(entity.getOrder().getTruckOnOrder()!=null) {
-                dto.setAssignedTruck(truckService.toDTO(entity.getOrder().getTruckOnOrder()));
-            }
-        }
-        if(entity.getCargo()!=null) {
-            dto.setCargo(cargoService.toDto(entity.getCargo()));
-        }
-        if(entity.getCity()!=null) {
-            dto.setDestCity(cityService.toDto(entity.getCity()));
-        }
-        dto.setCompleted(entity.isCompleted());
-        dto.setOperationType(entity.getOperationType());
-        return dto;
-
-    }
-
-
     /**
      * Changes the cargo status when a driver had set it
      * "Loaded" or "Unloaded"
@@ -154,29 +131,5 @@ public class OrderWayPointService {
         }
         return points;
 
-    }
-
-    @Transactional
-    public OrderWaypoint toEntity(CargoWaypointDTO cdto) {
-        OrderWaypoint entity;
-        if(cdto.getId()!=null){
-            entity = getPointById(cdto.getId());
-        }else{
-            entity = new OrderWaypoint();
-        }
-        if(cdto.getCargo()!=null){
-
-            entity.setCargo(cargoService.toEntity(cdto.getCargo()));
-        }
-        if(cdto.getAssignedTruck()!=null){
-            entity.getOrder().setTruckOnOrder(truckService.toEntity(cdto.getAssignedTruck()));
-        }
-        if(cdto.getDestCity()!=null) {
-            entity.setCity(cityService.toEntity(cdto.getDestCity()));
-        }
-        entity.setCompleted(cdto.isCompleted());
-        entity.setPointName(cdto.getName());
-        entity.setOperationType(cdto.getOperationType());
-        return entity;
     }
 }

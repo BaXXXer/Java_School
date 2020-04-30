@@ -3,7 +3,7 @@ package edu.tsystems.javaschool.logapp.api.service;
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.dto.TruckDTO;
 import edu.tsystems.javaschool.logapp.api.dto.TruckStatusDTO;
-import edu.tsystems.javaschool.logapp.api.dto.mapper.TruckMapper;
+import edu.tsystems.javaschool.logapp.api.dto.converter.TruckDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
@@ -20,27 +20,17 @@ import java.util.Map;
 @Service
 public class TruckService {
 
-
-    private TruckDao truckDao;
-    private CityService cityService;
-    private static final Logger LOG  = Logger.getLogger(TruckService.class);
     @Autowired
     private MessageProducer messageProducer;
-
-
-    private final TruckMapper mapper;
+    private final TruckDao truckDao;
+    private final TruckDtoConverter truckConverter;
+    private static final Logger LOG  = Logger.getLogger(TruckService.class);
 
     @Autowired
-    public TruckService(TruckDao truckDao, CityService cityService, TruckMapper mapper) {
+    public TruckService(TruckDao truckDao, TruckDtoConverter truckConverter) {
         this.truckDao = truckDao;
-        this.cityService = cityService;
-        this.mapper = mapper;
+        this.truckConverter = truckConverter;
     }
-
-    public TruckDao getTruckDao() {
-        return truckDao;
-    }
-
 
     @Transactional
     public void saveTruck(TruckDTO truckDTO) {
@@ -51,7 +41,7 @@ public class TruckService {
                 throw new DuplicateEntityException();
             }
         }
-        Truck entity = toEntity(truckDTO);
+        Truck entity = truckConverter.convertToEntity(truckDTO);
         truckDao.saveTruck(entity);
         messageProducer.sendMessage("trucks changed");
     }
@@ -62,7 +52,7 @@ public class TruckService {
         List<TruckDTO> dtos = new ArrayList();
 
         for (Truck t : truckDao.getAllTrucks()) {
-            dtos.add(toDTO(t));
+            dtos.add(truckConverter.convertToDto(t));
         }
         return dtos;
 
@@ -70,7 +60,7 @@ public class TruckService {
 
     @Transactional
     public void updateTruck(TruckDTO truck) {
-        truckDao.updateTruck(toEntity(truck));
+        truckDao.updateTruck(truckConverter.convertToEntity(truck));
         messageProducer.sendMessage("trucks changed");
     }
 
@@ -83,21 +73,13 @@ public class TruckService {
     @Transactional
     public TruckDTO getTruckById(int id) {
         Truck entity = truckDao.getTruckById(id);
-        return toDTO(entity);
+        return truckConverter.convertToDto(entity);
     }
 
-    public TruckDTO toDTO(Truck entity) {
-        TruckDTO truckDTO = new TruckDTO();
-        truckDTO.setId(entity.getId());
-        truckDTO.setRegNumber(entity.getRegNumber());
-
-        truckDTO.setDriverWorkingHours(entity.getDriverWorkingHours());
-        truckDTO.setCapacityTons(entity.getCapacityTons());
-        truckDTO.setCondition(entity.getCondition());
-        truckDTO.setCurrentCityId(entity.getCurrentCity().getCityId());
-        return truckDTO;
-
-    }
+//    public TruckDTO toDTO(Truck entity) {
+//
+//
+//    }
 
     public TruckStatusDTO getTruckStatus(){
         TruckStatusDTO status = new TruckStatusDTO();
@@ -107,29 +89,9 @@ public class TruckService {
         status.setTotalRestNumber(restTucks);
         return status;
     }
-
-    public Truck toEntity(TruckDTO dto) {
-        Truck entity;
-        if(dto.getId()==null){
-
-            entity = new Truck();
-        }else{
-            entity = truckDao.getTruckById(dto.getId());
-        }
-        entity.setId(dto.getId());
-        entity.setCapacityTons(dto.getCapacityTons());
-        entity.setCondition(dto.getCondition());
-        entity.setCurrentCity(cityService.getCityById(dto.getCurrentCityId()));
-        if(dto.getDriverWorkingHours()==null){
-            dto.setDriverWorkingHours(0);
-        }else{
-            entity.setDriverWorkingHours(dto.getDriverWorkingHours());
-        }
-
-        entity.setRegNumber(dto.getRegNumber());
-        return entity;
-
-    }
+//
+//    public Truck toEntity(TruckDTO dto) {
+//    }
 
     @Transactional
     public Map<Integer, String> getTruckMap() {
@@ -143,7 +105,7 @@ public class TruckService {
     public List<TruckDTO> getReadyToGoTrucks() {
         List<TruckDTO> readyDtos = new ArrayList<>();
         for(Truck t: truckDao.getReadyToGoTrucks()){
-            readyDtos.add(toDTO(t));
+            readyDtos.add(truckConverter.convertToDto(t));
         }
         return readyDtos;
     }
@@ -152,9 +114,6 @@ public class TruckService {
         int index = getAllTrucks().size() - 1;
         return getAllTrucks().get(index).getId();
     }
-
-
-//    }
 
 
 }

@@ -3,6 +3,7 @@ package edu.tsystems.javaschool.logapp.api.service;
 import edu.tsystems.javaschool.logapp.api.config.WebMvcConfig;
 import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
+import edu.tsystems.javaschool.logapp.api.dto.converter.DriverDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.util.WorkingHoursCalc;
@@ -31,6 +32,10 @@ public class DriverServiceTest {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private DriverDtoConverter driverDtoConverter;
 
 
     @Autowired
@@ -111,7 +116,7 @@ public class DriverServiceTest {
 
         int driverId = driverService.getLastDriverId();
 
-        Driver driverOutOfDB = driverService.toEntity(driverService.getDriverById(driverId));
+        Driver driverOutOfDB = driverDtoConverter.convertToEntity(driverService.getDriverById(driverId));
 
         Integer userId = driverOutOfDB.getUser().getId();
 

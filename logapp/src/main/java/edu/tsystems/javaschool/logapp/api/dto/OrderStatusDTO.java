@@ -21,7 +21,4 @@ public class OrderStatusDTO {
 
     private List<Cargo> cargoes;
 
-
-
-
 }
