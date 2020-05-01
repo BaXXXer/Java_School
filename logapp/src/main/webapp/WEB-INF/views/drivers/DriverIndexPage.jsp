@@ -127,7 +127,7 @@
 
                 <h1><spring:message
                         code="driverList"/>
-                    <a class="btn btn-primary" style="text-align: right;margin-left: 700px;background-color:green"
+                    <a class="btn btn-primary" style="text-align: right;align:left;background-color:green"
                        href="/drivers/addDriver" role="button"><spring:message
                             code="addDriver"/></a>
                 </h1>

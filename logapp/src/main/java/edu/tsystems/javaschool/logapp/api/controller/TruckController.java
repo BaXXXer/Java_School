@@ -92,7 +92,7 @@ public class TruckController {
                              BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
-            return "trucks/editTruck";
+            return "trucks/EditTruckPage";
         }
         truckService.updateTruck(truck);
         return "redirect: ../allTrucks";

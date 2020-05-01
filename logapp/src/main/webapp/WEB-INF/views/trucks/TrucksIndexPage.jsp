@@ -124,7 +124,7 @@
         <div id="contentPanel" style="position:absolute; left:225px;">
             <h1><spring:message
                     code="truckList"/>
-                <a class="btn btn-primary" style="text-align: right;margin-left: 600px; background-color:green"
+                <a class="btn btn-primary" style="text-align: right;align:right; background-color:green"
                    href="/trucks/addTruck" role="button"><spring:message
                     code="addTruck"/></a>
             </h1>

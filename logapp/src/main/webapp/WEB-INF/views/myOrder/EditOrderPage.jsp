@@ -31,7 +31,7 @@
     <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDBKByqyWkhK4TSbqwOOXzFtWnXHwYrhfw"
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDBKByqyWkhK4TSbqwOOXzFtWnXHwYrhfw&language=en&region=GB"
             type="text/javascript"></script>
 
 
@@ -40,10 +40,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Driver</a>
     <img src="/assets/img/acc.jpg" width="30" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -60,14 +63,14 @@
                     <li>
 
                         <a href="/myOrder/">
-                            <span data-feather="home" class="dropDownWord">My account</span>
+                            <span data-feather="home" class="dropDownWord"><spring:message code="myAccount"/></span></a>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">
-                                <p id="truckDropDown" class="dropDownWord">My order</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message code="myOrder"/></p>
                             </a>
 
                         </li>
@@ -84,16 +87,16 @@
 
 
             <table class="table table-striped">
-                <h3>Order #${order.orderId}</h3><br>
+                <h3><spring:message code="order"/> #${order.orderId}</h3><br>
 
-                <th scope="col">Point Id</th>
+                <th scope="col">Id</th>
                 <th scope="col">Name</th>
-                <th scope="col">Operation type</th>
-                <th scope="col">City</th>
-                <th scope="col">Cargo title</th>
-                <th scope="col">Cargo weight</th>
-                <th scope="col">Cargo status</th>
-                <th scope="col">Edit</th>
+                <th scope="col"><spring:message code="operationType"/></th>
+                <th scope="col"><spring:message code="city"/></th>
+                <th scope="col"><spring:message code="cargoTitle"/></th>
+                <th scope="col"><spring:message code="cargoWeight"/></th>
+                <th scope="col"><spring:message code="cargoStatus"/></th>
+                <th scope="col"><spring:message code="edit"/></th>
 
 
                 <c:forEach items="${order.points}" var="point">
@@ -131,7 +134,7 @@
                             <c:when test="${point.operationType.toString() == 'LOAD'}">
                                 <td>
                                     <form action="/myOrder/setLoaded/${order.orderId}/${point.id}" method="post">
-                                        <input type="submit" value="Set loaded"/>
+                                        <input type="submit" value="<spring:message code="setLoaded"/>"/>
                                     </form>
                                 </td>
                             </c:when>
@@ -140,12 +143,12 @@
                                     <c:when test="${point.cargo.cargoStatus!='DELIVERED'}">
                                         <td>
                                             <form action="/myOrder/setUnloaded/${order.orderId}/${point.id}" method="post">
-                                                <input type="submit" value="Set delivered"/>
+                                                <input type="submit" value="<spring:message code="setUnloaded"/>"/>
                                             </form>
                                         </td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td>Point is completed</td>
+                                        <td><spring:message code="pointIsComleted"/></td>
                                     </c:otherwise>
                                 </c:choose>
                             </c:otherwise>

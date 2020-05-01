@@ -42,8 +42,7 @@
 .flagimg{
     border-radius: 50%;
     position: relative;
-    left: 100px;
-    top: 10px;
+    align: right;
 }
 
 .dropMenu {

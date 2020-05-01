@@ -87,9 +87,9 @@ public class DriverController {
     @RequestMapping(value = "/editDriver/{driverId}", method = RequestMethod.POST)
     public String submitEdit(@ModelAttribute("driverToEdit") @Valid DriverDTO driver,
                              BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            return "drivers/editDriver";
-        }
+//        if(bindingResult.hasErrors()){
+//            return "drivers/EditDriverPage";
+//        }
         driverService.updateDriver(driver);
         return "redirect: ../allDrivers";
     }

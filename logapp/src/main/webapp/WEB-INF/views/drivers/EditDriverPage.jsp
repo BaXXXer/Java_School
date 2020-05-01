@@ -179,7 +179,8 @@
                     <tr>
                         <p style="text-align: center;font-style: italic; margin-bottom: 0px"><spring:message
                                 code="status"/>:</p>
-                            <springForm:select class="dropDownMenu" cssStyle="width: 280px; border-radius: .25 rem" path="driverStatus">
+                            <springForm:select class="dropDownMenu"
+                                               cssStyle="width: 280px; border-radius: .25 rem" path="driverStatus">
                                 <springForm:option value="" label="Choose Type.."/>
                                 <springForm:options items="${enumStatus}"/>
                             </springForm:select>

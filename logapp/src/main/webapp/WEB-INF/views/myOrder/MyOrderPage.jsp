@@ -55,10 +55,13 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Driver</a>
     <img src="/assets/img/acc.jpg" width="30" height="30" class="imgUpstairs">
+    <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
+    <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a href="${pageContext.request.contextPath}/logout" class="nav-link">Sign out</a>
+            <a href="${pageContext.request.contextPath}/logout" class="nav-link">
+                <spring:message code="logout"/></a>
         </li>
     </ul>
 </nav>
@@ -75,14 +78,14 @@
                     <li>
 
                         <a href="/myOrder/">
-                            <span data-feather="home" class="dropDownWord">My account</span>
+                            <span data-feather="home" class="dropDownWord"><spring:message code="myAccount"/></span></a>
                         </a>
                     </li>
                     <div id="trucks" class="menu">
 
                         <li class="nav-item">
                             <a href="/myOrder/editOrder/${driver.assignedOrder.orderId}">
-                                <p id="truckDropDown" class="dropDownWord">My order</p>
+                                <p id="truckDropDown" class="dropDownWord"><spring:message code="myOrder"/></p>
                             </a>
 
                         </li>
@@ -98,15 +101,15 @@
         <div id="contentPanel" style="position:absolute; left:225px;">
             <table class="table table-condensed">
                 <tr>
-                    <td>Your private Number:</td>
+                    <td><spring:message code="privateNumber"/></td>
                     <td>${driver.driverPrivateNum}</td>
                 </tr>
                 <tr>
-                    <td>Currently I am:</td>
+                    <td><spring:message code="currentStatus"/>:</td>
                     <td>
                         <c:choose>
                             <c:when test="${driver.driverStatus=='CARGO_HANDLING'}">
-                                Cargo handling
+                                <spring:message code="cargoHandling"/>
                             </c:when>
                             <c:otherwise>
                                 <c:choose>
@@ -116,17 +119,17 @@
                                     <c:otherwise>
                                         <c:choose>
                                             <c:when test="${driver.driverStatus=='DRIVING'}">
-                                                Driving
+                                                <spring:message code="driving"/>
                                             </c:when>
                                             <c:otherwise>
                                                 <c:choose>
                                                     <c:when test="${driver.driverStatus=='CO_DRIVER'}">
-                                                        Co-Driver
+                                                        <spring:message code="co-driver"/>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <c:choose>
                                                             <c:when test="${driver.driverStatus=='REST'}">
-                                                                Off Work
+                                                                <spring:message code="offWork"/>
                                                             </c:when>
                                                             <c:otherwise></c:otherwise>
                                                         </c:choose>
@@ -144,17 +147,17 @@
                 </tr>
 
                 <tr>
-                    <td>Truck Registration Number:</td>
+                    <td><spring:message code="truckNumber"/>:</td>
                     <td>${driver.truckRegNumber}</td>
                 </tr>
                 <tr>
-                    <td>Current order:</td>
+                    <td><spring:message code="order"/>:</td>
                     <c:choose>
                         <c:when test="${driver.assignedOrder!=null}">
                             <td>${driver.assignedOrder.orderId}</td>
                         </c:when>
                         <c:otherwise>
-                            <td>No order</td>
+                            <td><spring:message code="noOrders"/></td>
                         </c:otherwise>
 
                     </c:choose>
@@ -162,7 +165,7 @@
                 <c:choose>
                 <c:when test="${driver.assignedOrder!=null}">
                 <tr>
-                    <td>Order points:</td>
+                    <td><spring:message code="orderPoints"/>:</td>
                     <td>
                         <c:forEach items="${pointList}" var="point">
                             ${pointMap.get(point)} <br>
@@ -171,7 +174,7 @@
                 </tr>
 
                 <tr>
-                    <td>Co-driver(s) private number(s):</td>
+                    <td><spring:message code="coDriversPrivNum"/>:</td>
                     <c:choose>
                         <c:when test="${driverList.size()>1}">
                             <td>
@@ -182,7 +185,7 @@
                                 </c:forEach></td>
                         </c:when>
                         <c:otherwise>
-                            <td>You have no co-drivers for this trip!</td>
+                            <td><spring:message code="noCoDrivers"/></td>
                         </c:otherwise>
 
                     </c:choose>
@@ -198,14 +201,14 @@
                 || driver.driverStatus =='DRIVING' || driver.driverStatus == 'CO_DRIVER'}">
                         <td>
                             <form action="${pageContext.request.contextPath}/myOrder/setOnRest" method="post">
-                                <input type="submit" value="Finish shift"/>
+                                <input type="submit" value="<spring:message code="finishShift"/>"/>
                             </form>
                         </td>
                     </c:when>
                     <c:otherwise>
                         <td>
                             <form action="${pageContext.request.contextPath}/myOrder/setOnShift" method="post">
-                                <input type="submit" value="Start shift"/>
+                                <input type="submit" value="<spring:message code="startShift"/>"/>
                             </form>
                         </td>
 
@@ -216,7 +219,7 @@
                 <c:if test="${driver.driverStatus!='REST'}">
                     <tr>
                         <td>
-                            Set my status to
+                            <spring:message code="setStatus"/>
                         </td>
                         <td>
                             <springForm:form action="${pageContext.request.contextPath}/myOrder/setNewStatus"
@@ -227,7 +230,7 @@
                                     <c:choose>
                                         <c:when test="${status=='CARGO_HANDLING'}">
                                             <input type="radio" name="driverStatus"
-                                                   value="${'CARGO_HANDLING'}"/> Cargo handling
+                                                   value="${'CARGO_HANDLING'}"/> <spring:message code="cargoHandling"/>
                                             <br>
                                         </c:when>
                                         <c:otherwise>
@@ -241,14 +244,14 @@
                                                     <c:choose>
                                                         <c:when test="${status=='DRIVING'}">
                                                             <input type="radio" name="driverStatus"
-                                                                   value="${'DRIVING'}"/> Driving
+                                                                   value="${'DRIVING'}"/> <spring:message code="driving"/>
                                                             <br>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <c:choose>
                                                                 <c:when test="${status=='CO_DRIVER'}">
                                                                     <input type="radio" name="driverStatus"
-                                                                           value="${'CO_DRIVER'}"/> Co-Driver
+                                                                           value="${'CO_DRIVER'}"/> <spring:message code="co-driver"/>
                                                                     <br>
                                                                 </c:when>
                                                                 <c:otherwise></c:otherwise>
