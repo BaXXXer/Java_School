@@ -48,11 +48,11 @@ public class OrderWayPointService {
     @Transactional
     public List<CargoWaypointDTO> getAllWaypoints() {
         List<OrderWaypoint> waypoints = dao.getAllWaypoints();
-        List<CargoWaypointDTO> WPdtos = new ArrayList<>();
+        List<CargoWaypointDTO> wayPointdtos = new ArrayList<>();
         for(OrderWaypoint p: waypoints){
-            WPdtos.add(pointConverter.convertToDTO(p));
+            wayPointdtos.add(pointConverter.convertToDTO(p));
         }
-        return WPdtos;
+        return wayPointdtos;
 
     }
 
@@ -65,7 +65,7 @@ public class OrderWayPointService {
     @Transactional
     public List<CargoWaypointDTO> getNotAssignedWaypoints(){
         List<CargoWaypointDTO> allWaypoints = getAllWaypoints();
-        List<CargoWaypointDTO> notAssignedPoints = new ArrayList();
+        List<CargoWaypointDTO> notAssignedPoints = new ArrayList<>();
         for(CargoWaypointDTO point: allWaypoints){
             if(point.getOperationType()== OrderWaypoint.Operation.LOAD && !point.isCompleted()){
                 notAssignedPoints.add(point);
@@ -76,7 +76,7 @@ public class OrderWayPointService {
 
     @Transactional
     public List<CityDTO> getCityCoordinates(List<Integer> pointIds){
-        List<CityDTO> cityList = new ArrayList();
+        List<CityDTO> cityList = new ArrayList<>();
         for(Integer id: pointIds){
             CityDTO city = cityConverter.convertToDto(getPointById(id).getCity());
             cityList.add(city);

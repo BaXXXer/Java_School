@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,14 +20,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetails;
 
 
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(userDetails);
-//                .and()
-//                .inMemoryAuthentication()
-//                .withUser("admin")
-//                .password("password")
-//                .authorities("ROLE_MANAGER");
     }
 
 
@@ -41,7 +36,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/drivers/**").access("hasRole('ROLE_MANAGER')")
-                .antMatchers("/drivers/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/trucks/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/orders/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/myOrder/**").access("hasRole('ROLE_DRIVER')")
@@ -52,7 +46,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .logout();
-
     }
 
 

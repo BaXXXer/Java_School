@@ -8,7 +8,6 @@ import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.util.WorkingHoursCalc;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,6 @@ import java.util.List;
 @ContextConfiguration(classes = {WebMvcConfig.class})
 @WebAppConfiguration
 public class DriverServiceTest {
-
-    private WorkingHoursCalc workingHoursCalc;
 
     @Autowired
     private CityService cityService;
@@ -44,11 +41,6 @@ public class DriverServiceTest {
     @Autowired
     private TruckService truckService;
 
-    @Before
-    public void create() {
-        workingHoursCalc = new WorkingHoursCalc();
-    }
-
 
     @Test
     @Transactional
@@ -61,7 +53,7 @@ public class DriverServiceTest {
 
         int requiredWorkingHours = (int) WorkingHoursCalc.getRequiredWorkHoursInCurrentMonth(time1, time2);
 
-        Assert.assertEquals(requiredWorkingHours, 4);
+        Assert.assertEquals(4,requiredWorkingHours);
 
 
         DriverDTO driver1 = new DriverDTO();//less than 172 hours worked, should be in result list
@@ -93,8 +85,8 @@ public class DriverServiceTest {
 
         List<DriverDTO> freeDriversInCity = driverService.findFreeDriversInCity(2, 176 - requiredWorkingHours);//In current month we need to find driver with 176-4 = 172 worked hours
         for (DriverDTO driver : freeDriversInCity) {
-            Assert.assertEquals(driver.getDriverWorkedHours() < 172, true);
-            Assert.assertEquals(requiredCityName, "Chicago");
+            Assert.assertEquals(true,driver.getDriverWorkedHours() < 172);
+            Assert.assertEquals("Chicago",requiredCityName );
         }
 
     }
@@ -124,7 +116,7 @@ public class DriverServiceTest {
 
         String email = user.getEmail();
 
-        Assert.assertEquals(email,"misha.popov@logapp.com");
+        Assert.assertEquals("misha.popov@logapp.com",email);
     }
 
 }

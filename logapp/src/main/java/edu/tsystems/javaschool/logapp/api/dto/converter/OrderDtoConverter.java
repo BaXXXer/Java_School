@@ -73,7 +73,7 @@ public class OrderDtoConverter {
         order.setOrderIsDone(dto.isOrderIsDone());
         if (dto.getDriversOnOrderIds() != null) {
             List<Integer> driverIds = dto.getDriversOnOrderIds();
-            List<Driver> drivers = new ArrayList();
+            List<Driver> drivers = new ArrayList<>();
             for (Integer id : driverIds) {
                 drivers.add(driverDao.getDriverById(id));
             }
@@ -84,7 +84,7 @@ public class OrderDtoConverter {
             order.setTruckOnOrder(truckDao.getTruckById(dto.getTruckId()));
         }
         if (dto.getPoints() != null) {
-            List<OrderWaypoint> points = new ArrayList();
+            List<OrderWaypoint> points = new ArrayList<>();
             for (CargoWaypointDTO cdto : dto.getPoints()) {
                 OrderWaypoint orderWaypoint = pointConverter.convertToEntity(cdto);
                 orderWaypoint.setOrder(order);

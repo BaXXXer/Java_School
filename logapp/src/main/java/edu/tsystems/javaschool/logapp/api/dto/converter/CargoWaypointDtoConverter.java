@@ -28,10 +28,8 @@ public class CargoWaypointDtoConverter {
         CargoWaypointDTO dto = new CargoWaypointDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getPointName());
-        if(entity.getOrder()!=null){
-            if(entity.getOrder().getTruckOnOrder()!=null) {
+        if(entity.getOrder()!=null && entity.getOrder().getTruckOnOrder()!=null){
                 dto.setAssignedTruck(truckConverter.convertToDto(entity.getOrder().getTruckOnOrder()));
-            }
         }
         if(entity.getCargo()!=null) {
             dto.setCargo(cargoConverter.convertToDto(entity.getCargo()));

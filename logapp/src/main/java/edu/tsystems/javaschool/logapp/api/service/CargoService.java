@@ -23,16 +23,6 @@ public class CargoService {
         this.converter = converter;
     }
 
-//    @Transactional
-//    public CargoDTO toDto(Cargo entity){
-//
-//    }
-//
-//    @Transactional
-//    public Cargo toEntity(CargoDTO dto){
-//
-//    }
-
 
     @Transactional
     public List<CargoDTO> getAllCargoes(){

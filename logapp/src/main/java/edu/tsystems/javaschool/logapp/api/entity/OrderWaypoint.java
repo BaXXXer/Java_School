@@ -38,9 +38,6 @@ public class OrderWaypoint {
     @ManyToOne()
     @JoinColumn(name = "orders_or_id")
     private Order order;
-//
-//    @Column(name = "waypoint_weight")
-//    private int waypointWeight;
 
     @ManyToOne()
     @JoinColumn(name = "city_id", nullable = false)

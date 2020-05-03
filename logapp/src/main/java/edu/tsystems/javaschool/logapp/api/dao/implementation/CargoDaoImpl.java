@@ -1,9 +1,7 @@
 package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.CargoDao;
-import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +15,16 @@ import java.util.List;
 public class CargoDaoImpl implements CargoDao {
 
     private SessionFactory sessionFactory;
-    private WayPointsDao pointsDao;
-    private static final Logger LOG = Logger.getLogger(CargoDaoImpl.class);
 
     @Autowired
-    public CargoDaoImpl(SessionFactory sessionFactory, WayPointsDao pointsDao) {
+    public CargoDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.pointsDao = pointsDao;
     }
 
     @Override
     @Transactional
     public Cargo findCargoById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Cargo cargo = session.load(Cargo.class, id);
         return session.load(Cargo.class, id);
     }
 

@@ -3,9 +3,6 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.TruckDao;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
-import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
-import org.apache.log4j.Logger;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,6 @@ import java.util.List;
 public class TruckDaoImpl implements TruckDao {
 
     private SessionFactory sessionFactory;
-    private static final Logger LOG = Logger.getLogger(TruckDaoImpl.class);
 
     @Override
     public long getAllTrucksNumber() {
@@ -48,7 +44,6 @@ public class TruckDaoImpl implements TruckDao {
     @Transactional
     public Truck getTruckById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Truck truck = session.load(Truck.class, id);
         return session.load(Truck.class, id);
 
     }

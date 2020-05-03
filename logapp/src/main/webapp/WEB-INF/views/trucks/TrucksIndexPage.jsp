@@ -63,8 +63,10 @@
 </head>
 <body>
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
-    <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    <div>
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
+        <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
+    </div>
     <a href="?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
     <a href="?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
 
@@ -121,12 +123,12 @@
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div class="container-fluid">
-        <div id="contentPanel" style="position:absolute; left:225px;">
+        <div id="contentPanel" style="position:absolute; left:225px; min-width: 949px">
             <h1><spring:message
                     code="truckList"/>
                 <a class="btn btn-primary" style="text-align: right;align:right; background-color:green"
                    href="/trucks/addTruck" role="button"><spring:message
-                    code="addTruck"/></a>
+                        code="addTruck"/></a>
             </h1>
 
             <c:if test="${!empty trucks}">

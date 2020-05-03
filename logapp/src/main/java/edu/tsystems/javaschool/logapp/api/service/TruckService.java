@@ -24,7 +24,8 @@ public class TruckService {
     private MessageProducer messageProducer;
     private final TruckDao truckDao;
     private final TruckDtoConverter truckConverter;
-    private static final Logger LOG  = Logger.getLogger(TruckService.class);
+    private static final Logger LOG = Logger.getLogger(TruckService.class);
+    private static final String MESSAGE = "trucks changed";
 
     @Autowired
     public TruckService(TruckDao truckDao, TruckDtoConverter truckConverter) {
@@ -37,13 +38,13 @@ public class TruckService {
         List<TruckDTO> allTrucks = getAllTrucks();
         for (TruckDTO t : allTrucks) {
             if (t.getRegNumber().equals(truckDTO.getRegNumber())) {
-                LOG.error("Truck with number " + truckDTO.getRegNumber()+ " already exists in DB!");
+                LOG.error("Truck with number " + truckDTO.getRegNumber() + " already exists in DB!");
                 throw new DuplicateEntityException();
             }
         }
         Truck entity = truckConverter.convertToEntity(truckDTO);
         truckDao.saveTruck(entity);
-        messageProducer.sendMessage("trucks changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 
 
@@ -61,13 +62,13 @@ public class TruckService {
     @Transactional
     public void updateTruck(TruckDTO truck) {
         truckDao.updateTruck(truckConverter.convertToEntity(truck));
-        messageProducer.sendMessage("trucks changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 
     @Transactional
     public void removeTruck(int id) {
         truckDao.removeTruck(id);
-        messageProducer.sendMessage("trucks changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 
     @Transactional
@@ -76,12 +77,7 @@ public class TruckService {
         return truckConverter.convertToDto(entity);
     }
 
-//    public TruckDTO toDTO(Truck entity) {
-//
-//
-//    }
-
-    public TruckStatusDTO getTruckStatus(){
+    public TruckStatusDTO getTruckStatus() {
         TruckStatusDTO status = new TruckStatusDTO();
         status.setTotalTrucksNumber(truckDao.getAllTrucksNumber());
         status.setTotalBrokenNumber(truckDao.getBrokenTrucksNumber());
@@ -89,9 +85,6 @@ public class TruckService {
         status.setTotalRestNumber(restTucks);
         return status;
     }
-//
-//    public Truck toEntity(TruckDTO dto) {
-//    }
 
     @Transactional
     public Map<Integer, String> getTruckMap() {
@@ -104,12 +97,13 @@ public class TruckService {
 
     public List<TruckDTO> getReadyToGoTrucks() {
         List<TruckDTO> readyDtos = new ArrayList<>();
-        for(Truck t: truckDao.getReadyToGoTrucks()){
+        for (Truck t : truckDao.getReadyToGoTrucks()) {
             readyDtos.add(truckConverter.convertToDto(t));
         }
         return readyDtos;
     }
 
+    @Transactional
     public int getLastAddedTruckIndex() {
         int index = getAllTrucks().size() - 1;
         return getAllTrucks().get(index).getId();

@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/png">
     <title>LogApp</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -118,7 +119,7 @@
             <c:choose>
                 <c:when test="${!empty truckList}">
 
-                    <h1>Truck List</h1>
+                    <h1><spring:message code="truckList"/></h1>
 
                     <table class="table table-striped">
                         <tr>

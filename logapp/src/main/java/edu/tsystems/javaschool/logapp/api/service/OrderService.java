@@ -39,6 +39,7 @@ public class OrderService {
     private final CityDtoConverter cityDtoConverter;
     private final CargoWaypointDtoConverter pointConverter;
     private final DriverDtoConverter driverDtoConverter;
+    private static String MESSAGE = "orders changed";
 
     @Autowired
     private MessageProducer messageProducer;
@@ -70,7 +71,7 @@ public class OrderService {
     public int saveOrder(OrderDTO dto) {
         Order order = orderConverter.convertToEntity(dto);
         int i = orderDao.saveOrder(order);
-        messageProducer.sendMessage("orders changed");
+        messageProducer.sendMessage(MESSAGE);
         return i;
     }
 
@@ -291,7 +292,7 @@ public class OrderService {
 
         orderDao.updateOrder(order);//update entity
 
-        messageProducer.sendMessage("orders changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 
 
@@ -307,7 +308,7 @@ public class OrderService {
         Order order = orderConverter.convertToEntity(dto);
         orderDao.updateOrder(order);
 
-        messageProducer.sendMessage("orders changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 
     private void checkTypes(OrderDTO dto) {
@@ -352,7 +353,7 @@ public class OrderService {
         }
         order.setWayPoints(pointEntities);
         orderDao.updateOrder(order);
-        messageProducer.sendMessage("orders changed");
+        messageProducer.sendMessage(MESSAGE);
 
     }
 
@@ -376,7 +377,7 @@ public class OrderService {
         if (points.size() == i) {
             orderDTO.setOrderIsDone(true);
             orderDao.updateOrder(orderConverter.convertToEntity(orderDTO));
-            messageProducer.sendMessage("orders changed");
+            messageProducer.sendMessage(MESSAGE);
         }
     }
 
@@ -447,6 +448,6 @@ public class OrderService {
                             * orderDTO.getDriversOnOrderIds().size());//multiplies per number of drivers on current order
         }
         truckService.updateTruck(truckDTO);
-        messageProducer.sendMessage("orders changed");
+        messageProducer.sendMessage(MESSAGE);
     }
 }

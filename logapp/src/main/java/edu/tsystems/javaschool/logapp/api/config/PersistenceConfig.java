@@ -33,7 +33,7 @@ public class PersistenceConfig {
     public LocalSessionFactoryBean sessionFactory() throws IOException {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[]{"edu.tsystems.javaschool.logapp.api"});
+        sessionFactory.setPackagesToScan("edu.tsystems.javaschool.logapp.api");
         sessionFactory.setHibernateProperties(hibernateProperties());
         sessionFactory.afterPropertiesSet();
         return sessionFactory;
@@ -61,7 +61,7 @@ public class PersistenceConfig {
 
 
     @Bean
-    public PlatformTransactionManager hibernateTransactionManager() throws Exception {
+    public PlatformTransactionManager hibernateTransactionManager() throws IOException {
         HibernateTransactionManager transactionManager
                 = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());

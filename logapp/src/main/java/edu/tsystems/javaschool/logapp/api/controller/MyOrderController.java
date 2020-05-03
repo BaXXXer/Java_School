@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -27,16 +26,16 @@ public class MyOrderController {
     private final OrderService orderService;
     private final CityService cityService;
     private final OrderWayPointService pointService;
-    private final HttpServletRequest request;
+    private static final String REDIRECT = "redirect: .";
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public MyOrderController(DriverService driverService, OrderService orderService, CityService cityService, OrderWayPointService pointService, HttpServletRequest request) {
+    public MyOrderController(DriverService driverService, OrderService orderService, CityService cityService,
+                             OrderWayPointService pointService) {
         this.driverService = driverService;
         this.orderService = orderService;
         this.cityService = cityService;
         this.pointService = pointService;
-        this.request = request;
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET,RequestMethod.POST})
@@ -57,11 +56,12 @@ public class MyOrderController {
         return "myOrder/MyOrderPage";
     }
 
-    @RequestMapping(value = "/setNewStatus", method = {RequestMethod.POST})
+    @PostMapping(value = "/setNewStatus")
     public String setStatusSubmit(@RequestParam(name = "driverStatus") String status, Principal principal) {
         driverService.getDUDtoByEmailAndSetStatus(principal.getName(),status);
 
-        return "redirect: .";
+
+        return REDIRECT;
     }
 
     @GetMapping("/editOrder/{id}")
@@ -101,14 +101,14 @@ public class MyOrderController {
     public String setOnRest(Principal principal) {
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
         driverService.setDriverOnRest(driver);
-        return "redirect: .";
+        return REDIRECT;
     }
 
     @RequestMapping(value = "/setOnShift", method = {RequestMethod.GET, RequestMethod.POST})
     public String setOnShift(Principal principal) {
         DriverUserDTO driver = driverService.getDUDtoByEmail(principal.getName());
         driverService.setDriverOnShift(driver);
-        return "redirect: .";
+        return REDIRECT;
     }
 
 }

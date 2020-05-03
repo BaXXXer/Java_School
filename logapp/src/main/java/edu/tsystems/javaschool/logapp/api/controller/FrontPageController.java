@@ -3,7 +3,7 @@ package edu.tsystems.javaschool.logapp.api.controller;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Controller
 public class FrontPageController {
-    @RequestMapping("/")
+    @GetMapping("/")
     public void commonFrontPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (request.isUserInRole(User.UserRole.ROLE_MANAGER.toString())) {

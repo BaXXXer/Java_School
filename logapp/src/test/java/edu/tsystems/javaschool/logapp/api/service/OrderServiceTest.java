@@ -94,7 +94,7 @@ public class OrderServiceTest {
         int lastAddedOrder2Id = orderService.getLastAddedOrderId();
         OrderDTO order2FromDB = orderService.getOrderById(lastAddedOrder2Id);
 
-        Assert.assertEquals(orderService.getReadyToGoTrucks(order2FromDB).contains(truckFromDB),false); //false as the truck is assigned
+        Assert.assertEquals(false,orderService.getReadyToGoTrucks(order2FromDB).contains(truckFromDB)); //false as the truck is assigned
 
         TruckDTO truck1 = new TruckDTO(); //Must not be in result list (low capacity)
         truck1.setCondition(Truck.Condition.OK);
@@ -108,7 +108,7 @@ public class OrderServiceTest {
 
         TruckDTO truck2FromDB = truckService.getTruckById(lastIndex2);
 
-        Assert.assertEquals(orderService.getReadyToGoTrucks(orderFromDB).contains(truck2FromDB),false); // false as the truck with low capacity
+        Assert.assertEquals(false,orderService.getReadyToGoTrucks(orderFromDB).contains(truck2FromDB)); // false as the truck with low capacity
 
     }
 

@@ -111,8 +111,7 @@ public class DriverControllerIntegrationTest {
 
         driverService.saveDriver(driver);
         int lastId = driverService.getLastDriverId();
-        Assert.assertEquals(driverService.getDriverById(lastId).getDriverFirstName(), "Misha");
-//        driverService.removeDriver(lastId);
+        Assert.assertEquals("Misha",driverService.getDriverById(lastId).getDriverFirstName() );
     }
 
     @Test
@@ -134,7 +133,7 @@ public class DriverControllerIntegrationTest {
         DriverDTO driverToUpdate = driverService.getDriverById(lastId);
         driverToUpdate.setDriverFirstName("Masha");
         driverService.updateDriver(driverToUpdate);
-        Assert.assertEquals(driverService.getDriverById(lastId).getDriverFirstName(), "Masha");
+        Assert.assertEquals("Masha",driverService.getDriverById(lastId).getDriverFirstName());
         driverService.removeDriver(lastId);
 
 

@@ -52,21 +52,10 @@ public class CityService {
 
 
     public Map<Integer, String> getCityMap() {
-        Map<Integer, String> cityMap = new HashMap();
+        Map<Integer, String> cityMap = new HashMap<>();
         for (City c : getAllCities()) {
             cityMap.put(c.getCityId(), c.getCityName());
         }
         return cityMap;
     }
-
-//    @Transactional
-//    public CityDTO toDto(City entity) {
-//
-//
-//    }
-//
-//    @Transactional
-//    public City toEntity(CityDTO dto) {
-//
-//    }
 }

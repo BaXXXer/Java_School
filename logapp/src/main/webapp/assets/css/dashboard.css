@@ -42,7 +42,18 @@
 .flagimg{
     border-radius: 50%;
     position: relative;
-    align: right;
+    margin-left:35px;
+    margin-right:35px;
+
+    text-align: right;
+    display: inline-block;
+}
+#deutschFlag{
+    left: 2em;
+}
+
+#engFlag{
+    left: 1.75em;
 }
 
 .dropMenu {

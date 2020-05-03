@@ -225,7 +225,7 @@ public class OrderControllerIntegrationTest {
         order.getPoints().get(0).setOperationType(OrderWaypoint.Operation.UNLOAD);
         orderService.updateOrder(orderToUpdate);
 
-        Assert.assertEquals(order.getPoints().get(0).getOperationType(),OrderWaypoint.Operation.UNLOAD);
+        Assert.assertEquals(OrderWaypoint.Operation.UNLOAD,order.getPoints().get(0).getOperationType());
     }
 
 

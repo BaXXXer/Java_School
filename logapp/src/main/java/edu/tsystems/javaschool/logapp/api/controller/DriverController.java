@@ -2,7 +2,6 @@ package edu.tsystems.javaschool.logapp.api.controller;
 
 import edu.tsystems.javaschool.logapp.api.dto.DriverDTO;
 import edu.tsystems.javaschool.logapp.api.entity.Driver;
-import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import edu.tsystems.javaschool.logapp.api.service.CityService;
 import edu.tsystems.javaschool.logapp.api.service.DriverService;
 import edu.tsystems.javaschool.logapp.api.service.TruckService;
@@ -24,16 +23,12 @@ public class DriverController {
     private final DriverService driverService;
     private final TruckService truckService;
     private final CityService cityService;
-//    private final MessageProducer messageProducer;
-
 
     @Autowired
     public DriverController(DriverService driverService, TruckService truckService, CityService cityService) {
         this.driverService = driverService;
         this.truckService = truckService;
-        this.cityService = cityService;
-//        this.messageProducer = messageProducer;
-    }
+        this.cityService = cityService;    }
 
     @RequestMapping(value = "/addDriver", method = RequestMethod.GET)
     public ModelAndView showForm() {
@@ -53,7 +48,6 @@ public class DriverController {
             return "drivers/AddNewDriverPage";
         }
         driverService.saveDriver(driverDTO);
-//        messageProducer.sendMessage("Driver saved!");
         return "redirect: ./allDrivers";
 
     }
@@ -87,9 +81,6 @@ public class DriverController {
     @RequestMapping(value = "/editDriver/{driverId}", method = RequestMethod.POST)
     public String submitEdit(@ModelAttribute("driverToEdit") @Valid DriverDTO driver,
                              BindingResult bindingResult) {
-//        if(bindingResult.hasErrors()){
-//            return "drivers/EditDriverPage";
-//        }
         driverService.updateDriver(driver);
         return "redirect: ../allDrivers";
     }

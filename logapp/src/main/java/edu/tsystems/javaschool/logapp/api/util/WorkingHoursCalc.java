@@ -28,4 +28,7 @@ public class WorkingHoursCalc {
         }
         return requiredWorkHours;
     }
+
+    private WorkingHoursCalc() {
+    }
 }

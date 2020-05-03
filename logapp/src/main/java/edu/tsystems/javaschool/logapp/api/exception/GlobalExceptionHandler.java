@@ -20,12 +20,13 @@ import java.util.Arrays;
 public class GlobalExceptionHandler {
 
     private static final Logger LOG = Logger.getLogger(GlobalExceptionHandler.class);
+    private static final String EXCEPTION = "exception";
 
     @ExceptionHandler({SQLException.class, DataAccessException.class, HibernateException.class})
     public ModelAndView handleSQLException(HttpServletRequest request, Exception ex){
         LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
         ModelAndView modelAndView = new ModelAndView("exceptions/database_error");
-        modelAndView.addObject("exception", ex);
+        modelAndView.addObject(EXCEPTION, ex);
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
     }
@@ -35,26 +36,26 @@ public class GlobalExceptionHandler {
     public ModelAndView handleEntityNotFoundException(HttpServletRequest request, Exception ex){
         ModelAndView modelAndView = new ModelAndView("exceptions/entityNotFound");
         LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
-        modelAndView.addObject("exception", ex);
-        modelAndView.addObject("url", request.getRequestURL());
-        return modelAndView;
-    }
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Duplicating entity")
-    @ExceptionHandler(DuplicateEntityException.class)
-    public ModelAndView handleDuplicateEntityException(HttpServletRequest request, Exception ex) {
-        LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
-        ModelAndView modelAndView = new ModelAndView("exceptions/duplicateEntity");
-        modelAndView.addObject("exception", ex);
+        modelAndView.addObject(EXCEPTION, ex);
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
     }
 
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Incorrect operation type and cargo status")
+    @ExceptionHandler(DuplicateEntityException.class)
+    public ModelAndView handleDuplicateEntityException(HttpServletRequest request, Exception ex) {
+        LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
+        ModelAndView modelAndView = new ModelAndView("exceptions/duplicateEntity");
+        modelAndView.addObject(EXCEPTION, ex);
+        modelAndView.addObject("url", request.getRequestURL());
+        return modelAndView;
+    }
+
+
     @ExceptionHandler(InvalidStateException.class)
     public ModelAndView handleInvalidStateException(HttpServletRequest request, Exception ex){
         LOG.error(ex.getMessage()+Arrays.toString(ex.getStackTrace()));
         ModelAndView modelAndView = new ModelAndView("exceptions/invalidStateException");
-        modelAndView.addObject("exception", ex);
+        modelAndView.addObject(EXCEPTION, ex);
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
 
@@ -65,19 +66,19 @@ public class GlobalExceptionHandler {
     public ModelAndView handleNotFound(HttpServletRequest request, Exception ex){
         LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
         ModelAndView modelAndView = new ModelAndView("exceptions/404");
-        modelAndView.addObject("exception", ex);
+        modelAndView.addObject(EXCEPTION, ex);
         modelAndView.addObject("url", request.getRequestURL());
         return modelAndView;
     }
-//
-//    @ExceptionHandler(Exception.class)
-//    public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception ex){
-//        LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
-//        ModelAndView modelAndView = new ModelAndView("exceptions/generic");
-//        modelAndView.addObject("exception", ex);
-//        modelAndView.addObject("url", request.getRequestURL());
-//        return modelAndView;
-//    }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView defaultErrorHandler(HttpServletRequest request, Exception ex){
+        LOG.error(ex.getMessage()+ Arrays.toString(ex.getStackTrace()));
+        ModelAndView modelAndView = new ModelAndView("exceptions/generic");
+        modelAndView.addObject(EXCEPTION, ex);
+        modelAndView.addObject("url", request.getRequestURL());
+        return modelAndView;
+    }
 
 
 

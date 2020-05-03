@@ -1,7 +1,6 @@
 package edu.tsystems.javaschool.logapp.api.config;
 
 
-import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

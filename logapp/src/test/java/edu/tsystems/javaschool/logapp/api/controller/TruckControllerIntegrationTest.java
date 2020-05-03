@@ -79,7 +79,7 @@ public class TruckControllerIntegrationTest {
 
         truckService.saveTruck(truck);
         int lastId = truckService.getLastAddedTruckIndex();
-        Assert.assertEquals(truckService.getTruckById(lastId).getRegNumber(),"AA98765");
+        Assert.assertEquals("AA98765",truckService.getTruckById(lastId).getRegNumber());
         truckService.removeTruck(lastId);
     }
 
@@ -100,7 +100,7 @@ public class TruckControllerIntegrationTest {
         TruckDTO truckToUpdate = truckService.getTruckById(lastId);
         truckToUpdate.setRegNumber("BB98765");
         truckService.updateTruck(truckToUpdate);
-        Assert.assertEquals(truckService.getTruckById(lastId).getRegNumber(), "BB98765");
+        Assert.assertEquals("BB98765",truckService.getTruckById(lastId).getRegNumber());
         truckService.removeTruck(lastId);
 
 

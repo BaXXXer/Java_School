@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/png">
     <title>LogApp</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -53,8 +54,8 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0">LogApp Manager</a>
     <img src="/assets/img/truck1.png" width="50" height="30" class="imgUpstairs">
-    <a href="/?lang=en"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg"></a>
-    <a href="/?lang=de"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg"></a>
+    <a href="/?lang=en" id="engFlag"><img src="/assets/img/GB-flag.png" width="20" height="20" class="flagimg" ></a>
+    <a href="/?lang=de" id="deutschFlag"><img src="/assets/img/DEflag.png" width="20" height="20" class="flagimg" ></a>
 
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">

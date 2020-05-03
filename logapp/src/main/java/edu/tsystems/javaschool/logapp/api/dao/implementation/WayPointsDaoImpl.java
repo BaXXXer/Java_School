@@ -2,8 +2,6 @@ package edu.tsystems.javaschool.logapp.api.dao.implementation;
 
 import edu.tsystems.javaschool.logapp.api.dao.WayPointsDao;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
-import edu.tsystems.javaschool.logapp.api.exception.EntityNotFoundException;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import java.util.List;
 @Repository
 public class WayPointsDaoImpl implements WayPointsDao {
     private SessionFactory sessionFactory;
-    private static final Logger LOG = Logger.getLogger(WayPointsDaoImpl.class);
 
     @Autowired
     public WayPointsDaoImpl(SessionFactory sessionFactory) {

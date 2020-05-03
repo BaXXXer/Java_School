@@ -10,5 +10,4 @@ public interface OrderDao {
     Order getOrderById(int id);
     void updateOrder(Order order);
     List<Order> getLastTenOrders();
-//    void removeOrder(int id);
 }
