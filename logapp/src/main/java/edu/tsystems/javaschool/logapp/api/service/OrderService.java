@@ -289,6 +289,7 @@ public class OrderService {
         assignedDrivers.addAll(set);
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
+//        driverService.updateDriver(driver);
 
         orderDao.updateOrder(order);//update entity
 

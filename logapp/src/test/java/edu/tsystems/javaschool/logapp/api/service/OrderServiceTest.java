@@ -2,6 +2,7 @@ package edu.tsystems.javaschool.logapp.api.service;
 
 import edu.tsystems.javaschool.logapp.api.config.WebMvcConfig;
 import edu.tsystems.javaschool.logapp.api.dto.*;
+import edu.tsystems.javaschool.logapp.api.entity.Driver;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 import org.junit.Assert;
@@ -25,6 +26,9 @@ public class OrderServiceTest {
     private TruckService truckService;
 
     @Autowired
+    private DriverService driverService;
+
+    @Autowired
     private CargoService cargoService;
 
     @Autowired
@@ -32,6 +36,9 @@ public class OrderServiceTest {
 
     @Autowired
     private OrderService orderService;
+
+    private DriverDTO driver;
+    private OrderDTO order;
 
     private List<CargoWaypointDTO> points;
 
@@ -113,11 +120,113 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void findDriversForTrip() {
+    public void testFindDriversForTrip() {
+        points = new ArrayList<>();
+
+        CargoDTO cargo1 = cargoService.getAllCargoes().get(0);
+        CityDTO city1 = cityService.getCityDtoById(1) ;
+        CargoWaypointDTO point1 = new CargoWaypointDTO();
+
+        CargoDTO cargo2 = cargoService.getAllCargoes().get(1);
+        CityDTO city2 = cityService.getCityDtoById(7) ;
+        CargoWaypointDTO point2 = new CargoWaypointDTO();
+
+        point1.setCargo(cargo1);
+        point1.setName("999");
+        point1.setOperationType(OrderWaypoint.Operation.LOAD);
+        point1.setCompleted(false);
+        point1.setDestCity(city1);
+
+        point2.setCargo(cargo2);
+        point2.setName("1000");
+        point2.setOperationType(OrderWaypoint.Operation.LOAD);
+        point2.setCompleted(false);
+        point2.setDestCity(city2);
+
+        points.add(point1);
+        points.add(point2);
+
+        OrderDTO order = new OrderDTO();
+        order.setPoints(points);
+        order.setTruckId(40);
+
+        driver = new DriverDTO();
+        driver.setDriversTruckId(40);
+        driver.setDriverFirstName("Misha");
+        driver.setDriverSurname("Popov");
+        driver.setPassword("password");
+        driver.setDriverPrivateNum(111112);
+        driver.setDriverWorkedHours(0);
+        driver.setDriverStatus(Driver.Status.REST);
+        driver.setDriverCityId(5);
+        driverService.saveDriver(driver);
+        List<Integer> driverIds=new ArrayList<>();
+
+        order.setDriversOnOrderIds(driverIds);
+
+        List<DriverDTO> driversForTrip = orderService.findDriversForTrip(order);
+        Assert.assertEquals(false,driversForTrip.contains(driver));
+
+        driver.setDriverStatus(Driver.Status.CO_DRIVER);
+        Assert.assertEquals(false,driversForTrip.contains(driver));
+
+//        driverService.removeDriver(driver.getDriverId());
     }
 
     @Test
-    public void assignDriver() {
+    public void assignDriver() {//        driver = new DriverDTO();
+//        driver.setDriverFirstName("Misha");
+//        driver.setDriverSurname("Popov");
+//        driver.setPassword("password");
+//        driver.setDriverPrivateNum(18765432);
+//        driver.setDriverWorkedHours(10);
+//        driver.setDriverStatus(Driver.Status.DRIVING);
+//        driver.setDriverCityId(1);
+
+//        driverService.saveDriver(driver);
+        int lastId = driverService.getLastDriverId();
+
+        points = new ArrayList<>();
+
+        CargoDTO cargo1 = cargoService.getAllCargoes().get(0);
+        CityDTO city1 = cityService.getCityDtoById(1) ;//New York
+        CargoWaypointDTO point1 = new CargoWaypointDTO();
+
+        CargoDTO cargo2 = cargoService.getAllCargoes().get(1);
+        CityDTO city2 = cityService.getCityDtoById(7) ;//Toronto
+        CargoWaypointDTO point2 = new CargoWaypointDTO();
+
+        point1.setCargo(cargo1);
+        point1.setName("999");
+        point1.setOperationType(OrderWaypoint.Operation.LOAD);
+        point1.setCompleted(false);
+        point1.setDestCity(city1);
+
+        point2.setCargo(cargo2);
+        point2.setName("1000");
+        point2.setOperationType(OrderWaypoint.Operation.LOAD);
+        point2.setCompleted(false);
+        point2.setDestCity(city2);
+
+        points.add(point1);
+        points.add(point2);
+
+        order = orderService.getOrderById(40);
+        order.setOrderIsDone(false);
+        order.setWayPointsIds(new ArrayList<>());
+        order.setTruckId(40);
+        order.setPoints(points);
+        order.setDriversOnOrderIds(new ArrayList<>());
+
+
+        orderService.assignDriver(driverService.getDriverById(40),order);
+        orderService.assignDriver(driverService.getDriverById(41),order);
+
+        OrderDTO updatedOrder = orderService.getOrderById(40);
+
+        Assert.assertEquals(true,updatedOrder.getDriversOnOrderIds().get(0).equals(40));
+        Assert.assertEquals(true,updatedOrder.getDriversOnOrderIds().contains(41));
+
     }
 
     @Test
@@ -130,5 +239,60 @@ public class OrderServiceTest {
 
     @Test
     public void getParamsAndSetToOrder() {
+    }
+
+    @Test
+    public void testGetLastOrderStatus(){
+        int totalOrdersBefore = orderService.getLastOrdersStatus().size();
+
+        driver = new DriverDTO();
+        driver.setDriverFirstName("Misha");
+        driver.setDriverSurname("Popov");
+        driver.setDriverPrivateNum(18765432);
+        driver.setDriverWorkedHours(10);
+        driver.setDriverStatus(Driver.Status.DRIVING);
+        driver.setDriverCityId(1);
+        driver.setDriversTruckId(40);
+
+        points = new ArrayList<>();
+
+        CargoDTO cargo1 = cargoService.getAllCargoes().get(0);
+        CityDTO city1 = cityService.getCityDtoById(1) ;//New York
+        CargoWaypointDTO point1 = new CargoWaypointDTO();
+
+        CargoDTO cargo2 = cargoService.getAllCargoes().get(1);
+        CityDTO city2 = cityService.getCityDtoById(7) ;//Toronto
+        CargoWaypointDTO point2 = new CargoWaypointDTO();
+
+        point1.setCargo(cargo1);
+        point1.setName("999");
+        point1.setOperationType(OrderWaypoint.Operation.LOAD);
+        point1.setCompleted(false);
+        point1.setDestCity(city1);
+
+        point2.setCargo(cargo2);
+        point2.setName("1000");
+        point2.setOperationType(OrderWaypoint.Operation.LOAD);
+        point2.setCompleted(false);
+        point2.setDestCity(city2);
+
+        points.add(point1);
+        points.add(point2);
+
+        List<Integer> driverIds = new ArrayList<>();
+        driverIds.add(driver.getDriverId());
+        int truckId = driver.getDriversTruckId();
+
+        OrderDTO order = new OrderDTO();
+        order.setTruckId(truckId);
+        order.setPoints(points);
+        order.setDriversOnOrderIds(driverIds);
+
+        int numOfOrdersBefore = orderService.getAllOrders().size();
+        orderService.saveOrder(order);
+
+        int ordersAfter = orderService.getLastOrdersStatus().size();
+        Assert.assertEquals(1,ordersAfter-numOfOrdersBefore);
+
     }
 }

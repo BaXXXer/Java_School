@@ -101,7 +101,8 @@ public class DriverControllerIntegrationTest {
         DriverDTO driver = new DriverDTO();
         driver.setDriverFirstName("Misha");
         driver.setDriverSurname("Popov");
-        driver.setDriverPrivateNum(98765432);
+        driver.setPassword("password");
+        driver.setDriverPrivateNum(91765432);
         driver.setDriverWorkedHours(10);
         driver.setDriverStatus(Driver.Status.DRIVING);
 
@@ -127,6 +128,7 @@ public class DriverControllerIntegrationTest {
         driver.setDriverCityId(1);
 
         driver.setDriversTruckId(40);
+        driver.setPassword("password");
 
         driverService.saveDriver(driver);
         int lastId = driverService.getLastDriverId();
