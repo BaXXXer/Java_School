@@ -169,7 +169,7 @@ public class OrderControllerIntegrationTest {
         orderService.saveOrder(order);
         int lastAddedOrderId = orderService.getLastAddedOrderId();
         OrderDTO orderOutOfDB = orderService.getOrderById(lastAddedOrderId);
-        Assert.assertEquals(orderOutOfDB.getPoints().get(1).getCargo().getCargoName(),
+        Assert.assertEquals("001",
                 cargoService.getAllCargoes().get(0).getCargoName());
     }
 

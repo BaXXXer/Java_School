@@ -60,7 +60,7 @@ public class DriverControllerIntegrationTest {
     @Test
     public void showForm() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/drivers/addDriver")).andDo(print())
-                .andExpect(MockMvcResultMatchers.view().name("drivers/addNewDriver"));
+                .andExpect(MockMvcResultMatchers.view().name("drivers/AddNewDriverPage"));
 
     }
 
@@ -68,7 +68,7 @@ public class DriverControllerIntegrationTest {
     @Test
     public void getAllDrivers() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/drivers/allDrivers")).andDo(print())
-                .andExpect(MockMvcResultMatchers.view().name("drivers/allDrivers"));
+                .andExpect(MockMvcResultMatchers.view().name("drivers/DriverIndexPage"));
     }
 
     @Test
@@ -77,6 +77,7 @@ public class DriverControllerIntegrationTest {
         DriverDTO driver = new DriverDTO();
         driver.setDriverFirstName("Misha");
         driver.setDriverSurname("Popov");
+        driver.setPassword("password");
         driver.setDriverPrivateNum(98765432);
         driver.setDriverWorkedHours(10);
         driver.setDriverStatus(Driver.Status.DRIVING);

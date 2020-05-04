@@ -61,6 +61,7 @@ public class DriverServiceTest {
         driver1.setDriverSurname("Popov");
         driver1.setDriverPrivateNum(98765432);
         driver1.setDriverWorkedHours(10);
+        driver1.setPassword("password");
         driver1.setDriverStatus(Driver.Status.DRIVING);
         driver1.setDriverCityId(1);
         driver1.setDriversTruckId(40);
@@ -73,6 +74,7 @@ public class DriverServiceTest {
         driver2.setDriverWorkedHours(175);
         driver2.setDriverStatus(Driver.Status.DRIVING);
         driver2.setDriverCityId(1);
+        driver2.setPassword("password");
         driver2.setDriversTruckId(40);
 
         CityDTO requiredCityForDriver = cityService.getCityDtoById(truckService.getTruckById(40).getCurrentCityId());
@@ -98,10 +100,12 @@ public class DriverServiceTest {
         DriverDTO driver1 = new DriverDTO();
         driver1.setDriverFirstName("Misha");
         driver1.setDriverSurname("Popov");
+
         driver1.setDriverPrivateNum(98765432);
         driver1.setDriverWorkedHours(10);
         driver1.setDriverStatus(Driver.Status.DRIVING);
         driver1.setDriverCityId(1);
+        driver1.setPassword("password");
         driver1.setDriversTruckId(40);
 
         driverService.saveDriver(driver1);

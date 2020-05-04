@@ -32,10 +32,6 @@ public class Order {
     @JoinColumn(name = "truckOnOrder_tr_id")
     private Truck truckOnOrder;
 
-
-
-//    @JoinTable(name="lg_orders_driversOnOrder",joinColumns = @JoinColumn(name = "order_id"),
-//    inverseJoinColumns = @JoinColumn(name = "driver_id"))
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List <Driver> driversOnOrder;
 
