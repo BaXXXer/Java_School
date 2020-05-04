@@ -75,7 +75,7 @@ public class TruckController {
 
     @RequestMapping(value = "/editTruck/{id}", method = RequestMethod.GET)
     public ModelAndView editShowForm(@PathVariable("id") int id) {
-        ModelAndView mav = new ModelAndView("trucks/EditTruckPage");//was:editTruck.jsp
+        ModelAndView mav = new ModelAndView("trucks/EditTruckPage");
         mav.addObject("truckToEdit", truckService.getTruckById(id));
         mav.addObject("enumCondition", Truck.Condition.values());
         mav.addObject("cityService",cityService);
