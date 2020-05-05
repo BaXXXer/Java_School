@@ -144,7 +144,7 @@
                     </p>
 
 
-                    <p style="text-align: center;font-style: italic"><spring:message code="capacity"/>:<input class="form-control" type="number"
+                    <p style="text-align: center;font-style: italic"><spring:message code="capacityTons"/>:<input class="form-control" type="number"
                                                                                      name="capacityTons"
                                                                                      min="5"
                                                                                      max="25">

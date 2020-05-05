@@ -39,7 +39,7 @@ public class OrderService {
     private final CityDtoConverter cityDtoConverter;
     private final CargoWaypointDtoConverter pointConverter;
     private final DriverDtoConverter driverDtoConverter;
-    private static String MESSAGE = "orders changed";
+    private static final String MESSAGE = "orders changed";
 
     @Autowired
     private MessageProducer messageProducer;
@@ -77,7 +77,7 @@ public class OrderService {
 
 
     public List<OrderDTO> getLastTenOrders() {
-        List<OrderDTO> dtos = new ArrayList();
+        List<OrderDTO> dtos = new ArrayList<>();
 
         for (Order d : orderDao.getLastTenOrders()) {
             dtos.add(orderConverter.convertToDTO(d));
@@ -126,7 +126,7 @@ public class OrderService {
 
     @Transactional
     public List<OrderDTO> getAllOrders() {
-        List<OrderDTO> dtos = new ArrayList();
+        List<OrderDTO> dtos = new ArrayList<>();
 
         for (Order d : orderDao.getAllOrders()) {
             dtos.add(orderConverter.convertToDTO(d));
@@ -135,8 +135,9 @@ public class OrderService {
     }
 
     public int getLastAddedOrderId() {
-        int index = getAllOrders().size() - 1;
-        return getAllOrders().get(index).getOrderId();
+        List<OrderDTO> allOrders = getAllOrders();
+        int index = allOrders.size() - 1;
+        return allOrders.get(index).getOrderId();
     }
 
     @Transactional
@@ -152,7 +153,7 @@ public class OrderService {
         List<TruckDTO> readyToGoTrucks = new ArrayList<>();
         for (OrderDTO o : getAllOrders()) {
             if (o.getTruckId() != null) {
-                readyTrucks.removeIf(t -> t.getId() == o.getTruckId());
+                readyTrucks.removeIf(t -> t.getId().equals(o.getTruckId()));
             }
         }
         List<OrderWaypoint> points = (List<OrderWaypoint>) order.getWayPoints();
@@ -194,7 +195,7 @@ public class OrderService {
 
     @Transactional
     public List<DriverDTO> findDriversForTrip(OrderDTO orderDto) {
-        List<DriverDTO> driversForTrip = new ArrayList();
+        List<DriverDTO> driversForTrip = new ArrayList<>();
         double requiredWorkingHoursPerDriver = getRequiredWorkingHoursPerDriver(orderDto, null);
         for (CargoWaypointDTO point : orderDto.getPoints()) {
             driversForTrip.addAll(driverService.findFreeDriversInCity(truckDao.getTruckById(orderDto.getTruckId())
@@ -289,7 +290,6 @@ public class OrderService {
         assignedDrivers.addAll(set);
         order.setDriversOnOrder(assignedDrivers);//set to entity
         driver.setOrder(order);
-//        driverService.updateDriver(driver);
 
         orderDao.updateOrder(order);//update entity
 
@@ -345,7 +345,7 @@ public class OrderService {
         List<CargoWaypointDTO> points = orderDTO.getPoints();
         List<CargoWaypointDTO> waypointDTOSUpdated =
                 pointService.setLoadedById(points, pointId);
-        List<OrderWaypoint> pointEntities = new ArrayList();//returned an array with updated cargo status
+        List<OrderWaypoint> pointEntities = new ArrayList<>();//returned an array with updated cargo status
         for (CargoWaypointDTO dto : waypointDTOSUpdated) {
             pointEntities.add(pointConverter.convertToEntity(dto));
         }

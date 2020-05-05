@@ -33,8 +33,7 @@ public class DistanceCalculator {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                         * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double d = r * c;
-        return d;
+        return r * c;
     }
 
     /**
@@ -48,16 +47,16 @@ public class DistanceCalculator {
 
 
         int totalDistance = 0;
-        for(CargoWaypointDTO point:waypointCollection){
+        for (CargoWaypointDTO point : waypointCollection) {
             CityDTO cityFrom = point.getCargo().getCurrentCity();
-            if(!cityFrom.equals(currentCity)){
-                totalDistance += getCityDistance( cityFrom.getLat(), cityFrom.getLng(), currentCity.getLat(),currentCity.getLng());
+            if (!cityFrom.equals(currentCity)) {
+                totalDistance += getCityDistance(cityFrom.getLat(), cityFrom.getLng(), currentCity.getLat(), currentCity.getLng());
             }
             CityDTO cityTo = point.getDestCity();
             if (!cityFrom.equals(cityTo)) {
-                totalDistance += getCityDistance( cityFrom.getLat(), cityFrom.getLng(), cityTo.getLat(),cityTo.getLng());
+                totalDistance += getCityDistance(cityFrom.getLat(), cityFrom.getLng(), cityTo.getLat(), cityTo.getLng());
             }
-            currentCity=cityTo;
+            currentCity = cityTo;
         }
         return totalDistance;
 
@@ -66,8 +65,8 @@ public class DistanceCalculator {
     /**
      * Return aproximation of trip duration with given number of drivers.
      *
-     * @param routeLength Route length in km
-     * @param numCoDrivers  Number of drivers in truck
+     * @param routeLength  Route length in km
+     * @param numCoDrivers Number of drivers in truck
      * @return double number of total hours required to trip, include rest time.
      */
 
@@ -75,7 +74,7 @@ public class DistanceCalculator {
         ShippingCatalog constants = constantsDao.getConstants();
 
         double distancePerDay = (Math.min(numCoDrivers * constants.getLimitHoursPerDay(), 24) * constants.getTruckAvgSpeed());
-        return Math.floor(routeLength / distancePerDay)*24 + (routeLength % distancePerDay) / constants.getTruckAvgSpeed();
+        return Math.floor(routeLength / distancePerDay) * 24 + (routeLength % distancePerDay) / constants.getTruckAvgSpeed();
     }
 
 }

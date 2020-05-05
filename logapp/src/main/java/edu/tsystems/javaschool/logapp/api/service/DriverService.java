@@ -69,10 +69,9 @@ public class DriverService {
         user.setEmail(driver.getDriverFirstName().toLowerCase().trim() + "." +
                 driver.getDriverSurname().toLowerCase().trim() + "@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
-        user.setPasswordMd5(password);
+        user.setPasswordMd5(password);//convert to sha256
         user.setDriver(driver);
         return user;
-
     }
 
     public DriverStatusDTO getDriverStatus() {
