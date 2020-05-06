@@ -8,7 +8,7 @@ import edu.tsystems.javaschool.logapp.api.dto.converter.CargoWaypointDtoConverte
 import edu.tsystems.javaschool.logapp.api.dto.converter.CityDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Cargo;
 import edu.tsystems.javaschool.logapp.api.entity.OrderWaypoint;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,20 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderWayPointService {
 
     private final WayPointsDao dao;
     private final CargoService cargoService;
     private final CityDtoConverter cityConverter;
     private final CargoWaypointDtoConverter pointConverter;
-
-    @Autowired
-    public OrderWayPointService(WayPointsDao dao, CargoService cargoService, CityDtoConverter cityConverter, CargoWaypointDtoConverter pointConverter) {
-        this.dao = dao;
-        this.cargoService = cargoService;
-        this.cityConverter = cityConverter;
-        this.pointConverter = pointConverter;
-    }
 
 
     @Transactional

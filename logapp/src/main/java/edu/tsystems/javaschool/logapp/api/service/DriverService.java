@@ -15,6 +15,7 @@ import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class DriverService {
     private final UserService userService;
     private final DriverDtoConverter driverDtoConverter;
     private final DriverUserDtoConverter driverUserDtoConverter;
+    private final PasswordEncoder encoder;
     private static final Logger LOG = Logger.getLogger(DriverService.class);
     private static final String MESSAGE = "driver changed";
 
@@ -37,11 +39,12 @@ public class DriverService {
     private MessageProducer messageProducer;
 
     @Autowired
-    public DriverService(DriverDao driverDao, UserService userService, DriverDtoConverter driverDtoConverter, DriverUserDtoConverter driverUserDtoConverter) {
+    public DriverService(DriverDao driverDao, UserService userService, DriverDtoConverter driverDtoConverter, DriverUserDtoConverter driverUserDtoConverter, PasswordEncoder encoder) {
         this.driverDao = driverDao;
         this.userService = userService;
         this.driverDtoConverter = driverDtoConverter;
         this.driverUserDtoConverter = driverUserDtoConverter;
+        this.encoder = encoder;
     }
 
     @Transactional
@@ -69,7 +72,7 @@ public class DriverService {
         user.setEmail(driver.getDriverFirstName().toLowerCase().trim() + "." +
                 driver.getDriverSurname().toLowerCase().trim() + "@logapp.com");
         user.setRole(User.UserRole.ROLE_DRIVER);
-        user.setPasswordMd5(password);//convert to sha256
+        user.setPasswordMd5(encoder.encode(password));//convert to sha256
         user.setDriver(driver);
         return user;
     }

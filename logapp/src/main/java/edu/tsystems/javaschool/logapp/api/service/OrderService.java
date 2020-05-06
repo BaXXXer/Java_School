@@ -14,6 +14,7 @@ import edu.tsystems.javaschool.logapp.api.exception.InvalidStateException;
 import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
 import edu.tsystems.javaschool.logapp.api.util.DistanceCalculator;
 import edu.tsystems.javaschool.logapp.api.util.WorkingHoursCalc;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderDao orderDao;
@@ -43,28 +45,6 @@ public class OrderService {
 
     @Autowired
     private MessageProducer messageProducer;
-
-
-    @Autowired
-    public OrderService(OrderDao orderDao, DriverDao driverDao, TruckDao truckDao,
-                        OrderWayPointService pointService, DriverService driverService,
-                        DistanceCalculator distanceCalculator, CityService cityService, TruckService truckService,
-                        CargoService cargoService, ShippingCatalogDao constantsDao, OrderDtoConverter orderConverter, CityDtoConverter cityDtoConverter, CargoWaypointDtoConverter pointConverter, DriverDtoConverter driverDtoConverter) {
-        this.orderDao = orderDao;
-        this.driverDao = driverDao;
-        this.truckDao = truckDao;
-        this.pointService = pointService;
-        this.driverService = driverService;
-        this.distanceCalculator = distanceCalculator;
-        this.cityService = cityService;
-        this.truckService = truckService;
-        this.cargoService = cargoService;
-        this.constantsDao = constantsDao;
-        this.orderConverter = orderConverter;
-        this.cityDtoConverter = cityDtoConverter;
-        this.pointConverter = pointConverter;
-        this.driverDtoConverter = driverDtoConverter;
-    }
 
 
     @Transactional

@@ -4,7 +4,7 @@ import edu.tsystems.javaschool.logapp.api.dao.UserDao;
 import edu.tsystems.javaschool.logapp.api.entity.User;
 import edu.tsystems.javaschool.logapp.api.model.DriverUserModel;
 import edu.tsystems.javaschool.logapp.api.model.UserModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,13 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetailsService{
     private final UserDao userDao;
-
-    @Autowired
-    public CustomUserDetails(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     @Override
     @Transactional

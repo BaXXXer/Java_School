@@ -7,6 +7,7 @@ import edu.tsystems.javaschool.logapp.api.dto.converter.TruckDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.Truck;
 import edu.tsystems.javaschool.logapp.api.exception.DuplicateEntityException;
 import edu.tsystems.javaschool.logapp.api.producer.MessageProducer;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class TruckService {
 
     @Autowired
@@ -26,12 +28,6 @@ public class TruckService {
     private final TruckDtoConverter truckConverter;
     private static final Logger LOG = Logger.getLogger(TruckService.class);
     private static final String MESSAGE = "trucks changed";
-
-    @Autowired
-    public TruckService(TruckDao truckDao, TruckDtoConverter truckConverter) {
-        this.truckDao = truckDao;
-        this.truckConverter = truckConverter;
-    }
 
     @Transactional
     public void saveTruck(TruckDTO truckDTO) {

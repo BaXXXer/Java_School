@@ -4,7 +4,7 @@ import edu.tsystems.javaschool.logapp.api.dao.CityDao;
 import edu.tsystems.javaschool.logapp.api.dto.CityDTO;
 import edu.tsystems.javaschool.logapp.api.dto.converter.CityDtoConverter;
 import edu.tsystems.javaschool.logapp.api.entity.City;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,16 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CityService {
 
     private final CityDao cityDao;
     private final CityDtoConverter converter;
 
-    @Autowired
-    public CityService(CityDao cityDao, CityDtoConverter converter) {
-        this.cityDao = cityDao;
-        this.converter = converter;
-    }
 
 
     public List<City> getAllCities() {
